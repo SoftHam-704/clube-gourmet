@@ -2,22 +2,22 @@ import { useState, useEffect } from "react";
 import { Link } from "wouter";
 
 const CUISINES = [
-  "All Cuisines",
-  "Italian",
-  "Japanese",
-  "Brazilian",
-  "French",
-  "Mexican",
-  "Indian",
-  "Thai",
-  "Mediterranean",
-  "Contemporary",
+  "Todas as Cozinhas",
+  "Italiana",
+  "Japonesa",
+  "Brasileira",
+  "Francesa",
+  "Mexicana",
+  "Indiana",
+  "Tailandesa",
+  "Mediterrânea",
+  "Contemporânea",
 ];
 
 const PRICE_RANGES = [
-  { label: "$ Budget", value: 1 },
-  { label: "$$ Moderate", value: 2 },
-  { label: "$$$ Fine Dining", value: 3 },
+  { label: "$ Econômico", value: 1 },
+  { label: "$$ Moderado", value: 2 },
+  { label: "$$$ Sofisticado", value: 3 },
   { label: "$$$$ Premium", value: 4 },
 ];
 
@@ -27,132 +27,132 @@ const RESTAURANTS = [
   {
     id: 1,
     name: "Trattoria Bella Vista",
-    cuisine: "Italian",
+    cuisine: "Italiana",
     price: 3,
     rating: 4.8,
     location: "São Paulo - Jardins",
-    description: "Authentic Italian cuisine with handmade pasta and a curated wine selection from Tuscany.",
+    description: "Autêntica culinária italiana com massas artesanais e uma seleção curada de vinhos da Toscana.",
     image: "🍝",
     availability: "dinner",
   },
   {
     id: 2,
     name: "Sakura House",
-    cuisine: "Japanese",
+    cuisine: "Japonesa",
     price: 4,
     rating: 4.9,
     location: "São Paulo - Liberdade",
-    description: "Premium omakase experience with fish flown in weekly from Tokyo's Tsukiji market.",
+    description: "Experiência omakase premium com peixes importados semanalmente do mercado Tsukiji de Tóquio.",
     image: "🍣",
     availability: "both",
   },
   {
     id: 3,
     name: "Churrascaria Gaúcha",
-    cuisine: "Brazilian",
+    cuisine: "Brasileira",
     price: 3,
     rating: 4.7,
     location: "São Paulo - Moema",
-    description: "Traditional rodízio with 18 cuts of premium meats and an award-winning salad bar.",
+    description: "Rodízio tradicional com 18 cortes de carnes nobres e salad bar premiado.",
     image: "🥩",
     availability: "both",
   },
   {
     id: 4,
     name: "Le Petit Bistro",
-    cuisine: "French",
+    cuisine: "Francesa",
     price: 4,
     rating: 4.9,
     location: "Rio de Janeiro - Leblon",
-    description: "Classic French cuisine reimagined with Brazilian ingredients by Chef Pierre Laurent.",
+    description: "Clássica culinária francesa reimaginada com ingredientes brasileiros pelo Chef Pierre Laurent.",
     image: "🥐",
     availability: "dinner",
   },
   {
     id: 5,
     name: "Casa Oaxaca",
-    cuisine: "Mexican",
+    cuisine: "Mexicana",
     price: 2,
     rating: 4.6,
     location: "São Paulo - Vila Madalena",
-    description: "Vibrant Mexican flavors with artisanal mezcal and traditional mole recipes.",
+    description: "Sabores vibrantes mexicanos com mezcal artesanal e receitas tradicionais de mole.",
     image: "🌮",
     availability: "both",
   },
   {
     id: 6,
     name: "Spice Garden",
-    cuisine: "Indian",
+    cuisine: "Indiana",
     price: 2,
     rating: 4.5,
     location: "São Paulo - Pinheiros",
-    description: "Northern Indian specialties with tandoor oven dishes and authentic curry recipes.",
+    description: "Especialidades do norte da Índia com pratos do forno tandoor e receitas autênticas de curry.",
     image: "🍛",
     availability: "both",
   },
   {
     id: 7,
     name: "Bangkok Street",
-    cuisine: "Thai",
+    cuisine: "Tailandesa",
     price: 2,
     rating: 4.6,
     location: "Rio de Janeiro - Ipanema",
-    description: "Street food inspired dishes with bold flavors and fresh ingredients.",
+    description: "Pratos inspirados na comida de rua com sabores intensos e ingredientes frescos.",
     image: "🍜",
     availability: "lunch",
   },
   {
     id: 8,
     name: "Mediterrâneo",
-    cuisine: "Mediterranean",
+    cuisine: "Mediterrânea",
     price: 3,
     rating: 4.7,
     location: "Belo Horizonte - Savassi",
-    description: "Fresh seafood and mezze platters with oceanside views and olive oil from Greece.",
+    description: "Frutos do mar frescos e mezze com vista para o mar e azeite importado da Grécia.",
     image: "🫒",
     availability: "both",
   },
   {
     id: 9,
     name: "Mesa Moderna",
-    cuisine: "Contemporary",
+    cuisine: "Contemporânea",
     price: 4,
     rating: 4.9,
     location: "São Paulo - Itaim Bibi",
-    description: "Avant-garde tasting menu featuring molecular gastronomy and local ingredients.",
+    description: "Menu degustação de vanguarda com gastronomia molecular e ingredientes locais.",
     image: "🍽️",
     availability: "dinner",
   },
   {
     id: 10,
     name: "Osteria del Mare",
-    cuisine: "Italian",
+    cuisine: "Italiana",
     price: 3,
     rating: 4.7,
     location: "Curitiba - Batel",
-    description: "Coastal Italian specialties featuring fresh seafood and handcrafted limoncello.",
+    description: "Especialidades italianas costeiras com frutos do mar frescos e limoncello artesanal.",
     image: "🦞",
     availability: "dinner",
   },
   {
     id: 11,
     name: "Feijoada da Vovó",
-    cuisine: "Brazilian",
+    cuisine: "Brasileira",
     price: 1,
     rating: 4.8,
     location: "Rio de Janeiro - Centro",
-    description: "Traditional feijoada served every Saturday with live samba and caipirinhas.",
+    description: "Feijoada tradicional servida todo sábado com samba ao vivo e caipirinhas.",
     image: "🫘",
     availability: "lunch",
   },
   {
     id: 12,
     name: "Fusion Lab",
-    cuisine: "Contemporary",
+    cuisine: "Contemporânea",
     price: 4,
     rating: 4.8,
     location: "Brasília - Lago Sul",
-    description: "Experimental kitchen blending Asian and Latin American flavors in surprising ways.",
+    description: "Cozinha experimental que mistura sabores asiáticos e latino-americanos de formas surpreendentes.",
     image: "🔬",
     availability: "dinner",
   },
@@ -179,11 +179,11 @@ function Navbar() {
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
-            <Link href="/" className="text-slate-300 hover:text-white transition-colors font-medium">Home</Link>
-            <Link href="/restaurants" className="text-emerald-400 font-medium">Restaurants</Link>
-            <Link href="/plans" className="text-slate-300 hover:text-white transition-colors font-medium">Plans</Link>
+            <Link href="/" className="text-slate-300 hover:text-white transition-colors font-medium">Início</Link>
+            <Link href="/restaurants" className="text-emerald-400 font-medium">Restaurantes</Link>
+            <Link href="/plans" className="text-slate-300 hover:text-white transition-colors font-medium">Planos</Link>
             <Link href="/plans" className="px-6 py-2.5 bg-gradient-to-r from-coral-500 to-coral-600 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-coral-500/30 transition-all hover:-translate-y-0.5">
-              Get Started
+              Começar Agora
             </Link>
           </div>
         </div>
@@ -206,13 +206,13 @@ function HeroSection() {
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto">
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Discover Your Next
+            Descubra Sua Próxima
             <span className="block mt-2 bg-gradient-to-r from-emerald-400 to-coral-400 bg-clip-text text-transparent">
-              Culinary Adventure
+              Aventura Gastronômica
             </span>
           </h1>
           <p className="text-xl text-slate-400 mb-10">
-            Explore 500+ partner restaurants and enjoy exclusive 2-for-1 dining experiences
+            Explore mais de 500 restaurantes parceiros e aproveite experiências exclusivas 2 por 1
           </p>
 
           {/* Search bar */}
@@ -221,7 +221,7 @@ function HeroSection() {
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl">🔍</span>
               <input
                 type="text"
-                placeholder="Search restaurants, cuisines..."
+                placeholder="Buscar restaurantes, cozinhas..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
@@ -243,7 +243,7 @@ function HeroSection() {
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">▼</span>
             </div>
             <button className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-emerald-500/30 transition-all">
-              Search
+              Buscar
             </button>
           </div>
         </div>
@@ -280,18 +280,18 @@ function FilterSidebar({
   return (
     <aside className="w-full lg:w-72 shrink-0">
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sticky top-28">
-        <h3 className="font-display text-lg font-bold text-slate-900 mb-6">Filters</h3>
+        <h3 className="font-display text-lg font-bold text-slate-900 mb-6">Filtros</h3>
 
         {/* Cuisine Type */}
         <div className="mb-8">
-          <h4 className="text-sm font-semibold text-slate-700 uppercase tracking-wider mb-4">Cuisine Type</h4>
+          <h4 className="text-sm font-semibold text-slate-700 uppercase tracking-wider mb-4">Tipo de Cozinha</h4>
           <div className="space-y-2">
             {CUISINES.map((cuisine) => (
               <button
                 key={cuisine}
-                onClick={() => setSelectedCuisine(cuisine === "All Cuisines" ? "" : cuisine)}
+                onClick={() => setSelectedCuisine(cuisine === "Todas as Cozinhas" ? "" : cuisine)}
                 className={`w-full text-left px-4 py-2.5 rounded-lg transition-all ${
-                  (cuisine === "All Cuisines" && !selectedCuisine) || selectedCuisine === cuisine
+                  (cuisine === "Todas as Cozinhas" && !selectedCuisine) || selectedCuisine === cuisine
                     ? "bg-emerald-50 text-emerald-700 font-medium"
                     : "text-slate-600 hover:bg-slate-50"
                 }`}
@@ -304,7 +304,7 @@ function FilterSidebar({
 
         {/* Price Range */}
         <div className="mb-8">
-          <h4 className="text-sm font-semibold text-slate-700 uppercase tracking-wider mb-4">Price Range</h4>
+          <h4 className="text-sm font-semibold text-slate-700 uppercase tracking-wider mb-4">Faixa de Preço</h4>
           <div className="space-y-2">
             {PRICE_RANGES.map((range) => (
               <label
@@ -337,12 +337,12 @@ function FilterSidebar({
 
         {/* Availability */}
         <div>
-          <h4 className="text-sm font-semibold text-slate-700 uppercase tracking-wider mb-4">Availability</h4>
+          <h4 className="text-sm font-semibold text-slate-700 uppercase tracking-wider mb-4">Disponibilidade</h4>
           <div className="space-y-2">
             {[
-              { label: "Any Time", value: "" },
-              { label: "Lunch Only", value: "lunch" },
-              { label: "Dinner Only", value: "dinner" },
+              { label: "Qualquer Horário", value: "" },
+              { label: "Apenas Almoço", value: "lunch" },
+              { label: "Apenas Jantar", value: "dinner" },
             ].map((option) => (
               <button
                 key={option.value}
@@ -368,7 +368,7 @@ function FilterSidebar({
           }}
           className="w-full mt-8 py-3 border-2 border-slate-200 text-slate-600 rounded-xl font-medium hover:border-slate-300 hover:bg-slate-50 transition-all"
         >
-          Reset Filters
+          Limpar Filtros
         </button>
       </div>
     </aside>
@@ -398,7 +398,7 @@ function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
           {restaurant.image}
         </span>
         <div className="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-emerald-700">
-          2-for-1
+          2 por 1
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
       </div>
@@ -428,7 +428,7 @@ function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
         </div>
 
         <button className="w-full py-3 bg-slate-900 text-white rounded-xl font-semibold hover:bg-emerald-600 transition-colors group-hover:bg-emerald-600">
-          View Details
+          Ver Detalhes
         </button>
       </div>
     </div>
@@ -487,7 +487,7 @@ function Footer() {
             <span className="font-display text-xl font-bold text-white">Clube Gourmet</span>
           </Link>
           <p className="text-slate-500 text-sm">
-            © 2024 Clube Gourmet. All rights reserved.
+            © 2024 Clube Gourmet. Todos os direitos reservados.
           </p>
         </div>
       </div>
@@ -542,13 +542,13 @@ export default function Restaurants() {
               {/* Results header */}
               <div className="flex items-center justify-between mb-8">
                 <p className="text-slate-600">
-                  Showing <span className="font-semibold text-slate-900">{filteredRestaurants.length}</span> restaurants
+                  Mostrando <span className="font-semibold text-slate-900">{filteredRestaurants.length}</span> restaurantes
                 </p>
                 <select className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-slate-600 focus:outline-none focus:border-emerald-500">
-                  <option>Sort by: Recommended</option>
-                  <option>Rating: High to Low</option>
-                  <option>Price: Low to High</option>
-                  <option>Price: High to Low</option>
+                  <option>Ordenar por: Recomendados</option>
+                  <option>Avaliação: Maior para Menor</option>
+                  <option>Preço: Menor para Maior</option>
+                  <option>Preço: Maior para Menor</option>
                 </select>
               </div>
 
@@ -562,8 +562,8 @@ export default function Restaurants() {
               ) : (
                 <div className="text-center py-16">
                   <span className="text-6xl mb-4 block">🍽️</span>
-                  <h3 className="font-display text-2xl font-bold text-slate-900 mb-2">No restaurants found</h3>
-                  <p className="text-slate-600">Try adjusting your filters to see more results</p>
+                  <h3 className="font-display text-2xl font-bold text-slate-900 mb-2">Nenhum restaurante encontrado</h3>
+                  <p className="text-slate-600">Tente ajustar seus filtros para ver mais resultados</p>
                 </div>
               )}
 

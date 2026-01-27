@@ -2,59 +2,59 @@ import { useState, useEffect } from "react";
 import { Link } from "wouter";
 
 const NAV_LINKS = [
-  { label: "Restaurants", href: "/restaurants", isPage: true },
-  { label: "Plans", href: "/plans", isPage: true },
-  { label: "Benefits", href: "#benefits", isPage: false },
-  { label: "How It Works", href: "#how-it-works", isPage: false },
+  { label: "Restaurantes", href: "/restaurants", isPage: true },
+  { label: "Planos", href: "/plans", isPage: true },
+  { label: "Benefícios", href: "#benefits", isPage: false },
+  { label: "Como Funciona", href: "#how-it-works", isPage: false },
 ];
 
 const BENEFITS = [
   {
     icon: "🍽️",
-    title: "2-for-1 Every Time",
-    description: "Order two main courses, pay for one. No restrictions, no fine print. It's that simple.",
+    title: "2 por 1 Sempre",
+    description: "Peça dois pratos principais, pague apenas um. Sem restrições, sem letras miúdas. Simples assim.",
   },
   {
     icon: "⭐",
-    title: "Top-Rated Venues",
-    description: "Curated selection of the finest restaurants in your city. Only the best make our list.",
+    title: "Restaurantes Top",
+    description: "Seleção curada dos melhores restaurantes da sua cidade. Só os melhores entram na nossa lista.",
   },
   {
     icon: "♾️",
-    title: "Unlimited Experiences",
-    description: "Use your membership as many times as you want. Dine out every day if you like.",
+    title: "Experiências Ilimitadas",
+    description: "Use sua assinatura quantas vezes quiser. Jante fora todos os dias, se preferir.",
   },
   {
     icon: "💰",
-    title: "Pays for Itself",
-    description: "One dinner out covers your annual subscription. Everything after is pure savings.",
+    title: "Se Paga Rapidinho",
+    description: "Um jantar fora já cobre sua assinatura anual. Todo o resto é economia pura.",
   },
 ];
 
 const STEPS = [
-  { number: "01", title: "Subscribe", description: "Choose your plan and get instant access to our platform" },
-  { number: "02", title: "Browse", description: "Explore 500+ partner restaurants in your area" },
-  { number: "03", title: "Reserve", description: "Book your table through our app or website" },
-  { number: "04", title: "Enjoy", description: "Show your digital card, order two mains, pay for one" },
+  { number: "01", title: "Assine", description: "Escolha seu plano e tenha acesso imediato à plataforma" },
+  { number: "02", title: "Explore", description: "Descubra mais de 500 restaurantes parceiros na sua região" },
+  { number: "03", title: "Reserve", description: "Faça sua reserva pelo app ou pelo site" },
+  { number: "04", title: "Aproveite", description: "Mostre seu cartão digital, peça dois pratos, pague um" },
 ];
 
 const TESTIMONIALS = [
   {
     name: "Mariana Costa",
-    role: "Member since 2023",
-    quote: "I was skeptical at first, but after the third dinner out, I'd already saved more than my annual fee. Now I recommend it to everyone.",
+    role: "Membro desde 2023",
+    quote: "No começo fiquei em dúvida, mas depois do terceiro jantar já tinha economizado mais que o valor da assinatura anual. Agora recomendo para todo mundo.",
     avatar: "MC",
   },
   {
     name: "Rafael Mendes",
-    role: "Food enthusiast",
-    quote: "The restaurant quality is incredible. These aren't random places—they're actually where I'd want to dine anyway. Game changer.",
+    role: "Entusiasta gastronômico",
+    quote: "A qualidade dos restaurantes é incrível. Não são lugares aleatórios — são exatamente onde eu já queria jantar. Mudou tudo.",
     avatar: "RM",
   },
   {
     name: "Ana Beatriz Silva",
-    role: "Date night regular",
-    quote: "My partner and I go out every weekend now. What used to cost us R$300 now costs R$150. It's like having a permanent discount on life.",
+    role: "Frequentadora assídua",
+    quote: "Eu e meu parceiro saímos todo final de semana agora. O que custava R$300 agora custa R$150. É como ter um desconto permanente na vida.",
     avatar: "AS",
   },
 ];
@@ -93,11 +93,11 @@ function Navbar() {
               )
             ))}
             <Link href="/plans" className="px-6 py-2.5 bg-gradient-to-r from-coral-500 to-coral-600 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-coral-500/30 transition-all hover:-translate-y-0.5">
-              Get Started
+              Começar Agora
             </Link>
           </div>
 
-          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-white" aria-label="Toggle menu">
+          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-white" aria-label="Abrir menu">
             <div className="w-6 h-5 flex flex-col justify-between">
               <span className={`w-full h-0.5 bg-current transition-all ${isOpen ? "rotate-45 translate-y-2" : ""}`} />
               <span className={`w-full h-0.5 bg-current transition-all ${isOpen ? "opacity-0" : ""}`} />
@@ -107,7 +107,7 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Menu mobile */}
       <div className={`md:hidden overflow-hidden transition-all duration-300 ${isOpen ? "max-h-96" : "max-h-0"}`}>
         <div className="px-6 py-4 bg-slate-900/95 backdrop-blur-md border-t border-slate-700/50 space-y-4">
           {NAV_LINKS.map((link) => (
@@ -122,7 +122,7 @@ function Navbar() {
             )
           ))}
           <Link href="/plans" className="block w-full text-center px-6 py-3 bg-gradient-to-r from-coral-500 to-coral-600 text-white rounded-full font-semibold">
-            Get Started
+            Começar Agora
           </Link>
         </div>
       </div>
@@ -145,44 +145,44 @@ function HeroSection() {
           <div className="space-y-8 animate-fade-in">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-emerald-400 text-sm font-medium">500+ Partner Restaurants</span>
+              <span className="text-emerald-400 text-sm font-medium">+500 Restaurantes Parceiros</span>
             </div>
 
             <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight">
-              Fine Dining,
+              Alta Gastronomia,
               <span className="block mt-2 bg-gradient-to-r from-emerald-400 via-emerald-300 to-coral-400 bg-clip-text text-transparent">
-                Half the Price
+                Metade do Preço
               </span>
             </h1>
 
             <p className="text-xl text-slate-400 max-w-lg leading-relaxed">
-              Join thousands of food lovers who save up to 50% at the city's best restaurants. One subscription, unlimited 2-for-1 dining experiences.
+              Junte-se a milhares de amantes da boa comida que economizam até 50% nos melhores restaurantes da cidade. Uma assinatura, experiências 2 por 1 ilimitadas.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Link href="/restaurants" className="group px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-full font-semibold text-lg hover:shadow-xl hover:shadow-emerald-500/30 transition-all hover:-translate-y-1 text-center">
-                See Restaurants
+                Ver Restaurantes
                 <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
               </Link>
               <Link href="/plans" className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all text-center backdrop-blur-sm">
-                View Plans
+                Ver Planos
               </Link>
             </div>
 
             <div className="flex items-center gap-8 pt-6 border-t border-slate-700/50">
               <div>
                 <div className="text-3xl font-bold text-white">50%</div>
-                <div className="text-slate-500 text-sm">Average Savings</div>
+                <div className="text-slate-500 text-sm">Economia Média</div>
               </div>
               <div className="w-px h-12 bg-slate-700" />
               <div>
-                <div className="text-3xl font-bold text-white">15k+</div>
-                <div className="text-slate-500 text-sm">Happy Members</div>
+                <div className="text-3xl font-bold text-white">15mil+</div>
+                <div className="text-slate-500 text-sm">Membros Felizes</div>
               </div>
               <div className="w-px h-12 bg-slate-700 hidden sm:block" />
               <div className="hidden sm:block">
                 <div className="text-3xl font-bold text-white">4.9★</div>
-                <div className="text-slate-500 text-sm">Member Rating</div>
+                <div className="text-slate-500 text-sm">Avaliação</div>
               </div>
             </div>
           </div>
@@ -199,16 +199,16 @@ function HeroSection() {
                     </div>
                     <div>
                       <div className="text-white font-semibold">Clube Gourmet</div>
-                      <div className="text-slate-500 text-sm">Premium Member</div>
+                      <div className="text-slate-500 text-sm">Membro Premium</div>
                     </div>
                   </div>
-                  <div className="text-emerald-400 font-bold">ACTIVE</div>
+                  <div className="text-emerald-400 font-bold">ATIVO</div>
                 </div>
                 
                 <div className="space-y-4">
                   <div className="flex justify-between items-center p-4 bg-slate-700/30 rounded-xl">
                     <div>
-                      <div className="text-slate-400 text-sm">Tonight's Dinner</div>
+                      <div className="text-slate-400 text-sm">Jantar de Hoje</div>
                       <div className="text-white font-medium">Bistrô Montmartre</div>
                     </div>
                     <div className="text-right">
@@ -218,8 +218,8 @@ function HeroSection() {
                   </div>
                   
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-500">This month's savings</span>
-                    <span className="text-emerald-400 font-semibold">R$ 847 saved</span>
+                    <span className="text-slate-500">Economia do mês</span>
+                    <span className="text-emerald-400 font-semibold">R$ 847 economizados</span>
                   </div>
                 </div>
               </div>
@@ -253,13 +253,13 @@ function BenefitsSection() {
       
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-emerald-600 font-semibold text-sm tracking-wider uppercase">Why Choose Us</span>
+          <span className="text-emerald-600 font-semibold text-sm tracking-wider uppercase">Por Que Escolher a Gente</span>
           <h2 className="font-display text-4xl lg:text-5xl font-bold text-slate-900 mt-4 mb-6">
-            The Smartest Way to
-            <span className="text-emerald-600"> Dine Out</span>
+            A Forma Mais Inteligente de
+            <span className="text-emerald-600"> Jantar Fora</span>
           </h2>
           <p className="text-slate-600 text-lg">
-            More than just a discount card. It's a lifestyle upgrade for people who love great food.
+            Mais que um cartão de desconto. É uma melhoria no estilo de vida para quem ama boa comida.
           </p>
         </div>
 
@@ -298,13 +298,13 @@ function HowItWorksSection() {
       
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-emerald-400 font-semibold text-sm tracking-wider uppercase">Simple Process</span>
+          <span className="text-emerald-400 font-semibold text-sm tracking-wider uppercase">Processo Simples</span>
           <h2 className="font-display text-4xl lg:text-5xl font-bold text-white mt-4 mb-6">
-            Four Steps to
-            <span className="text-emerald-400"> Delicious Savings</span>
+            Quatro Passos para
+            <span className="text-emerald-400"> Economizar com Sabor</span>
           </h2>
           <p className="text-slate-400 text-lg">
-            From signup to savings in under 5 minutes. No complicated setup, no hidden steps.
+            Do cadastro à economia em menos de 5 minutos. Sem complicação, sem passos ocultos.
           </p>
         </div>
 
@@ -381,13 +381,13 @@ function TestimonialsSection() {
     <section id="reviews" className="py-24 lg:py-32 bg-cream-50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-emerald-600 font-semibold text-sm tracking-wider uppercase">Testimonials</span>
+          <span className="text-emerald-600 font-semibold text-sm tracking-wider uppercase">Depoimentos</span>
           <h2 className="font-display text-4xl lg:text-5xl font-bold text-slate-900 mt-4 mb-6">
-            Loved by
-            <span className="text-emerald-600"> Food Enthusiasts</span>
+            Amado por
+            <span className="text-emerald-600"> Entusiastas da Gastronomia</span>
           </h2>
           <p className="text-slate-600 text-lg">
-            Don't just take our word for it. Here's what our members have to say.
+            Não acredite só na nossa palavra. Veja o que nossos membros dizem.
           </p>
         </div>
 
@@ -445,16 +445,16 @@ function NewsletterSection() {
 
       <div className="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-coral-500/10 border border-coral-500/20 mb-8">
-          <span className="text-coral-400 text-sm font-medium">🎁 Get 10% off your first subscription</span>
+          <span className="text-coral-400 text-sm font-medium">🎁 Ganhe 10% de desconto na primeira assinatura</span>
         </div>
 
         <h2 className="font-display text-4xl lg:text-5xl font-bold text-white mb-6">
-          Ready to Start
-          <span className="block text-emerald-400">Saving?</span>
+          Pronto para Começar a
+          <span className="block text-emerald-400">Economizar?</span>
         </h2>
 
         <p className="text-slate-400 text-lg mb-10 max-w-2xl mx-auto">
-          Join our newsletter and be the first to know about new restaurant partners, exclusive deals, and member perks.
+          Assine nossa newsletter e seja o primeiro a saber sobre novos restaurantes parceiros, ofertas exclusivas e benefícios para membros.
         </p>
 
         {submitted ? (
@@ -462,7 +462,7 @@ function NewsletterSection() {
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
-            <span className="font-medium">Thanks for subscribing! Check your inbox.</span>
+            <span className="font-medium">Obrigado por se inscrever! Verifique sua caixa de entrada.</span>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
@@ -470,7 +470,7 @@ function NewsletterSection() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
+              placeholder="Digite seu e-mail"
               className="flex-1 px-6 py-4 rounded-full bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/20 transition-all"
               required
             />
@@ -478,13 +478,13 @@ function NewsletterSection() {
               type="submit"
               className="px-8 py-4 bg-gradient-to-r from-coral-500 to-coral-600 text-white rounded-full font-semibold hover:shadow-xl hover:shadow-coral-500/30 transition-all hover:-translate-y-1 whitespace-nowrap"
             >
-              Subscribe
+              Inscrever-se
             </button>
           </form>
         )}
 
         <p className="text-slate-600 text-sm mt-6">
-          No spam, ever. Unsubscribe anytime.
+          Sem spam, nunca. Cancele quando quiser.
         </p>
       </div>
     </section>
@@ -504,13 +504,13 @@ function Footer() {
           </div>
 
           <div className="flex items-center gap-8 text-slate-500 text-sm">
-            <a href="#" className="hover:text-white transition-colors">Terms</a>
-            <a href="#" className="hover:text-white transition-colors">Privacy</a>
-            <a href="#" className="hover:text-white transition-colors">Contact</a>
+            <a href="#" className="hover:text-white transition-colors">Termos</a>
+            <a href="#" className="hover:text-white transition-colors">Privacidade</a>
+            <a href="#" className="hover:text-white transition-colors">Contato</a>
           </div>
 
           <p className="text-slate-600 text-sm">
-            © {new Date().getFullYear()} Clube Gourmet. All rights reserved.
+            © {new Date().getFullYear()} Clube Gourmet. Todos os direitos reservados.
           </p>
         </div>
       </div>

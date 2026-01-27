@@ -4,82 +4,82 @@ import { Link } from "wouter";
 const PLANS = [
   {
     id: "monthly",
-    name: "Monthly",
-    price: "29.90",
-    period: "/month",
-    description: "Perfect for trying out the experience",
+    name: "Mensal",
+    price: "29,90",
+    period: "/mês",
+    description: "Perfeito para experimentar",
     popular: false,
     benefits: [
-      "2-for-1 at all partner restaurants",
-      "Unlimited monthly uses",
-      "Digital membership card",
-      "Email support",
-      "Cancel anytime",
+      "2 por 1 em todos os restaurantes parceiros",
+      "Uso ilimitado no mês",
+      "Cartão digital de membro",
+      "Suporte por e-mail",
+      "Cancele quando quiser",
     ],
   },
   {
     id: "annual",
-    name: "Annual",
+    name: "Anual",
     price: "299",
-    period: "/year",
-    description: "Best value for food enthusiasts",
+    period: "/ano",
+    description: "Melhor custo-benefício para amantes da gastronomia",
     popular: true,
-    savings: "Save 16%",
+    savings: "Economize 16%",
     benefits: [
-      "2-for-1 at all partner restaurants",
-      "Unlimited uses all year",
-      "Digital membership card",
-      "Priority support",
-      "Cancel anytime",
-      "Exclusive restaurant previews",
-      "Birthday bonus offer",
-      "Access to VIP events",
+      "2 por 1 em todos os restaurantes parceiros",
+      "Uso ilimitado o ano todo",
+      "Cartão digital de membro",
+      "Suporte prioritário",
+      "Cancele quando quiser",
+      "Acesso antecipado a novos restaurantes",
+      "Oferta especial de aniversário",
+      "Acesso a eventos VIP",
     ],
   },
   {
     id: "family",
-    name: "Family",
+    name: "Família",
     price: "449",
-    period: "/year",
-    description: "Share the savings with loved ones",
+    period: "/ano",
+    description: "Compartilhe a economia com quem você ama",
     popular: false,
     benefits: [
-      "2-for-1 for up to 4 members",
-      "Unlimited uses for all",
-      "4 digital membership cards",
-      "Priority support",
-      "Cancel anytime",
-      "Exclusive restaurant previews",
-      "Birthday bonus for all members",
-      "Family-friendly venues highlighted",
+      "2 por 1 para até 4 membros",
+      "Uso ilimitado para todos",
+      "4 cartões digitais de membro",
+      "Suporte prioritário",
+      "Cancele quando quiser",
+      "Acesso antecipado a novos restaurantes",
+      "Oferta de aniversário para todos",
+      "Destaque de restaurantes família-friendly",
     ],
   },
 ];
 
 const FAQS = [
   {
-    question: "How does the 2-for-1 offer work?",
-    answer: "When you dine at any of our partner restaurants, simply order two main courses and only pay for one. The cheaper or equal-value dish is complimentary. It's that simple – no complicated vouchers, no minimum spend.",
+    question: "Como funciona a oferta 2 por 1?",
+    answer: "Ao jantar em qualquer um dos nossos restaurantes parceiros, basta pedir dois pratos principais e pagar apenas um. O prato de menor valor (ou igual) é cortesia. Simples assim – sem vouchers complicados, sem valor mínimo de consumo.",
   },
   {
-    question: "Can I use my membership at any restaurant, any day?",
-    answer: "Yes! Your membership works at all 500+ partner restaurants. Some venues may have specific availability (lunch or dinner), but there are no blackout dates or day-of-week restrictions.",
+    question: "Posso usar minha assinatura em qualquer restaurante, qualquer dia?",
+    answer: "Sim! Sua assinatura funciona em todos os mais de 500 restaurantes parceiros. Alguns estabelecimentos podem ter disponibilidade específica (almoço ou jantar), mas não há datas bloqueadas ou restrições de dia da semana.",
   },
   {
-    question: "How quickly will I see a return on my investment?",
-    answer: "Most members save more than their annual fee in just 2-3 restaurant visits. With an average main course costing R$70-150 at our partner restaurants, you're looking at R$70-150 in savings per visit.",
+    question: "Em quanto tempo terei retorno do meu investimento?",
+    answer: "A maioria dos membros economiza mais que o valor da assinatura anual em apenas 2-3 visitas a restaurantes. Com um prato principal custando em média R$70-150 nos nossos parceiros, você economiza R$70-150 por visita.",
   },
   {
-    question: "Can I cancel my subscription anytime?",
-    answer: "Absolutely. You can cancel your subscription at any time through your account settings. Your benefits will remain active until the end of your current billing period.",
+    question: "Posso cancelar minha assinatura a qualquer momento?",
+    answer: "Com certeza. Você pode cancelar sua assinatura a qualquer momento pelas configurações da sua conta. Seus benefícios permanecerão ativos até o final do período de cobrança atual.",
   },
   {
-    question: "How does the Family Plan work?",
-    answer: "The Family Plan allows up to 4 people to be registered under one account. Each member gets their own digital card and can use the 2-for-1 benefit independently. Perfect for families or couples who dine together frequently.",
+    question: "Como funciona o Plano Família?",
+    answer: "O Plano Família permite que até 4 pessoas sejam cadastradas em uma única conta. Cada membro recebe seu próprio cartão digital e pode usar o benefício 2 por 1 de forma independente. Perfeito para famílias ou casais que jantam fora frequentemente.",
   },
   {
-    question: "What if my favorite restaurant isn't a partner?",
-    answer: "We're always expanding our network! You can suggest restaurants through our app, and we actively reach out to popular venues. Many of our best partners came from member suggestions.",
+    question: "E se meu restaurante favorito não for parceiro?",
+    answer: "Estamos sempre expandindo nossa rede! Você pode sugerir restaurantes pelo nosso app, e nós entramos em contato ativamente com estabelecimentos populares. Muitos dos nossos melhores parceiros vieram de sugestões de membros.",
   },
 ];
 
@@ -104,11 +104,11 @@ function Navbar() {
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
-            <Link href="/" className="text-slate-300 hover:text-white transition-colors font-medium">Home</Link>
-            <Link href="/restaurants" className="text-slate-300 hover:text-white transition-colors font-medium">Restaurants</Link>
-            <Link href="/plans" className="text-emerald-400 font-medium">Plans</Link>
+            <Link href="/" className="text-slate-300 hover:text-white transition-colors font-medium">Início</Link>
+            <Link href="/restaurants" className="text-slate-300 hover:text-white transition-colors font-medium">Restaurantes</Link>
+            <Link href="/plans" className="text-emerald-400 font-medium">Planos</Link>
             <Link href="/plans" className="px-6 py-2.5 bg-gradient-to-r from-coral-500 to-coral-600 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-coral-500/30 transition-all hover:-translate-y-0.5">
-              Get Started
+              Começar Agora
             </Link>
           </div>
         </div>
@@ -128,18 +128,18 @@ function HeroSection() {
       <div className="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
         <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-emerald-400 text-sm font-medium">Join 15,000+ Happy Members</span>
+          <span className="text-emerald-400 text-sm font-medium">Junte-se a mais de 15.000 membros felizes</span>
         </span>
 
         <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-          Choose Your
+          Escolha Seu Plano de
           <span className="block mt-2 bg-gradient-to-r from-emerald-400 to-coral-400 bg-clip-text text-transparent">
-            Savings Plan
+            Economia
           </span>
         </h1>
 
         <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-          One dinner out pays for your entire year. Stop paying full price at restaurants you love.
+          Um jantar fora já paga sua assinatura do ano inteiro. Pare de pagar preço cheio nos restaurantes que você ama.
         </p>
       </div>
     </section>
@@ -161,7 +161,7 @@ function PlanCard({ plan }: PlanCardProps) {
       {plan.popular && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
           <span className="px-4 py-1.5 bg-coral-500 text-white text-sm font-bold rounded-full shadow-lg shadow-coral-500/30">
-            Most Popular
+            Mais Popular
           </span>
         </div>
       )}
@@ -218,12 +218,12 @@ function PlanCard({ plan }: PlanCardProps) {
           ? "bg-white text-emerald-700 hover:bg-cream-50 hover:shadow-lg"
           : "bg-slate-900 text-white hover:bg-emerald-600 hover:shadow-lg hover:shadow-emerald-500/20"
       }`}>
-        Subscribe Now
+        Assinar Agora
       </button>
 
       {plan.id === "annual" && (
         <p className={`text-center text-sm mt-4 ${plan.popular ? "text-emerald-100" : "text-slate-500"}`}>
-          Equivalent to just R$24.92/month
+          Equivalente a apenas R$24,92/mês
         </p>
       )}
     </div>
@@ -242,19 +242,19 @@ function PricingSection() {
 
         {/* Trust indicators */}
         <div className="mt-16 text-center">
-          <p className="text-slate-500 mb-6">Trusted by food lovers across Brazil</p>
+          <p className="text-slate-500 mb-6">Confiado por amantes da gastronomia em todo o Brasil</p>
           <div className="flex flex-wrap justify-center gap-8 text-slate-400">
             <div className="flex items-center gap-2">
               <span className="text-2xl">🔒</span>
-              <span className="text-sm font-medium">Secure Payment</span>
+              <span className="text-sm font-medium">Pagamento Seguro</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-2xl">💳</span>
-              <span className="text-sm font-medium">All Cards Accepted</span>
+              <span className="text-sm font-medium">Todos os Cartões</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-2xl">🔄</span>
-              <span className="text-sm font-medium">7-Day Money Back</span>
+              <span className="text-sm font-medium">7 Dias de Garantia</span>
             </div>
           </div>
         </div>
@@ -274,34 +274,34 @@ function ROICalculator() {
         <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 lg:p-12 border border-slate-700/50">
           <div className="text-center mb-10">
             <h2 className="font-display text-3xl lg:text-4xl font-bold text-white mb-4">
-              See How Fast You'll Save
+              Veja Como Você Economiza Rápido
             </h2>
             <p className="text-slate-400">
-              Average member pays back their subscription in just 2 dinners
+              O membro médio recupera o valor da assinatura em apenas 2 jantares
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 text-center">
             <div className="p-6 bg-slate-700/30 rounded-2xl">
               <div className="text-4xl font-bold text-emerald-400 mb-2">R$ 75</div>
-              <div className="text-slate-300 font-medium mb-1">Average Savings</div>
-              <div className="text-slate-500 text-sm">Per restaurant visit</div>
+              <div className="text-slate-300 font-medium mb-1">Economia Média</div>
+              <div className="text-slate-500 text-sm">Por visita ao restaurante</div>
             </div>
             <div className="p-6 bg-slate-700/30 rounded-2xl">
               <div className="text-4xl font-bold text-coral-400 mb-2">4x</div>
-              <div className="text-slate-300 font-medium mb-1">Avg Monthly Visits</div>
-              <div className="text-slate-500 text-sm">By our members</div>
+              <div className="text-slate-300 font-medium mb-1">Visitas Mensais</div>
+              <div className="text-slate-500 text-sm">Média dos nossos membros</div>
             </div>
             <div className="p-6 bg-slate-700/30 rounded-2xl">
-              <div className="text-4xl font-bold text-amber-400 mb-2">R$ 3,600</div>
-              <div className="text-slate-300 font-medium mb-1">Annual Savings</div>
-              <div className="text-slate-500 text-sm">On average per member</div>
+              <div className="text-4xl font-bold text-amber-400 mb-2">R$ 3.600</div>
+              <div className="text-slate-300 font-medium mb-1">Economia Anual</div>
+              <div className="text-slate-500 text-sm">Em média por membro</div>
             </div>
           </div>
 
           <div className="mt-10 p-6 bg-emerald-600/20 border border-emerald-500/30 rounded-2xl text-center">
             <p className="text-emerald-300 font-medium">
-              💡 With the Annual Plan at R$299, you're looking at a <span className="text-white font-bold">12x return</span> on your investment
+              💡 Com o Plano Anual de R$299, você tem um <span className="text-white font-bold">retorno de 12x</span> sobre seu investimento
             </p>
           </div>
         </div>
@@ -319,7 +319,7 @@ function FAQSection() {
         <div className="text-center mb-12">
           <span className="text-emerald-600 font-semibold text-sm tracking-wider uppercase">FAQ</span>
           <h2 className="font-display text-3xl lg:text-4xl font-bold text-slate-900 mt-4">
-            Common Questions
+            Perguntas Frequentes
           </h2>
         </div>
 
@@ -362,9 +362,9 @@ function FAQSection() {
 
         {/* CTA */}
         <div className="mt-12 text-center">
-          <p className="text-slate-500 mb-4">Still have questions?</p>
-          <a href="mailto:support@clubegourmet.com" className="text-emerald-600 font-semibold hover:text-emerald-700 transition-colors">
-            Contact our support team →
+          <p className="text-slate-500 mb-4">Ainda tem dúvidas?</p>
+          <a href="mailto:suporte@clubegourmet.com" className="text-emerald-600 font-semibold hover:text-emerald-700 transition-colors">
+            Fale com nosso time de suporte →
           </a>
         </div>
       </div>
@@ -379,18 +379,18 @@ function CTASection() {
 
       <div className="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
         <h2 className="font-display text-3xl lg:text-4xl font-bold text-white mb-6">
-          Ready to Start Saving?
+          Pronto para Começar a Economizar?
         </h2>
         <p className="text-emerald-100 text-lg mb-8 max-w-2xl mx-auto">
-          Join thousands of food lovers who've discovered the smartest way to enjoy fine dining.
-          Your first dinner out will already be worth it.
+          Junte-se a milhares de amantes da gastronomia que descobriram a forma mais inteligente de jantar fora.
+          Seu primeiro jantar já vai valer a pena.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button className="px-8 py-4 bg-white text-emerald-700 rounded-full font-semibold text-lg hover:bg-cream-50 hover:shadow-xl transition-all">
-            Get Started Today
+            Começar Hoje
           </button>
           <Link href="/restaurants" className="px-8 py-4 bg-emerald-500/30 border border-white/30 text-white rounded-full font-semibold text-lg hover:bg-emerald-500/40 transition-all">
-            Browse Restaurants
+            Ver Restaurantes
           </Link>
         </div>
       </div>
@@ -410,7 +410,7 @@ function Footer() {
             <span className="font-display text-xl font-bold text-white">Clube Gourmet</span>
           </Link>
           <p className="text-slate-500 text-sm">
-            © 2024 Clube Gourmet. All rights reserved.
+            © 2024 Clube Gourmet. Todos os direitos reservados.
           </p>
         </div>
       </div>
