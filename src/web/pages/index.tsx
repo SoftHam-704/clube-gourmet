@@ -77,7 +77,7 @@ function Navbar() {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/30 group-hover:shadow-emerald-500/50 transition-shadow">
               <span className="text-white font-bold text-lg">C</span>
             </div>
-            <span className="font-display text-xl font-bold text-white">Clube Gourmet</span>
+            <span className="font-display text-xl font-bold text-white">Club Empar</span>
           </a>
 
           <div className="hidden md:flex items-center gap-8">
@@ -198,7 +198,7 @@ function HeroSection() {
                       <span className="text-white font-bold text-xl">C</span>
                     </div>
                     <div>
-                      <div className="text-white font-semibold">Clube Gourmet</div>
+                      <div className="text-white font-semibold">Club Empar</div>
                       <div className="text-slate-500 text-sm">Membro Premium</div>
                     </div>
                   </div>
@@ -500,7 +500,7 @@ function Footer() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
               <span className="text-white font-bold">C</span>
             </div>
-            <span className="font-display text-lg font-bold text-white">Clube Gourmet</span>
+            <span className="font-display text-lg font-bold text-white">Club Empar</span>
           </div>
 
           <div className="flex items-center gap-8 text-slate-500 text-sm">
@@ -510,7 +510,7 @@ function Footer() {
           </div>
 
           <p className="text-slate-600 text-sm">
-            © {new Date().getFullYear()} Clube Gourmet. Todos os direitos reservados.
+            © {new Date().getFullYear()} Club Empar. Todos os direitos reservados.
           </p>
         </div>
       </div>

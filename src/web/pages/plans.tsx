@@ -100,7 +100,7 @@ function Navbar() {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/30 group-hover:shadow-emerald-500/50 transition-shadow">
               <span className="text-white font-bold text-lg">C</span>
             </div>
-            <span className="font-display text-xl font-bold text-white">Clube Gourmet</span>
+            <span className="font-display text-xl font-bold text-white">Club Empar</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
@@ -407,10 +407,10 @@ function Footer() {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
               <span className="text-white font-bold text-lg">C</span>
             </div>
-            <span className="font-display text-xl font-bold text-white">Clube Gourmet</span>
+            <span className="font-display text-xl font-bold text-white">Club Empar</span>
           </Link>
           <p className="text-slate-500 text-sm">
-            © 2024 Clube Gourmet. Todos os direitos reservados.
+            © 2024 Club Empar. Todos os direitos reservados.
           </p>
         </div>
       </div>
