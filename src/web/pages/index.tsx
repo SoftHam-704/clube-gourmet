@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { Link } from "wouter";
 
 const NAV_LINKS = [
-  { label: "Benefits", href: "#benefits" },
-  { label: "How It Works", href: "#how-it-works" },
-  { label: "Reviews", href: "#reviews" },
+  { label: "Restaurants", href: "/restaurants", isPage: true },
+  { label: "Plans", href: "/plans", isPage: true },
+  { label: "Benefits", href: "#benefits", isPage: false },
+  { label: "How It Works", href: "#how-it-works", isPage: false },
 ];
 
 const BENEFITS = [
@@ -80,13 +82,19 @@ function Navbar() {
 
           <div className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map((link) => (
-              <a key={link.href} href={link.href} className="text-slate-300 hover:text-white transition-colors font-medium">
-                {link.label}
-              </a>
+              link.isPage ? (
+                <Link key={link.href} href={link.href} className="text-slate-300 hover:text-white transition-colors font-medium">
+                  {link.label}
+                </Link>
+              ) : (
+                <a key={link.href} href={link.href} className="text-slate-300 hover:text-white transition-colors font-medium">
+                  {link.label}
+                </a>
+              )
             ))}
-            <a href="#plans" className="px-6 py-2.5 bg-gradient-to-r from-coral-500 to-coral-600 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-coral-500/30 transition-all hover:-translate-y-0.5">
+            <Link href="/plans" className="px-6 py-2.5 bg-gradient-to-r from-coral-500 to-coral-600 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-coral-500/30 transition-all hover:-translate-y-0.5">
               Get Started
-            </a>
+            </Link>
           </div>
 
           <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-white" aria-label="Toggle menu">
@@ -103,13 +111,19 @@ function Navbar() {
       <div className={`md:hidden overflow-hidden transition-all duration-300 ${isOpen ? "max-h-96" : "max-h-0"}`}>
         <div className="px-6 py-4 bg-slate-900/95 backdrop-blur-md border-t border-slate-700/50 space-y-4">
           {NAV_LINKS.map((link) => (
-            <a key={link.href} href={link.href} onClick={() => setIsOpen(false)} className="block text-slate-300 hover:text-white transition-colors font-medium py-2">
-              {link.label}
-            </a>
+            link.isPage ? (
+              <Link key={link.href} href={link.href} onClick={() => setIsOpen(false)} className="block text-slate-300 hover:text-white transition-colors font-medium py-2">
+                {link.label}
+              </Link>
+            ) : (
+              <a key={link.href} href={link.href} onClick={() => setIsOpen(false)} className="block text-slate-300 hover:text-white transition-colors font-medium py-2">
+                {link.label}
+              </a>
+            )
           ))}
-          <a href="#plans" className="block w-full text-center px-6 py-3 bg-gradient-to-r from-coral-500 to-coral-600 text-white rounded-full font-semibold">
+          <Link href="/plans" className="block w-full text-center px-6 py-3 bg-gradient-to-r from-coral-500 to-coral-600 text-white rounded-full font-semibold">
             Get Started
-          </a>
+          </Link>
         </div>
       </div>
     </nav>
@@ -146,13 +160,13 @@ function HeroSection() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <a href="#restaurants" className="group px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-full font-semibold text-lg hover:shadow-xl hover:shadow-emerald-500/30 transition-all hover:-translate-y-1 text-center">
+              <Link href="/restaurants" className="group px-8 py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-full font-semibold text-lg hover:shadow-xl hover:shadow-emerald-500/30 transition-all hover:-translate-y-1 text-center">
                 See Restaurants
                 <span className="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
-              </a>
-              <a href="#plans" className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all text-center backdrop-blur-sm">
+              </Link>
+              <Link href="/plans" className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all text-center backdrop-blur-sm">
                 View Plans
-              </a>
+              </Link>
             </div>
 
             <div className="flex items-center gap-8 pt-6 border-t border-slate-700/50">
