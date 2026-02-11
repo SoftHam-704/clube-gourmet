@@ -7,6 +7,7 @@ import Contact from "./pages/contact";
 import Faq from "./pages/faq";
 import Terms from "./pages/terms";
 import Privacy from "./pages/privacy";
+import ClassicVision from "./pages/classic-vision";
 import { Provider } from "./components/provider";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                                 <Route path="/faq" component={Faq} />
                                 <Route path="/terms" component={Terms} />
                                 <Route path="/privacy" component={Privacy} />
+                                <Route path="/classic-vision" component={ClassicVision} />
                         </Switch>
                 </Provider>
         );
