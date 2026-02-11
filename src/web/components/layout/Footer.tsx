@@ -41,7 +41,7 @@ export function Footer() {
                 <div className="border-t border-[#222] pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-[#444] text-xs font-mono">
                         © 2026 Club Empar. Todos os direitos reservados.
-                        <Link href="/classic-vision" className="ml-2 opacity-0 hover:opacity-10 cursor-default">Classic Edition</Link>
+                        <Link href="/classic-vision" className="ml-4 text-[#222] hover:text-[#00ff88] transition-colors cursor-pointer">[ Classic Edition ]</Link>
                     </p>
                     <div className="flex gap-6">
                         <Link href="/terms" className="text-[#444] hover:text-[#00ff88] transition-colors text-xs font-mono">Termos de Uso</Link>
