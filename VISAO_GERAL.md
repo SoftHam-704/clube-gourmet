@@ -1,7 +1,7 @@
 # Club Empar - Visão Geral do Projeto
 
-**Data:** 27 de Janeiro de 2026  
-**Status:** MVP Fase 1 Concluída ✅
+**Data:** 11 de Fevereiro de 2026  
+**Status:** Fase 2 Concluída ✅
 
 ---
 
@@ -10,7 +10,7 @@
 | Fase | Descrição | Tempo Estimado | Status | Progresso |
 |------|-----------|----------------|--------|-----------|
 | **1** | **MVP - Frontend Base** | 2-3 semanas | ✅ **CONCLUÍDO** | 100% |
-| **2** | **Páginas Institucionais** | 1 semana | 🔜 **Próximo** | 0% |
+| **2** | **Páginas Institucionais** | 1 semana | ✅ **CONCLUÍDO** | 100% |
 | **3** | **Autenticação & Usuários** | 2-3 semanas | 📋 Planejado | 0% |
 | **4** | **Sistema de Pagamentos** | 2-3 semanas | 📋 Planejado | 0% |
 | **5** | **Sistema de Benefícios** | 3-4 semanas | 📋 Planejado | 0% |
@@ -47,15 +47,15 @@
 ## 🔜 FASE 2 - PÁGINAS INSTITUCIONAIS (Próximo)
 
 **Estimativa:** 1 semana  
-**Progresso:** 0%
+**Progresso:** 100% ✅
 
 ### A criar:
-- [ ] Sobre Nós - História, missão, valores
-- [ ] Contato - Formulário + informações
-- [ ] FAQ Completo - Página dedicada
-- [ ] Como Funciona - Página detalhada
-- [ ] Termos de Uso - Legal
-- [ ] Política de Privacidade - LGPD
+- [x] Sobre Nós - História, missão, valores
+- [x] Contato - Formulário + informações
+- [x] FAQ Completo - Página dedicada
+- [x] Como Funciona - Página detalhada (Home + Link)
+- [x] Termos de Uso - Legal
+- [x] Política de Privacidade - LGPD
 
 ---
 
@@ -133,15 +133,15 @@
 
 ```
 FASE 1 ████████████████████ 100% ✅ CONCLUÍDO
-FASE 2 ░░░░░░░░░░░░░░░░░░░░   0% 🔜 PRÓXIMO
-FASE 3 ░░░░░░░░░░░░░░░░░░░░   0% 📋 PLANEJADO
+FASE 2 ████████████████████ 100% ✅ CONCLUÍDO
+FASE 3 ░░░░░░░░░░░░░░░░░░░░   0% 🔜 PRÓXIMO
 FASE 4 ░░░░░░░░░░░░░░░░░░░░   0% 📋 PLANEJADO
 FASE 5 ░░░░░░░░░░░░░░░░░░░░   0% 📋 PLANEJADO
 FASE 6 ░░░░░░░░░░░░░░░░░░░░   0% 📋 PLANEJADO
 FASE 7 ░░░░░░░░░░░░░░░░░░░░   0% 📋 PLANEJADO
 ```
 
-**Progresso Geral:** ██░░░░░░░░░░░░░░░░░░ 10%
+**Progresso Geral:** ████░░░░░░░░░░░░░░░░ 20%
 
 ---
 

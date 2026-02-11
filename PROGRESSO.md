@@ -1,8 +1,8 @@
 # Club Empar - Progresso do Projeto
 
-## 📊 Status Atual: Versão 1 Completa (Design Premium)
+## 📊 Status Atual: Fase 2 Concluída (Páginas Institucionais)
 
-**Última atualização:** 27 de Janeiro de 2026
+**Última atualização:** 11 de Fevereiro de 2026
 
 ---
 
@@ -20,6 +20,10 @@
 - [x] **Home** - Hero, benefits, how-it-works, testimonials, newsletter
 - [x] **Restaurantes** - Catálogo com 12 restaurantes, filtros funcionais
 - [x] **Planos** - 3 tiers de preço, FAQ, calculadora ROI
+- [x] **Sobre Nós** - História, missão e valores
+- [x] **Contato** - Formulário e informações de contato
+- [x] **FAQ Completo** - Central de dúvidas categorizada
+- [x] **Termos & Privacidade** - Páginas legais completas
 
 ### Funcionalidades
 - [x] Navegação responsiva com menu mobile
@@ -63,8 +67,10 @@
 - [ ] Limite de uso por dia/mês
 
 ### Fase 5 - Melhorias & Expansão
-- [ ] Página Sobre Nós
-- [ ] Página de Contato com formulário
+- [x] Página Sobre Nós
+- [x] Página de Contato com formulário
+- [x] FAQ Completo
+- [x] Termos de Uso e Política de Privacidade
 - [ ] Blog/Novidades
 - [ ] Depoimentos ampliados
 - [ ] Integração com mapa real (Google Maps)

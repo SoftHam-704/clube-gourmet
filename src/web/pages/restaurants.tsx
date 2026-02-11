@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
-import { Link } from "wouter";
+import { useState } from "react";
+import { Navbar } from "../components/layout/Navbar";
+import { Footer } from "../components/layout/Footer";
 
 const CUISINES = [
   "Todas",
@@ -190,39 +191,7 @@ const Icons = {
   ),
 };
 
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "glass border-b border-[#222]" : "bg-[#0a0a0a]"}`}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 border border-[#00ff88] flex items-center justify-center transition-all group-hover:bg-[#00ff88]">
-              <span className="text-[#00ff88] font-mono font-bold text-lg group-hover:text-[#0a0a0a] transition-colors">C</span>
-            </div>
-            <span className="font-display text-xl font-bold text-white tracking-tighter">Club Empar</span>
-          </Link>
-
-          <div className="hidden md:flex items-center gap-8">
-            <Link href="/" className="text-[#666] hover:text-white transition-colors font-medium text-sm tracking-wide uppercase">Início</Link>
-            <Link href="/restaurants" className="text-[#00ff88] font-medium text-sm tracking-wide uppercase">Restaurantes</Link>
-            <Link href="/plans" className="text-[#666] hover:text-white transition-colors font-medium text-sm tracking-wide uppercase">Planos</Link>
-            <Link href="/plans" className="px-6 py-2.5 bg-[#00ff88] text-[#0a0a0a] font-semibold text-sm tracking-wide uppercase hover:glow-green transition-all">
-              Começar
-            </Link>
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-}
+// Navbar removed
 
 function HeroSection() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -296,7 +265,7 @@ function FilterSidebar({ selectedCuisine, setSelectedCuisine, selectedPrice, set
       {showFilters && (
         <div className="fixed inset-0 bg-black/80 z-40 lg:hidden" onClick={() => setShowFilters(false)} />
       )}
-      
+
       <aside className={`fixed lg:relative top-0 left-0 h-full lg:h-auto w-80 lg:w-64 bg-[#111] lg:bg-transparent z-50 lg:z-auto transform transition-transform lg:transform-none ${showFilters ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="p-6 lg:p-0 h-full lg:h-auto overflow-y-auto">
           {/* Mobile header */}
@@ -315,11 +284,10 @@ function FilterSidebar({ selectedCuisine, setSelectedCuisine, selectedPrice, set
                 <button
                   key={cuisine}
                   onClick={() => setSelectedCuisine(cuisine)}
-                  className={`w-full text-left px-4 py-2 text-sm transition-all border ${
-                    selectedCuisine === cuisine
-                      ? "bg-[#00ff88]/10 border-[#00ff88] text-[#00ff88]"
-                      : "bg-transparent border-[#222] text-[#666] hover:border-[#333] hover:text-white"
-                  }`}
+                  className={`w-full text-left px-4 py-2 text-sm transition-all border ${selectedCuisine === cuisine
+                    ? "bg-[#00ff88]/10 border-[#00ff88] text-[#00ff88]"
+                    : "bg-transparent border-[#222] text-[#666] hover:border-[#333] hover:text-white"
+                    }`}
                 >
                   {cuisine}
                 </button>
@@ -335,11 +303,10 @@ function FilterSidebar({ selectedCuisine, setSelectedCuisine, selectedPrice, set
                 <button
                   key={range.value}
                   onClick={() => setSelectedPrice(selectedPrice === range.value ? null : range.value)}
-                  className={`w-full text-left px-4 py-2 text-sm transition-all border ${
-                    selectedPrice === range.value
-                      ? "bg-[#00ff88]/10 border-[#00ff88] text-[#00ff88]"
-                      : "bg-transparent border-[#222] text-[#666] hover:border-[#333] hover:text-white"
-                  }`}
+                  className={`w-full text-left px-4 py-2 text-sm transition-all border ${selectedPrice === range.value
+                    ? "bg-[#00ff88]/10 border-[#00ff88] text-[#00ff88]"
+                    : "bg-transparent border-[#222] text-[#666] hover:border-[#333] hover:text-white"
+                    }`}
                 >
                   {range.label}
                 </button>
@@ -370,7 +337,7 @@ interface RestaurantCardProps {
 
 function RestaurantCard({ restaurant, index }: RestaurantCardProps) {
   return (
-    <div 
+    <div
       className="group border border-[#222] bg-[#111] hover:border-[#00ff88]/50 transition-all duration-300 relative overflow-hidden"
       style={{ animationDelay: `${index * 50}ms` }}
     >
@@ -382,7 +349,7 @@ function RestaurantCard({ restaurant, index }: RestaurantCardProps) {
             {String(index + 1).padStart(2, '0')}
           </div>
         </div>
-        
+
         {/* Rating badge */}
         <div className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-[#0a0a0a]/90 border border-[#222]">
           <span className="text-[#00ff88]">{Icons.star}</span>
@@ -520,11 +487,10 @@ function RestaurantsGrid() {
                       <button
                         key={page}
                         onClick={() => setCurrentPage(page)}
-                        className={`w-10 h-10 font-mono text-sm transition-all border ${
-                          currentPage === page
-                            ? "bg-[#00ff88] text-[#0a0a0a] border-[#00ff88]"
-                            : "bg-transparent text-[#666] border-[#222] hover:border-[#333]"
-                        }`}
+                        className={`w-10 h-10 font-mono text-sm transition-all border ${currentPage === page
+                          ? "bg-[#00ff88] text-[#0a0a0a] border-[#00ff88]"
+                          : "bg-transparent text-[#666] border-[#222] hover:border-[#333]"
+                          }`}
                       >
                         {String(page).padStart(2, '0')}
                       </button>
@@ -547,25 +513,7 @@ function RestaurantsGrid() {
   );
 }
 
-function Footer() {
-  return (
-    <footer className="py-16 bg-[#0a0a0a] border-t border-[#222]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 border border-[#00ff88] flex items-center justify-center">
-              <span className="text-[#00ff88] font-mono font-bold text-lg">C</span>
-            </div>
-            <span className="font-display text-xl font-bold text-white tracking-tighter">Club Empar</span>
-          </div>
-          <p className="text-[#444] text-xs font-mono">
-            © 2024 Club Empar. Todos os direitos reservados.
-          </p>
-        </div>
-      </div>
-    </footer>
-  );
-}
+// Footer removed
 
 export default function Restaurants() {
   return (

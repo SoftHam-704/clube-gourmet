@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "wouter";
+import { Navbar } from "../components/layout/Navbar";
+import { Footer } from "../components/layout/Footer";
 
 const PLANS = [
   {
@@ -116,39 +118,7 @@ const Icons = {
   ),
 };
 
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "glass border-b border-[#222]" : "bg-[#0a0a0a]"}`}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 border border-[#00ff88] flex items-center justify-center transition-all group-hover:bg-[#00ff88]">
-              <span className="text-[#00ff88] font-mono font-bold text-lg group-hover:text-[#0a0a0a] transition-colors">C</span>
-            </div>
-            <span className="font-display text-xl font-bold text-white tracking-tighter">Club Empar</span>
-          </Link>
-
-          <div className="hidden md:flex items-center gap-8">
-            <Link href="/" className="text-[#666] hover:text-white transition-colors font-medium text-sm tracking-wide uppercase">Início</Link>
-            <Link href="/restaurants" className="text-[#666] hover:text-white transition-colors font-medium text-sm tracking-wide uppercase">Restaurantes</Link>
-            <Link href="/plans" className="text-[#00ff88] font-medium text-sm tracking-wide uppercase">Planos</Link>
-            <Link href="/plans" className="px-6 py-2.5 bg-[#00ff88] text-[#0a0a0a] font-semibold text-sm tracking-wide uppercase hover:glow-green transition-all">
-              Começar
-            </Link>
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-}
+// Navbar removed
 
 function HeroSection() {
   return (
@@ -160,7 +130,7 @@ function HeroSection() {
 
       <div className="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
         <span className="text-[#00ff88] font-mono text-sm tracking-widest uppercase mb-4 block">// Planos</span>
-        
+
         <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl font-bold text-white tracking-tighter mb-6">
           Escolha Sua<br />
           <span className="text-gradient">Economia</span>
@@ -198,16 +168,15 @@ interface PlanCardProps {
 
 function PlanCard({ plan }: PlanCardProps) {
   return (
-    <div className={`relative transition-all duration-300 ${
-      plan.popular 
-        ? "border-2 border-[#00ff88] bg-[#111] scale-105 z-10" 
-        : "border border-[#222] bg-[#111] hover:border-[#333]"
-    }`}>
+    <div className={`relative transition-all duration-300 ${plan.popular
+      ? "border-2 border-[#00ff88] bg-[#111] scale-105 z-10"
+      : "border border-[#222] bg-[#111] hover:border-[#333]"
+      }`}>
       {/* Popular badge */}
       {plan.popular && (
         <div className="absolute -top-px left-0 right-0 h-1 bg-[#00ff88]" />
       )}
-      
+
       <div className="p-8">
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
@@ -244,11 +213,10 @@ function PlanCard({ plan }: PlanCardProps) {
         </ul>
 
         {/* CTA */}
-        <button className={`w-full flex items-center justify-center gap-2 py-4 font-bold text-sm tracking-wider uppercase transition-all ${
-          plan.popular 
-            ? "bg-[#00ff88] text-[#0a0a0a] hover:glow-green"
-            : "border border-[#333] text-white hover:border-[#00ff88] hover:text-[#00ff88]"
-        }`}>
+        <button className={`w-full flex items-center justify-center gap-2 py-4 font-bold text-sm tracking-wider uppercase transition-all ${plan.popular
+          ? "bg-[#00ff88] text-[#0a0a0a] hover:glow-green"
+          : "border border-[#333] text-white hover:border-[#00ff88] hover:text-[#00ff88]"
+          }`}>
           <span>{Icons.lightning}</span>
           Assinar Agora
         </button>
@@ -269,24 +237,22 @@ function PricingSection() {
   return (
     <section className="py-20 bg-[#0a0a0a] relative">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
-      
+
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         {/* Toggle */}
         <div className="flex items-center justify-center gap-4 mb-16">
           <button
             onClick={() => setBillingPeriod("monthly")}
-            className={`px-6 py-2 font-mono text-sm transition-all ${
-              billingPeriod === "monthly" ? "text-white" : "text-[#666] hover:text-white"
-            }`}
+            className={`px-6 py-2 font-mono text-sm transition-all ${billingPeriod === "monthly" ? "text-white" : "text-[#666] hover:text-white"
+              }`}
           >
             Mensal
           </button>
           <div className="w-px h-4 bg-[#333]" />
           <button
             onClick={() => setBillingPeriod("annual")}
-            className={`px-6 py-2 font-mono text-sm transition-all flex items-center gap-2 ${
-              billingPeriod === "annual" ? "text-white" : "text-[#666] hover:text-white"
-            }`}
+            className={`px-6 py-2 font-mono text-sm transition-all flex items-center gap-2 ${billingPeriod === "annual" ? "text-white" : "text-[#666] hover:text-white"
+              }`}
           >
             Anual
             <span className="px-2 py-0.5 bg-[#00ff88]/10 text-[#00ff88] text-xs">-16%</span>
@@ -405,7 +371,7 @@ function FAQSection() {
   return (
     <section className="py-20 bg-[#0a0a0a] relative">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
-      
+
       <div className="max-w-3xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <span className="text-[#00ff88] font-mono text-sm tracking-widest uppercase mb-4 block">// FAQ</span>
@@ -446,11 +412,11 @@ function CTASection() {
   return (
     <section className="py-20 bg-[#111] relative overflow-hidden">
       <div className="absolute inset-0 grid-bg opacity-20" />
-      
+
       {/* Geometric shapes */}
       <div className="absolute top-10 left-10 w-32 h-32 border border-[#00ff88]/20 rotate-45" />
       <div className="absolute bottom-10 right-10 w-24 h-24 border border-[#ff3366]/20 -rotate-12" />
-      
+
       <div className="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
         <h2 className="font-display text-4xl lg:text-5xl font-bold text-white tracking-tighter mb-6">
           Pronto para <span className="text-gradient">Economizar</span>?
@@ -471,25 +437,7 @@ function CTASection() {
   );
 }
 
-function Footer() {
-  return (
-    <footer className="py-16 bg-[#0a0a0a] border-t border-[#222]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 border border-[#00ff88] flex items-center justify-center">
-              <span className="text-[#00ff88] font-mono font-bold text-lg">C</span>
-            </div>
-            <span className="font-display text-xl font-bold text-white tracking-tighter">Club Empar</span>
-          </div>
-          <p className="text-[#444] text-xs font-mono">
-            © 2024 Club Empar. Todos os direitos reservados.
-          </p>
-        </div>
-      </div>
-    </footer>
-  );
-}
+// Footer removed
 
 export default function Plans() {
   return (

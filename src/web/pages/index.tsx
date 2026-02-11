@@ -1,12 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link } from "wouter";
-
-const NAV_LINKS = [
-  { label: "Restaurantes", href: "/restaurants", isPage: true },
-  { label: "Planos", href: "/plans", isPage: true },
-  { label: "Benefícios", href: "#benefits", isPage: false },
-  { label: "Como Funciona", href: "#how-it-works", isPage: false },
-];
+import { Navbar } from "../components/layout/Navbar";
+import { Footer } from "../components/layout/Footer";
 
 const BENEFITS = [
   {
@@ -92,72 +85,10 @@ const Icons = {
   ),
 };
 
-function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+// Navbar removed - using shared component
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "glass border-b border-[#222]" : "bg-transparent"}`}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          <a href="#" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 border border-[#00ff88] flex items-center justify-center transition-all group-hover:bg-[#00ff88] group-hover:glow-green">
-              <span className="text-[#00ff88] font-mono font-bold text-lg group-hover:text-[#0a0a0a] transition-colors">C</span>
-            </div>
-            <span className="font-display text-xl font-bold text-white tracking-tighter">Club Empar</span>
-          </a>
-
-          <div className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map((link) => (
-              link.isPage ? (
-                <Link key={link.href} href={link.href} className="text-[#666] hover:text-white transition-colors font-medium text-sm tracking-wide uppercase">
-                  {link.label}
-                </Link>
-              ) : (
-                <a key={link.href} href={link.href} className="text-[#666] hover:text-white transition-colors font-medium text-sm tracking-wide uppercase">
-                  {link.label}
-                </a>
-              )
-            ))}
-            <Link href="/plans" className="px-6 py-2.5 bg-[#00ff88] text-[#0a0a0a] font-semibold text-sm tracking-wide uppercase hover:glow-green transition-all">
-              Começar
-            </Link>
-          </div>
-
-          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-white" aria-label="Abrir menu">
-            {isOpen ? Icons.close : Icons.menu}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      <div className={`md:hidden overflow-hidden transition-all duration-300 ${isOpen ? "max-h-96" : "max-h-0"}`}>
-        <div className="px-6 py-4 glass border-t border-[#222] space-y-4">
-          {NAV_LINKS.map((link) => (
-            link.isPage ? (
-              <Link key={link.href} href={link.href} onClick={() => setIsOpen(false)} className="block text-[#666] hover:text-white transition-colors font-medium py-2 text-sm tracking-wide uppercase">
-                {link.label}
-              </Link>
-            ) : (
-              <a key={link.href} href={link.href} onClick={() => setIsOpen(false)} className="block text-[#666] hover:text-white transition-colors font-medium py-2 text-sm tracking-wide uppercase">
-                {link.label}
-              </a>
-            )
-          ))}
-          <Link href="/plans" className="block w-full text-center px-6 py-3 bg-[#00ff88] text-[#0a0a0a] font-semibold text-sm tracking-wide uppercase">
-            Começar
-          </Link>
-        </div>
-      </div>
-    </nav>
-  );
-}
+import { useState, useEffect } from "react";
+import { Link } from "wouter";
 
 function HeroSection() {
   const [count1, setCount1] = useState(0);
@@ -169,9 +100,9 @@ function HeroSection() {
     const steps = 60;
     const interval = duration / steps;
 
-    const timer1 = setInterval(() => setCount1(prev => prev < 50 ? prev + 1 : 50), interval);
-    const timer2 = setInterval(() => setCount2(prev => prev < 15 ? prev + 0.3 : 15), interval);
-    const timer3 = setInterval(() => setCount3(prev => prev < 847 ? prev + 15 : 847), interval);
+    const timer1 = setInterval(() => setCount1((prev: number) => prev < 50 ? prev + 1 : 50), interval);
+    const timer2 = setInterval(() => setCount2((prev: number) => prev < 15 ? prev + 0.3 : 15), interval);
+    const timer3 = setInterval(() => setCount3((prev: number) => prev < 847 ? prev + 15 : 847), interval);
 
     return () => {
       clearInterval(timer1);
@@ -184,23 +115,23 @@ function HeroSection() {
     <section className="relative min-h-screen flex items-center overflow-hidden bg-[#0a0a0a]">
       {/* Grid background */}
       <div className="absolute inset-0 grid-bg opacity-50" />
-      
+
       {/* Large geometric shapes */}
       <div className="absolute top-20 right-10 w-80 h-80 border border-[#00ff88]/10 rotate-45" />
       <div className="absolute top-24 right-14 w-72 h-72 border border-[#00ff88]/20 rotate-45 animate-pulse-glow" />
       <div className="absolute bottom-20 left-10 w-64 h-64 border border-[#ff3366]/10 rotate-12" />
       <div className="absolute bottom-24 left-14 w-56 h-56 border border-[#ff3366]/20 rotate-12" />
-      
+
       {/* Hexagon shape */}
       <svg className="absolute top-1/4 left-[15%] w-24 h-24 text-[#222]" viewBox="0 0 100 100">
         <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" fill="none" stroke="currentColor" strokeWidth="1" />
       </svg>
-      
+
       {/* Triangle shapes */}
       <svg className="absolute bottom-1/4 right-[20%] w-16 h-16 text-[#00ff88]/20" viewBox="0 0 100 100">
         <polygon points="50,10 90,90 10,90" fill="none" stroke="currentColor" strokeWidth="2" />
       </svg>
-      
+
       {/* Scan line effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute w-full h-20 bg-gradient-to-b from-transparent via-[#00ff88]/5 to-transparent animate-scan" />
@@ -315,7 +246,7 @@ function BenefitsSection() {
     <section id="benefits" className="py-32 bg-[#0a0a0a] relative overflow-hidden">
       {/* Top border */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
-      
+
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-20 gap-8">
           <div>
@@ -333,22 +264,22 @@ function BenefitsSection() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-px bg-[#222]">
           {BENEFITS.map((benefit, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="group bg-[#0a0a0a] p-8 hover:bg-[#111] transition-all duration-500 relative"
             >
               {/* Corner accent */}
               <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-[#333] opacity-0 group-hover:opacity-100 group-hover:border-[#00ff88] transition-all" />
-              
+
               {/* Stat */}
               <div className="font-mono text-6xl font-bold text-[#222] group-hover:text-[#00ff88]/20 transition-colors mb-4">
                 {benefit.stat}
               </div>
-              
+
               <div className="text-[#666] text-xs font-mono tracking-widest uppercase mb-6">
                 {benefit.statLabel}
               </div>
-              
+
               <h3 className="font-display text-xl font-bold text-white mb-3 tracking-tight group-hover:text-[#00ff88] transition-colors">
                 {benefit.title}
               </h3>
@@ -373,11 +304,11 @@ function HowItWorksSection() {
     <section id="how-it-works" className="py-32 bg-[#111] relative overflow-hidden">
       {/* Grid pattern */}
       <div className="absolute inset-0 grid-bg opacity-30" />
-      
+
       {/* Decorative elements */}
       <div className="absolute top-20 right-20 w-px h-40 bg-gradient-to-b from-[#00ff88] to-transparent" />
       <div className="absolute bottom-20 left-20 w-px h-40 bg-gradient-to-b from-transparent to-[#ff3366]" />
-      
+
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-20">
           <span className="text-[#00ff88] font-mono text-sm tracking-widest uppercase mb-4 block">// Processo</span>
@@ -395,21 +326,20 @@ function HowItWorksSection() {
           <div className="relative">
             {/* Connecting line */}
             <div className="absolute left-[26px] top-12 bottom-12 w-px bg-gradient-to-b from-[#00ff88] via-[#222] to-[#ff3366] hidden lg:block" />
-            
+
             <div className="space-y-2 relative">
               {STEPS.map((step, index) => (
                 <button
                   key={index}
                   onClick={() => setActiveStep(index)}
-                  className={`w-full text-left p-6 transition-all duration-300 border group relative ${
-                    activeStep === index
-                      ? "bg-[#0a0a0a] border-[#00ff88] shadow-[0_0_30px_rgba(0,255,136,0.1)]"
-                      : "bg-transparent border-[#222] hover:border-[#333] hover:bg-[#0a0a0a]/50"
-                  }`}
+                  className={`w-full text-left p-6 transition-all duration-300 border group relative ${activeStep === index
+                    ? "bg-[#0a0a0a] border-[#00ff88] shadow-[0_0_30px_rgba(0,255,136,0.1)]"
+                    : "bg-transparent border-[#222] hover:border-[#333] hover:bg-[#0a0a0a]/50"
+                    }`}
                 >
                   {/* Gradient border on hover for inactive */}
                   <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none ${activeStep !== index ? "border-gradient" : ""}`} />
-                  
+
                   <div className="flex items-start gap-6 relative">
                     {/* Step indicator dot */}
                     <div className="relative">
@@ -440,7 +370,7 @@ function HowItWorksSection() {
             <div className="relative w-full aspect-square max-w-md">
               {/* Outer border */}
               <div className="absolute inset-0 border border-[#222]" />
-              
+
               {/* Inner content */}
               <div className="absolute inset-8 border border-[#00ff88]/30 bg-[#0a0a0a] flex items-center justify-center">
                 <div className="text-center">
@@ -470,7 +400,7 @@ function TestimonialsSection() {
   return (
     <section className="py-32 bg-[#0a0a0a] relative">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
-      
+
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-20">
           <span className="text-[#00ff88] font-mono text-sm tracking-widest uppercase mb-4 block">// Depoimentos</span>
@@ -517,7 +447,7 @@ function NewsletterSection() {
   return (
     <section className="py-32 bg-[#111] relative overflow-hidden">
       <div className="absolute inset-0 grid-bg opacity-20" />
-      
+
       <div className="relative max-w-3xl mx-auto px-6 lg:px-8 text-center">
         <span className="text-[#00ff88] font-mono text-sm tracking-widest uppercase mb-4 block">// Newsletter</span>
         <h2 className="font-display text-4xl lg:text-5xl font-bold text-white tracking-tighter mb-6">
@@ -547,55 +477,7 @@ function NewsletterSection() {
   );
 }
 
-function Footer() {
-  return (
-    <footer className="py-16 bg-[#0a0a0a] border-t border-[#222]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-12 mb-16">
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 border border-[#00ff88] flex items-center justify-center">
-                <span className="text-[#00ff88] font-mono font-bold text-lg">C</span>
-              </div>
-              <span className="font-display text-xl font-bold text-white tracking-tighter">Club Empar</span>
-            </div>
-            <p className="text-[#666] text-sm leading-relaxed max-w-sm">
-              A forma mais inteligente de jantar fora. Economia de até 50% nos melhores restaurantes do Brasil.
-            </p>
-          </div>
-
-          <div>
-            <h4 className="text-white font-semibold mb-4 text-sm tracking-wider uppercase">Links</h4>
-            <ul className="space-y-3">
-              <li><Link href="/restaurants" className="text-[#666] hover:text-[#00ff88] transition-colors text-sm">Restaurantes</Link></li>
-              <li><Link href="/plans" className="text-[#666] hover:text-[#00ff88] transition-colors text-sm">Planos</Link></li>
-              <li><a href="#benefits" className="text-[#666] hover:text-[#00ff88] transition-colors text-sm">Benefícios</a></li>
-              <li><a href="#how-it-works" className="text-[#666] hover:text-[#00ff88] transition-colors text-sm">Como Funciona</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-semibold mb-4 text-sm tracking-wider uppercase">Contato</h4>
-            <ul className="space-y-3">
-              <li className="text-[#666] text-sm font-mono">contato@clubempar.com</li>
-              <li className="text-[#666] text-sm font-mono">(11) 99999-9999</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="border-t border-[#222] pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-[#444] text-xs font-mono">
-            © 2024 Club Empar. Todos os direitos reservados.
-          </p>
-          <div className="flex gap-6">
-            <a href="#" className="text-[#444] hover:text-[#00ff88] transition-colors text-xs font-mono">Termos</a>
-            <a href="#" className="text-[#444] hover:text-[#00ff88] transition-colors text-xs font-mono">Privacidade</a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
+// Footer removed - using shared component
 
 export default function Index() {
   return (
