@@ -35,10 +35,13 @@ export function Navbar() {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "glass border-b border-[#222]" : "bg-transparent"}`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center gap-3 group">
-            <img src="/logo.png" alt="Club Empar" className="w-12 h-12 transition-transform group-hover:scale-110" />
-            <span className="font-display text-2xl font-bold text-white tracking-wide">Club Empar</span>
+        <div className="flex items-center justify-between h-24">
+          <Link href="/" className="flex items-center gap-4 group">
+            <img src="/logo.png" alt="Club Empar" className="w-16 h-16 transition-transform group-hover:scale-105" />
+            <div className="flex flex-col">
+              <span className="font-display text-3xl font-bold text-[#c9a961] tracking-widest leading-none">CLUB EMPAR</span>
+              <span className="font-display text-xs font-medium text-[#c9a961]/70 tracking-[0.3em] uppercase mt-1">Gourmet</span>
+            </div>
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
