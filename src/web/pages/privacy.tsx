@@ -32,7 +32,7 @@ export default function Privacy() {
             <section className="pt-32 pb-20 relative overflow-hidden">
                 <div className="absolute inset-0 grid-bg opacity-30" />
                 <div className="relative max-w-4xl mx-auto px-6 lg:px-8">
-                    <span className="text-[#ff3366] font-mono text-sm tracking-widest uppercase mb-4 block">// LGPD</span>
+                    <span className="text-[#d4c5a0] font-mono text-sm tracking-widest uppercase mb-4 block">// LGPD</span>
                     <h1 className="font-display text-5xl lg:text-7xl font-bold tracking-tighter mb-8">
                         Política de <span className="text-gradient">Privacidade</span>
                     </h1>
@@ -44,14 +44,14 @@ export default function Privacy() {
                 <div className="max-w-4xl mx-auto px-6 lg:px-8 bg-[#111]/50 border border-[#222] p-8 lg:p-16 space-y-12">
                     {sections.map((section, i) => (
                         <div key={i} className="space-y-4">
-                            <h2 className="text-2xl font-bold text-white border-l-2 border-[#ff3366] pl-6">{section.title}</h2>
+                            <h2 className="text-2xl font-bold text-white border-l-2 border-[#d4c5a0] pl-6">{section.title}</h2>
                             <p className="text-[#999] leading-relaxed text-lg pl-6">{section.content}</p>
                         </div>
                     ))}
 
                     <div className="pt-12 border-t border-[#222]">
                         <p className="text-[#666] text-sm">
-                            Para questões sobre privacidade e LGPD, entre em contato com nosso DPO (Data Protection Officer) em <a href="mailto:privacidade@clubempar.com" className="text-[#ff3366] hover:underline">privacidade@clubempar.com</a>.
+                            Para questões sobre privacidade e LGPD, entre em contato com nosso DPO (Data Protection Officer) em <a href="mailto:privacidade@clubempar.com" className="text-[#d4c5a0] hover:underline">privacidade@clubempar.com</a>.
                         </p>
                     </div>
                 </div>

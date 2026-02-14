@@ -9,11 +9,11 @@ export default function About() {
             {/* Hero Section */}
             <section className="pt-32 pb-20 relative overflow-hidden">
                 <div className="absolute inset-0 grid-bg opacity-30" />
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#00ff88]/5 blur-[150px]" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#4ec985]/5 blur-[150px]" />
 
                 <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="max-w-3xl">
-                        <span className="text-[#00ff88] font-mono text-sm tracking-widest uppercase mb-4 block">// Sobre Nós</span>
+                        <span className="text-[#4ec985] font-mono text-sm tracking-widest uppercase mb-4 block">// Sobre Nós</span>
                         <h1 className="font-display text-5xl lg:text-7xl font-bold tracking-tighter mb-6">
                             Democratizando a<br />
                             <span className="text-gradient">Alta Gastronomia</span>
@@ -30,7 +30,7 @@ export default function About() {
                 <div className="max-w-7xl mx-auto px-6 lg:px-8">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
                         <div>
-                            <div className="font-mono text-4xl font-bold text-[#00ff88]">2022</div>
+                            <div className="font-mono text-4xl font-bold text-[#4ec985]">2022</div>
                             <div className="text-[#666] text-xs uppercase tracking-widest mt-2">Fundação</div>
                         </div>
                         <div>
@@ -42,7 +42,7 @@ export default function About() {
                             <div className="text-[#666] text-xs uppercase tracking-widest mt-2">Membros</div>
                         </div>
                         <div>
-                            <div className="font-mono text-4xl font-bold text-[#ff3366]">R$2M+</div>
+                            <div className="font-mono text-4xl font-bold text-[#d4c5a0]">R$2M+</div>
                             <div className="text-[#666] text-xs uppercase tracking-widest mt-2">Economizados</div>
                         </div>
                     </div>
@@ -66,11 +66,11 @@ export default function About() {
 
                             <div className="grid sm:grid-cols-2 gap-8 pt-8">
                                 <div className="p-6 border border-[#222] bg-[#111]/50">
-                                    <h3 className="text-[#00ff88] font-mono text-sm uppercase tracking-widest mb-3">// Missão</h3>
+                                    <h3 className="text-[#4ec985] font-mono text-sm uppercase tracking-widest mb-3">// Missão</h3>
                                     <p className="text-sm text-[#666]">Tornar a gastronomia premium acessível a todos, promovendo o crescimento do setor.</p>
                                 </div>
                                 <div className="p-6 border border-[#222] bg-[#111]/50">
-                                    <h3 className="text-[#ff3366] font-mono text-sm uppercase tracking-widest mb-3">// Visão</h3>
+                                    <h3 className="text-[#d4c5a0] font-mono text-sm uppercase tracking-widest mb-3">// Visão</h3>
                                     <p className="text-sm text-[#666]">Ser a maior plataforma de benefícios gastronômicos da América Latina até 2028.</p>
                                 </div>
                             </div>
@@ -79,13 +79,13 @@ export default function About() {
                         <div className="relative">
                             {/* Abstract decorative graphic */}
                             <div className="aspect-square border border-[#222] bg-[#111] relative flex items-center justify-center">
-                                <div className="absolute inset-4 border border-[#00ff88]/20" />
-                                <div className="absolute inset-8 border border-[#ff3366]/20 rotate-12" />
+                                <div className="absolute inset-4 border border-[#4ec985]/20" />
+                                <div className="absolute inset-8 border border-[#d4c5a0]/20 rotate-12" />
                                 <div className="font-mono text-8xl font-bold text-[#222]">CE</div>
 
                                 {/* Corner accents */}
-                                <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#00ff88]" />
-                                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#ff3366]" />
+                                <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#4ec985]" />
+                                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#d4c5a0]" />
                             </div>
                         </div>
                     </div>
@@ -96,15 +96,15 @@ export default function About() {
             <section className="py-32 bg-[#111] relative overflow-hidden">
                 <div className="absolute inset-0 grid-bg opacity-20" />
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center mb-16">
-                    <span className="text-[#00ff88] font-mono text-sm tracking-widest uppercase mb-4 block">// Nossos Valores</span>
+                    <span className="text-[#4ec985] font-mono text-sm tracking-widest uppercase mb-4 block">// Nossos Valores</span>
                     <h2 className="font-display text-4xl lg:text-5xl font-bold tracking-tighter">O DNA do Club Empar</h2>
                 </div>
 
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 grid md:grid-cols-3 gap-8">
                     {[
-                        { title: "Transparência", desc: "Sem letras miúdas. O benefício é real, direto e simples.", color: "#00ff88" },
-                        { title: "Qualidade", desc: "Curadoria rigorosa. Só os melhores restaurantes entram no nosso clube.", color: "#ff3366" },
-                        { title: "Inovação", desc: "Tecnologia a serviço da experiência gastronômica.", color: "#00ff88" }
+                        { title: "Transparência", desc: "Sem letras miúdas. O benefício é real, direto e simples.", color: "#4ec985" },
+                        { title: "Qualidade", desc: "Curadoria rigorosa. Só os melhores restaurantes entram no nosso clube.", color: "#d4c5a0" },
+                        { title: "Inovação", desc: "Tecnologia a serviço da experiência gastronômica.", color: "#4ec985" }
                     ].map((item, i) => (
                         <div key={i} className="p-8 border border-[#222] bg-[#0a0a0a] hover:border-[#333] transition-all group">
                             <div className="w-12 h-px mb-6 transition-all group-hover:w-full" style={{ backgroundColor: item.color }} />

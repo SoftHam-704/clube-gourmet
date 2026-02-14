@@ -201,11 +201,11 @@ function HeroSection() {
     <section className="pt-32 pb-16 bg-[#0a0a0a] relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 grid-bg opacity-30" />
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#00ff88]/5 blur-[150px]" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#4ec985]/5 blur-[150px]" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         <div className="max-w-3xl">
-          <span className="text-[#00ff88] font-mono text-sm tracking-widest uppercase mb-4 block">// Restaurantes</span>
+          <span className="text-[#4ec985] font-mono text-sm tracking-widest uppercase mb-4 block">// Restaurantes</span>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tighter mb-6">
             Descubra Onde<br />
             <span className="text-gradient">Economizar</span>
@@ -224,14 +224,14 @@ function HeroSection() {
               placeholder="Buscar restaurantes..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-[#111] border border-[#222] text-white placeholder-[#444] focus:border-[#00ff88] focus:outline-none font-mono text-sm"
+              className="w-full pl-12 pr-4 py-4 bg-[#111] border border-[#222] text-white placeholder-[#444] focus:border-[#4ec985] focus:outline-none font-mono text-sm"
             />
           </div>
           <div className="relative">
             <select
               value={selectedCity}
               onChange={(e) => setSelectedCity(e.target.value)}
-              className="w-full md:w-48 px-4 py-4 bg-[#111] border border-[#222] text-white focus:border-[#00ff88] focus:outline-none appearance-none font-mono text-sm cursor-pointer"
+              className="w-full md:w-48 px-4 py-4 bg-[#111] border border-[#222] text-white focus:border-[#4ec985] focus:outline-none appearance-none font-mono text-sm cursor-pointer"
             >
               {CITIES.map((city) => (
                 <option key={city} value={city}>{city}</option>
@@ -285,7 +285,7 @@ function FilterSidebar({ selectedCuisine, setSelectedCuisine, selectedPrice, set
                   key={cuisine}
                   onClick={() => setSelectedCuisine(cuisine)}
                   className={`w-full text-left px-4 py-2 text-sm transition-all border ${selectedCuisine === cuisine
-                    ? "bg-[#00ff88]/10 border-[#00ff88] text-[#00ff88]"
+                    ? "bg-[#4ec985]/10 border-[#4ec985] text-[#4ec985]"
                     : "bg-transparent border-[#222] text-[#666] hover:border-[#333] hover:text-white"
                     }`}
                 >
@@ -304,7 +304,7 @@ function FilterSidebar({ selectedCuisine, setSelectedCuisine, selectedPrice, set
                   key={range.value}
                   onClick={() => setSelectedPrice(selectedPrice === range.value ? null : range.value)}
                   className={`w-full text-left px-4 py-2 text-sm transition-all border ${selectedPrice === range.value
-                    ? "bg-[#00ff88]/10 border-[#00ff88] text-[#00ff88]"
+                    ? "bg-[#4ec985]/10 border-[#4ec985] text-[#4ec985]"
                     : "bg-transparent border-[#222] text-[#666] hover:border-[#333] hover:text-white"
                     }`}
                 >
@@ -320,7 +320,7 @@ function FilterSidebar({ selectedCuisine, setSelectedCuisine, selectedPrice, set
               setSelectedCuisine("Todas");
               setSelectedPrice(null);
             }}
-            className="w-full px-4 py-3 border border-[#333] text-[#666] hover:border-[#ff3366] hover:text-[#ff3366] transition-all text-sm font-mono"
+            className="w-full px-4 py-3 border border-[#333] text-[#666] hover:border-[#d4c5a0] hover:text-[#d4c5a0] transition-all text-sm font-mono"
           >
             Limpar Filtros
           </button>
@@ -338,21 +338,21 @@ interface RestaurantCardProps {
 function RestaurantCard({ restaurant, index }: RestaurantCardProps) {
   return (
     <div
-      className="group border border-[#222] bg-[#111] hover:border-[#00ff88]/50 transition-all duration-300 relative overflow-hidden"
+      className="group border border-[#222] bg-[#111] hover:border-[#4ec985]/50 transition-all duration-300 relative overflow-hidden"
       style={{ animationDelay: `${index * 50}ms` }}
     >
       {/* Image placeholder with abstract design */}
       <div className="relative h-48 bg-[#0a0a0a] overflow-hidden">
         <div className="absolute inset-0 grid-bg opacity-50" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="font-mono text-6xl font-bold text-[#222] group-hover:text-[#00ff88]/20 transition-colors">
+          <div className="font-mono text-6xl font-bold text-[#222] group-hover:text-[#4ec985]/20 transition-colors">
             {String(index + 1).padStart(2, '0')}
           </div>
         </div>
 
         {/* Rating badge */}
         <div className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-[#0a0a0a]/90 border border-[#222]">
-          <span className="text-[#00ff88]">{Icons.star}</span>
+          <span className="text-[#4ec985]">{Icons.star}</span>
           <span className="text-white font-mono text-sm">{restaurant.rating}</span>
         </div>
 
@@ -369,7 +369,7 @@ function RestaurantCard({ restaurant, index }: RestaurantCardProps) {
 
       <div className="p-6">
         <div className="flex items-start justify-between mb-2">
-          <h3 className="font-display text-lg font-bold text-white group-hover:text-[#00ff88] transition-colors">
+          <h3 className="font-display text-lg font-bold text-white group-hover:text-[#4ec985] transition-colors">
             {restaurant.name}
           </h3>
           <span className="text-[#666] font-mono text-sm">
@@ -386,14 +386,14 @@ function RestaurantCard({ restaurant, index }: RestaurantCardProps) {
           {restaurant.description}
         </p>
 
-        <button className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-[#333] text-[#666] hover:border-[#00ff88] hover:text-[#00ff88] transition-all text-sm font-mono group/btn">
+        <button className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-[#333] text-[#666] hover:border-[#4ec985] hover:text-[#4ec985] transition-all text-sm font-mono group/btn">
           Ver Detalhes
           <span className="transition-transform group-hover/btn:translate-x-1">{Icons.arrow}</span>
         </button>
       </div>
 
       {/* Bottom accent */}
-      <div className="absolute bottom-0 left-0 w-0 h-px bg-[#00ff88] group-hover:w-full transition-all duration-500" />
+      <div className="absolute bottom-0 left-0 w-0 h-px bg-[#4ec985] group-hover:w-full transition-all duration-500" />
     </div>
   );
 }
@@ -450,13 +450,13 @@ function RestaurantsGrid() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setViewMode("grid")}
-                  className={`p-2 border transition-all ${viewMode === "grid" ? "border-[#00ff88] text-[#00ff88]" : "border-[#222] text-[#666] hover:border-[#333]"}`}
+                  className={`p-2 border transition-all ${viewMode === "grid" ? "border-[#4ec985] text-[#4ec985]" : "border-[#222] text-[#666] hover:border-[#333]"}`}
                 >
                   {Icons.grid}
                 </button>
                 <button
                   onClick={() => setViewMode("map")}
-                  className={`p-2 border transition-all ${viewMode === "map" ? "border-[#00ff88] text-[#00ff88]" : "border-[#222] text-[#666] hover:border-[#333]"}`}
+                  className={`p-2 border transition-all ${viewMode === "map" ? "border-[#4ec985] text-[#4ec985]" : "border-[#222] text-[#666] hover:border-[#333]"}`}
                 >
                   {Icons.map}
                 </button>
@@ -488,7 +488,7 @@ function RestaurantsGrid() {
                         key={page}
                         onClick={() => setCurrentPage(page)}
                         className={`w-10 h-10 font-mono text-sm transition-all border ${currentPage === page
-                          ? "bg-[#00ff88] text-[#0a0a0a] border-[#00ff88]"
+                          ? "bg-[#4ec985] text-[#0a0a0a] border-[#4ec985]"
                           : "bg-transparent text-[#666] border-[#222] hover:border-[#333]"
                           }`}
                       >

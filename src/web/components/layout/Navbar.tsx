@@ -37,8 +37,8 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 border border-[#00ff88] flex items-center justify-center transition-all group-hover:bg-[#00ff88] group-hover:glow-green">
-              <span className="text-[#00ff88] font-mono font-bold text-lg group-hover:text-[#0a0a0a] transition-colors">C</span>
+            <div className="w-10 h-10 border border-[#4ec985] flex items-center justify-center transition-all group-hover:bg-[#4ec985] group-hover:glow-green">
+              <span className="text-[#4ec985] font-mono font-bold text-lg group-hover:text-[#0a0a0a] transition-colors">C</span>
             </div>
             <span className="font-display text-xl font-bold text-white tracking-tighter">Club Empar</span>
           </Link>
@@ -50,7 +50,7 @@ export function Navbar() {
                   key={link.href} 
                   href={link.href} 
                   className={`transition-colors font-medium text-sm tracking-wide uppercase ${
-                    location === link.href ? "text-[#00ff88]" : "text-[#666] hover:text-white"
+                    location === link.href ? "text-[#4ec985]" : "text-[#666] hover:text-white"
                   }`}
                 >
                   {link.label}
@@ -65,7 +65,7 @@ export function Navbar() {
                 </a>
               )
             ))}
-            <Link href="/plans" className="px-6 py-2.5 bg-[#00ff88] text-[#0a0a0a] font-semibold text-sm tracking-wide uppercase hover:glow-green transition-all">
+            <Link href="/plans" className="px-6 py-2.5 bg-[#4ec985] text-[#0a0a0a] font-semibold text-sm tracking-wide uppercase hover:glow-green transition-all">
               Começar
             </Link>
           </div>
@@ -90,7 +90,7 @@ export function Navbar() {
               </a>
             )
           ))}
-          <Link href="/plans" className="block w-full text-center px-6 py-3 bg-[#00ff88] text-[#0a0a0a] font-semibold text-sm tracking-wide uppercase">
+          <Link href="/plans" className="block w-full text-center px-6 py-3 bg-[#4ec985] text-[#0a0a0a] font-semibold text-sm tracking-wide uppercase">
             Começar
           </Link>
         </div>
