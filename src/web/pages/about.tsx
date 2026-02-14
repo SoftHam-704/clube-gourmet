@@ -3,7 +3,7 @@ import { Footer } from "../components/layout/Footer";
 
 export default function About() {
     return (
-        <div className="bg-[#0a0a0a] min-h-screen text-white">
+        <div className="bg-[#0f1410] min-h-screen text-white">
             <Navbar />
 
             {/* Hero Section */}
@@ -106,7 +106,7 @@ export default function About() {
                         { title: "Qualidade", desc: "Curadoria rigorosa. Só os melhores restaurantes entram no nosso clube.", color: "#d4c5a0" },
                         { title: "Inovação", desc: "Tecnologia a serviço da experiência gastronômica.", color: "#4ec985" }
                     ].map((item, i) => (
-                        <div key={i} className="p-8 border border-[#222] bg-[#0a0a0a] hover:border-[#333] transition-all group">
+                        <div key={i} className="p-8 border border-[#222] bg-[#0f1410] hover:border-[#333] transition-all group">
                             <div className="w-12 h-px mb-6 transition-all group-hover:w-full" style={{ backgroundColor: item.color }} />
                             <h3 className="text-xl font-bold mb-4">{item.title}</h3>
                             <p className="text-[#666] leading-relaxed">{item.desc}</p>

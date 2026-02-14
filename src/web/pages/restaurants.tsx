@@ -198,7 +198,7 @@ function HeroSection() {
   const [selectedCity, setSelectedCity] = useState(CITIES[0]);
 
   return (
-    <section className="pt-32 pb-16 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="pt-32 pb-16 bg-[#0f1410] relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 grid-bg opacity-30" />
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#4ec985]/5 blur-[150px]" />
@@ -342,7 +342,7 @@ function RestaurantCard({ restaurant, index }: RestaurantCardProps) {
       style={{ animationDelay: `${index * 50}ms` }}
     >
       {/* Image placeholder with abstract design */}
-      <div className="relative h-48 bg-[#0a0a0a] overflow-hidden">
+      <div className="relative h-48 bg-[#0f1410] overflow-hidden">
         <div className="absolute inset-0 grid-bg opacity-50" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="font-mono text-6xl font-bold text-[#222] group-hover:text-[#4ec985]/20 transition-colors">
@@ -351,14 +351,14 @@ function RestaurantCard({ restaurant, index }: RestaurantCardProps) {
         </div>
 
         {/* Rating badge */}
-        <div className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-[#0a0a0a]/90 border border-[#222]">
+        <div className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-[#0f1410]/90 border border-[#222]">
           <span className="text-[#4ec985]">{Icons.star}</span>
           <span className="text-white font-mono text-sm">{restaurant.rating}</span>
         </div>
 
         {/* Cuisine tag */}
         <div className="absolute bottom-4 left-4">
-          <span className="px-3 py-1 bg-[#0a0a0a]/90 border border-[#222] text-[#666] font-mono text-xs uppercase">
+          <span className="px-3 py-1 bg-[#0f1410]/90 border border-[#222] text-[#666] font-mono text-xs uppercase">
             {restaurant.cuisine}
           </span>
         </div>
@@ -419,7 +419,7 @@ function RestaurantsGrid() {
   );
 
   return (
-    <section className="py-12 bg-[#0a0a0a]">
+    <section className="py-12 bg-[#0f1410]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex lg:gap-12">
           <FilterSidebar
@@ -517,7 +517,7 @@ function RestaurantsGrid() {
 
 export default function Restaurants() {
   return (
-    <div className="bg-[#0a0a0a] min-h-screen">
+    <div className="bg-[#0f1410] min-h-screen">
       <Navbar />
       <HeroSection />
       <RestaurantsGrid />

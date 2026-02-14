@@ -3,7 +3,7 @@ import { Footer } from "../components/layout/Footer";
 
 export default function Contact() {
     return (
-        <div className="bg-[#0a0a0a] min-h-screen text-white">
+        <div className="bg-[#0f1410] min-h-screen text-white">
             <Navbar />
 
             <section className="pt-32 pb-20 relative overflow-hidden">
@@ -57,17 +57,17 @@ export default function Contact() {
                                     <div className="grid sm:grid-cols-2 gap-6">
                                         <div className="space-y-2">
                                             <label className="text-[#666] text-xs font-mono uppercase tracking-widest">Nome Completo</label>
-                                            <input type="text" className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#222] focus:border-[#4ec985] outline-none transition-all font-mono text-sm" placeholder="Seu nome" />
+                                            <input type="text" className="w-full px-4 py-3 bg-[#0f1410] border border-[#222] focus:border-[#4ec985] outline-none transition-all font-mono text-sm" placeholder="Seu nome" />
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-[#666] text-xs font-mono uppercase tracking-widest">E-mail</label>
-                                            <input type="email" className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#222] focus:border-[#4ec985] outline-none transition-all font-mono text-sm" placeholder="seu@email.com" />
+                                            <input type="email" className="w-full px-4 py-3 bg-[#0f1410] border border-[#222] focus:border-[#4ec985] outline-none transition-all font-mono text-sm" placeholder="seu@email.com" />
                                         </div>
                                     </div>
 
                                     <div className="space-y-2">
                                         <label className="text-[#666] text-xs font-mono uppercase tracking-widest">Assunto</label>
-                                        <select className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#222] focus:border-[#4ec985] outline-none transition-all font-mono text-sm appearance-none cursor-pointer">
+                                        <select className="w-full px-4 py-3 bg-[#0f1410] border border-[#222] focus:border-[#4ec985] outline-none transition-all font-mono text-sm appearance-none cursor-pointer">
                                             <option>Dúvidas Gerais</option>
                                             <option>Problemas com Assinatura</option>
                                             <option>Seja um Parceiro</option>
@@ -78,7 +78,7 @@ export default function Contact() {
 
                                     <div className="space-y-2">
                                         <label className="text-[#666] text-xs font-mono uppercase tracking-widest">Mensagem</label>
-                                        <textarea rows={5} className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#222] focus:border-[#4ec985] outline-none transition-all font-mono text-sm resize-none" placeholder="Como podemos ajudar?"></textarea>
+                                        <textarea rows={5} className="w-full px-4 py-3 bg-[#0f1410] border border-[#222] focus:border-[#4ec985] outline-none transition-all font-mono text-sm resize-none" placeholder="Como podemos ajudar?"></textarea>
                                     </div>
 
                                     <button type="button" className="w-full py-4 bg-[#4ec985] text-[#0a0a0a] font-bold uppercase tracking-wider text-sm hover:glow-green transition-all">

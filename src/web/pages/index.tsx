@@ -112,7 +112,7 @@ function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-[#0a0a0a]">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-[#0f1410]">
       {/* Grid background */}
       <div className="absolute inset-0 grid-bg opacity-50" />
 
@@ -243,7 +243,7 @@ function HeroSection() {
 
 function BenefitsSection() {
   return (
-    <section id="benefits" className="py-32 bg-[#0a0a0a] relative overflow-hidden">
+    <section id="benefits" className="py-32 bg-[#0f1410] relative overflow-hidden">
       {/* Top border */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
 
@@ -266,7 +266,7 @@ function BenefitsSection() {
           {BENEFITS.map((benefit, index) => (
             <div
               key={index}
-              className="group bg-[#0a0a0a] p-8 hover:bg-[#111] transition-all duration-500 relative"
+              className="group bg-[#0f1410] p-8 hover:bg-[#111] transition-all duration-500 relative"
             >
               {/* Corner accent */}
               <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-[#333] opacity-0 group-hover:opacity-100 group-hover:border-[#4ec985] transition-all" />
@@ -333,8 +333,8 @@ function HowItWorksSection() {
                   key={index}
                   onClick={() => setActiveStep(index)}
                   className={`w-full text-left p-6 transition-all duration-300 border group relative ${activeStep === index
-                    ? "bg-[#0a0a0a] border-[#4ec985] shadow-[0_0_30px_rgba(0,255,136,0.1)]"
-                    : "bg-transparent border-[#222] hover:border-[#333] hover:bg-[#0a0a0a]/50"
+                    ? "bg-[#0f1410] border-[#4ec985] shadow-[0_0_30px_rgba(0,255,136,0.1)]"
+                    : "bg-transparent border-[#222] hover:border-[#333] hover:bg-[#0f1410]/50"
                     }`}
                 >
                   {/* Gradient border on hover for inactive */}
@@ -372,7 +372,7 @@ function HowItWorksSection() {
               <div className="absolute inset-0 border border-[#222]" />
 
               {/* Inner content */}
-              <div className="absolute inset-8 border border-[#4ec985]/30 bg-[#0a0a0a] flex items-center justify-center">
+              <div className="absolute inset-8 border border-[#4ec985]/30 bg-[#0f1410] flex items-center justify-center">
                 <div className="text-center">
                   <div className="font-mono text-[120px] font-bold text-[#4ec985] leading-none">
                     {STEPS[activeStep].number}
@@ -398,7 +398,7 @@ function HowItWorksSection() {
 
 function TestimonialsSection() {
   return (
-    <section className="py-32 bg-[#0a0a0a] relative">
+    <section className="py-32 bg-[#0f1410] relative">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -412,7 +412,7 @@ function TestimonialsSection() {
 
         <div className="grid md:grid-cols-3 gap-px bg-[#222]">
           {TESTIMONIALS.map((testimonial, index) => (
-            <div key={index} className="bg-[#0a0a0a] p-8 relative group hover:bg-[#111] transition-all">
+            <div key={index} className="bg-[#0f1410] p-8 relative group hover:bg-[#111] transition-all">
               <div className="absolute top-8 right-8">
                 <svg className="w-8 h-8 text-[#222] group-hover:text-[#4ec985]/20 transition-colors" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z" />
@@ -462,7 +462,7 @@ function NewsletterSection() {
           <input
             type="email"
             placeholder="seu@email.com"
-            className="flex-1 px-6 py-4 bg-[#0a0a0a] border border-[#222] text-white placeholder-[#444] focus:border-[#4ec985] focus:outline-none font-mono text-sm"
+            className="flex-1 px-6 py-4 bg-[#0f1410] border border-[#222] text-white placeholder-[#444] focus:border-[#4ec985] focus:outline-none font-mono text-sm"
           />
           <button className="px-8 py-4 bg-[#4ec985] text-[#0a0a0a] font-bold text-sm tracking-wider uppercase hover:glow-green transition-all">
             Inscrever
@@ -481,7 +481,7 @@ function NewsletterSection() {
 
 export default function Index() {
   return (
-    <div className="bg-[#0a0a0a] min-h-screen">
+    <div className="bg-[#0f1410] min-h-screen">
       <Navbar />
       <HeroSection />
       <BenefitsSection />

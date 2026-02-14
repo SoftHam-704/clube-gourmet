@@ -44,9 +44,9 @@
   /* Enterprise brand colors */
   --color-neon-green: #4ec985;
   --color-gold: #d4c5a0;
-  --color-dark-bg: #0a0a0a;
-  --color-dark-surface: #0f1410;
-  --color-dark-card: #0f3520;
+  --color-dark-bg: #0f1410;
+  --color-dark-surface: #0f3520;
+  --color-dark-card: #1a4d2e;
   --color-dark-border: #2d7a4f;
 
   /* Font families */
@@ -57,19 +57,19 @@
 
 :root {
   --radius: 2px;
-  --background: #0a0a0a;
+  --background: #0f1410;
   --foreground: #fafafa;
-  --card: #0f3520;
+  --card: #1a4d2e;
   --card-foreground: #fafafa;
-  --popover: #1a4d2e;
+  --popover: #0f3520;
   --popover-foreground: #fafafa;
   --primary: #4ec985;
   --primary-foreground: #0a0a0a;
-  --secondary: #1a4d2e;
-  --secondary-foreground: #d4c5a0;
-  --muted: #0f3520;
-  --muted-foreground: #9ca3af;
-  --accent: #d4c5a0;
+  --secondary: #0f3520;
+  --secondary-foreground: #fafafa;
+  --muted: #1a4d2e;
+  --muted-foreground: #d4c5a0;
+  --accent: #4ec985;
   --accent-foreground: #0a0a0a;
   --destructive: #ff3366;
   --border: #2d7a4f;
@@ -80,12 +80,12 @@
   --chart-3: #2d7a4f;
   --chart-4: #3da56a;
   --chart-5: #b89968;
-  --sidebar: #0a0a0a;
+  --sidebar: #0f1410;
   --sidebar-foreground: #fafafa;
   --sidebar-primary: #4ec985;
   --sidebar-primary-foreground: #0a0a0a;
   --sidebar-accent: #1a4d2e;
-  --sidebar-accent-foreground: #d4c5a0;
+  --sidebar-accent-foreground: #fafafa;
   --sidebar-border: #2d7a4f;
   --sidebar-ring: #4ec985;
 }
@@ -97,7 +97,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Sora', system-ui, sans-serif;
-    background: #0a0a0a;
+    background: #0f1410;
   }
 
   html {
@@ -281,7 +281,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #0f1410;
 }
 
 ::-webkit-scrollbar-thumb {

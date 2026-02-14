@@ -59,7 +59,7 @@ export default function Faq() {
     const filteredFaqs = FAQS.filter(faq => faq.category === activeCategory);
 
     return (
-        <div className="bg-[#0a0a0a] min-h-screen text-white">
+        <div className="bg-[#0f1410] min-h-screen text-white">
             <Navbar />
 
             <section className="pt-32 pb-20 relative overflow-hidden">

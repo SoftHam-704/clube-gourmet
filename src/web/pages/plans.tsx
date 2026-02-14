@@ -122,7 +122,7 @@ const Icons = {
 
 function HeroSection() {
   return (
-    <section className="pt-32 pb-16 bg-[#0a0a0a] relative overflow-hidden">
+    <section className="pt-32 pb-16 bg-[#0f1410] relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 grid-bg opacity-30" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-[#4ec985]/5 blur-[150px]" />
@@ -235,7 +235,7 @@ function PricingSection() {
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("annual");
 
   return (
-    <section className="py-20 bg-[#0a0a0a] relative">
+    <section className="py-20 bg-[#0f1410] relative">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
 
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
@@ -313,7 +313,7 @@ function ComparisonTable() {
 
         <div className="border border-[#222] overflow-hidden">
           {/* Header */}
-          <div className="grid grid-cols-4 bg-[#0a0a0a] border-b border-[#222]">
+          <div className="grid grid-cols-4 bg-[#0f1410] border-b border-[#222]">
             <div className="p-4 text-[#666] text-sm font-mono">Recurso</div>
             <div className="p-4 text-white text-sm font-mono text-center border-l border-[#222]">Mensal</div>
             <div className="p-4 text-[#4ec985] text-sm font-mono text-center border-l border-[#222]">Anual</div>
@@ -322,7 +322,7 @@ function ComparisonTable() {
 
           {/* Rows */}
           {features.map((feature, index) => (
-            <div key={index} className="grid grid-cols-4 border-b border-[#222] last:border-b-0 hover:bg-[#0a0a0a]/50 transition-colors">
+            <div key={index} className="grid grid-cols-4 border-b border-[#222] last:border-b-0 hover:bg-[#0f1410]/50 transition-colors">
               <div className="p-4 text-[#999] text-sm">{feature.name}</div>
               <div className="p-4 text-center border-l border-[#222]">
                 {typeof feature.monthly === "boolean" ? (
@@ -369,7 +369,7 @@ function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-20 bg-[#0a0a0a] relative">
+    <section className="py-20 bg-[#0f1410] relative">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
 
       <div className="max-w-3xl mx-auto px-6 lg:px-8">
@@ -441,7 +441,7 @@ function CTASection() {
 
 export default function Plans() {
   return (
-    <div className="bg-[#0a0a0a] min-h-screen">
+    <div className="bg-[#0f1410] min-h-screen">
       <Navbar />
       <HeroSection />
       <PricingSection />

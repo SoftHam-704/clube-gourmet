@@ -26,7 +26,7 @@ export default function Terms() {
     ];
 
     return (
-        <div className="bg-[#0a0a0a] min-h-screen text-white text-justify">
+        <div className="bg-[#0f1410] min-h-screen text-white text-justify">
             <Navbar />
 
             <section className="pt-32 pb-20 relative overflow-hidden">
