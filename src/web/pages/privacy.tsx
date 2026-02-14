@@ -26,7 +26,7 @@ export default function Privacy() {
     ];
 
     return (
-        <div className="bg-[#0f1410] min-h-screen text-white text-justify">
+        <div className="bg-[#1a4d2e] min-h-screen text-white text-justify">
             <Navbar />
 
             <section className="pt-32 pb-20 relative overflow-hidden">

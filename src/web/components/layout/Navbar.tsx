@@ -48,7 +48,7 @@ export function Navbar() {
                   key={link.href} 
                   href={link.href} 
                   className={`transition-colors font-medium text-sm tracking-wide uppercase ${
-                    location === link.href ? "text-[#4ec985]" : "text-[#666] hover:text-white"
+                    location === link.href ? "text-[#c9a961]" : "text-[#666] hover:text-white"
                   }`}
                 >
                   {link.label}
@@ -63,7 +63,7 @@ export function Navbar() {
                 </a>
               )
             ))}
-            <Link href="/plans" className="px-6 py-2.5 bg-[#4ec985] text-[#0a0a0a] font-semibold text-sm tracking-wide uppercase hover:glow-green transition-all">
+            <Link href="/plans" className="px-6 py-2.5 bg-[#c9a961] text-[#0a0a0a] font-semibold text-sm tracking-wide uppercase hover:glow-green transition-all">
               Começar
             </Link>
           </div>
@@ -88,7 +88,7 @@ export function Navbar() {
               </a>
             )
           ))}
-          <Link href="/plans" className="block w-full text-center px-6 py-3 bg-[#4ec985] text-[#0a0a0a] font-semibold text-sm tracking-wide uppercase">
+          <Link href="/plans" className="block w-full text-center px-6 py-3 bg-[#c9a961] text-[#0a0a0a] font-semibold text-sm tracking-wide uppercase">
             Começar
           </Link>
         </div>

@@ -42,12 +42,12 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   /* Enterprise brand colors */
-  --color-neon-green: #4ec985;
-  --color-gold: #d4c5a0;
-  --color-dark-bg: #0f1410;
-  --color-dark-surface: #0f3520;
-  --color-dark-card: #1a4d2e;
-  --color-dark-border: #2d7a4f;
+  --color-neon-green: #c9a961;
+  --color-gold: #c9a961;
+  --color-dark-bg: #1a4d2e;
+  --color-dark-surface: #234d33;
+  --color-dark-card: #2d5c40;
+  --color-dark-border: #3d6b4f;
 
   /* Font families */
   --font-display: 'Sora', system-ui, sans-serif;
@@ -57,37 +57,37 @@
 
 :root {
   --radius: 2px;
-  --background: #0f1410;
+  --background: #1a4d2e;
   --foreground: #fafafa;
-  --card: #1a4d2e;
+  --card: #234d33;
   --card-foreground: #fafafa;
-  --popover: #0f3520;
+  --popover: #1a4d2e;
   --popover-foreground: #fafafa;
-  --primary: #4ec985;
-  --primary-foreground: #0a0a0a;
-  --secondary: #0f3520;
+  --primary: #c9a961;
+  --primary-foreground: #1a4d2e;
+  --secondary: #234d33;
   --secondary-foreground: #fafafa;
-  --muted: #1a4d2e;
-  --muted-foreground: #d4c5a0;
-  --accent: #4ec985;
-  --accent-foreground: #0a0a0a;
+  --muted: #2d5c40;
+  --muted-foreground: #c9a961;
+  --accent: #c9a961;
+  --accent-foreground: #1a4d2e;
   --destructive: #ff3366;
-  --border: #2d7a4f;
-  --input: #0f3520;
-  --ring: #4ec985;
-  --chart-1: #4ec985;
+  --border: #3d6b4f;
+  --input: #234d33;
+  --ring: #c9a961;
+  --chart-1: #c9a961;
   --chart-2: #d4c5a0;
-  --chart-3: #2d7a4f;
-  --chart-4: #3da56a;
+  --chart-3: #3d6b4f;
+  --chart-4: #4a7c59;
   --chart-5: #b89968;
-  --sidebar: #0f1410;
+  --sidebar: #1a4d2e;
   --sidebar-foreground: #fafafa;
-  --sidebar-primary: #4ec985;
-  --sidebar-primary-foreground: #0a0a0a;
-  --sidebar-accent: #1a4d2e;
+  --sidebar-primary: #c9a961;
+  --sidebar-primary-foreground: #1a4d2e;
+  --sidebar-accent: #234d33;
   --sidebar-accent-foreground: #fafafa;
-  --sidebar-border: #2d7a4f;
-  --sidebar-ring: #4ec985;
+  --sidebar-border: #3d6b4f;
+  --sidebar-ring: #c9a961;
 }
 
 @layer base {
@@ -97,7 +97,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Sora', system-ui, sans-serif;
-    background: #0f1410;
+    background: #1a4d2e;
   }
 
   html {
@@ -105,7 +105,7 @@
   }
 
   ::selection {
-    background: rgba(78, 201, 133, 0.3);
+    background: rgba(201, 169, 97, 0.3);
     color: #fff;
   }
 }
@@ -121,7 +121,7 @@
     letter-spacing: -0.05em;
   }
   .text-gradient {
-    background: linear-gradient(135deg, #4ec985 0%, #3da56a 50%, #d4c5a0 100%);
+    background: linear-gradient(135deg, #c9a961 0%, #d4c5a0 50%, #e6d7b8 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -133,17 +133,17 @@
     background-clip: text;
   }
   .glow-green {
-    box-shadow: 0 0 20px rgba(78, 201, 133, 0.4), 0 0 60px rgba(78, 201, 133, 0.2);
+    box-shadow: 0 0 20px rgba(201, 169, 97, 0.4), 0 0 60px rgba(201, 169, 97, 0.2);
   }
   .glow-gold {
-    box-shadow: 0 0 20px rgba(212, 197, 160, 0.4), 0 0 60px rgba(212, 197, 160, 0.2);
+    box-shadow: 0 0 20px rgba(201, 169, 97, 0.5), 0 0 60px rgba(201, 169, 97, 0.3);
   }
   .border-gradient {
     border: 1px solid transparent;
-    background: linear-gradient(#0f3520, #0f3520) padding-box, linear-gradient(135deg, #4ec985 0%, transparent 50%, #d4c5a0 100%) border-box;
+    background: linear-gradient(#234d33, #234d33) padding-box, linear-gradient(135deg, #c9a961 0%, transparent 50%, #d4c5a0 100%) border-box;
   }
   .glass {
-    background: rgba(15, 53, 32, 0.8);
+    background: rgba(35, 77, 51, 0.8);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
   }
@@ -158,8 +158,8 @@
   }
   .grid-bg {
     background-image: 
-      linear-gradient(rgba(45, 122, 79, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(45, 122, 79, 0.05) 1px, transparent 1px);
+      linear-gradient(rgba(61, 107, 79, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(61, 107, 79, 0.1) 1px, transparent 1px);
     background-size: 60px 60px;
   }
 }
@@ -281,16 +281,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f1410;
+  background: #1a4d2e;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #3d6b4f;
   border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #4ec985;
+  background: #c9a961;
 }
 
 /* Custom cursor styles */
@@ -301,7 +301,7 @@
 .cursor-dot {
   width: 8px;
   height: 8px;
-  background: #4ec985;
+  background: #c9a961;
   position: fixed;
   pointer-events: none;
   z-index: 9999;

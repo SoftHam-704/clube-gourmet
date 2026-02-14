@@ -112,13 +112,13 @@ function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-[#0f1410]">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-[#1a4d2e]">
       {/* Grid background */}
       <div className="absolute inset-0 grid-bg opacity-50" />
 
       {/* Large geometric shapes */}
-      <div className="absolute top-20 right-10 w-80 h-80 border border-[#4ec985]/10 rotate-45" />
-      <div className="absolute top-24 right-14 w-72 h-72 border border-[#4ec985]/20 rotate-45 animate-pulse-glow" />
+      <div className="absolute top-20 right-10 w-80 h-80 border border-[#c9a961]/10 rotate-45" />
+      <div className="absolute top-24 right-14 w-72 h-72 border border-[#c9a961]/20 rotate-45 animate-pulse-glow" />
       <div className="absolute bottom-20 left-10 w-64 h-64 border border-[#d4c5a0]/10 rotate-12" />
       <div className="absolute bottom-24 left-14 w-56 h-56 border border-[#d4c5a0]/20 rotate-12" />
 
@@ -128,7 +128,7 @@ function HeroSection() {
       </svg>
 
       {/* Triangle shapes */}
-      <svg className="absolute bottom-1/4 right-[20%] w-16 h-16 text-[#4ec985]/20" viewBox="0 0 100 100">
+      <svg className="absolute bottom-1/4 right-[20%] w-16 h-16 text-[#c9a961]/20" viewBox="0 0 100 100">
         <polygon points="50,10 90,90 10,90" fill="none" stroke="currentColor" strokeWidth="2" />
       </svg>
 
@@ -138,7 +138,7 @@ function HeroSection() {
       </div>
 
       {/* Glow effects */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#4ec985]/5 blur-[150px]" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#c9a961]/5 blur-[150px]" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#d4c5a0]/5 blur-[120px]" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20 w-full">
@@ -146,7 +146,7 @@ function HeroSection() {
           {/* Left side - Text */}
           <div className="lg:col-span-7 space-y-8 animate-fade-in">
             <div className="inline-flex items-center gap-3 px-4 py-2 border border-[#222] bg-[#111]">
-              <span className="w-2 h-2 bg-[#4ec985] animate-pulse" />
+              <span className="w-2 h-2 bg-[#c9a961] animate-pulse" />
               <span className="text-[#666] text-sm font-mono tracking-wider">500+ RESTAURANTES PARCEIROS</span>
             </div>
 
@@ -166,11 +166,11 @@ function HeroSection() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Link href="/restaurants" className="group px-8 py-4 bg-[#4ec985] text-[#0a0a0a] font-bold text-sm tracking-wider uppercase hover:glow-green hover:-translate-y-1 transition-all inline-flex items-center justify-center gap-3">
+              <Link href="/restaurants" className="group px-8 py-4 bg-[#c9a961] text-[#0a0a0a] font-bold text-sm tracking-wider uppercase hover:glow-green hover:-translate-y-1 transition-all inline-flex items-center justify-center gap-3">
                 Ver Restaurantes
                 <span className="transition-transform group-hover:translate-x-1">{Icons.arrow}</span>
               </Link>
-              <Link href="/plans" className="px-8 py-4 border border-[#333] text-white font-bold text-sm tracking-wider uppercase hover:border-[#4ec985] hover:text-[#4ec985] hover:-translate-y-1 transition-all text-center">
+              <Link href="/plans" className="px-8 py-4 border border-[#333] text-white font-bold text-sm tracking-wider uppercase hover:border-[#c9a961] hover:text-[#c9a961] hover:-translate-y-1 transition-all text-center">
                 Ver Planos
               </Link>
             </div>
@@ -180,19 +180,19 @@ function HeroSection() {
           <div className="lg:col-span-5 animate-fade-in-delayed">
             <div className="border border-[#222] bg-[#111]/80 backdrop-blur-sm p-8 space-y-8 relative">
               {/* Corner accents */}
-              <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-[#4ec985]" />
-              <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-[#4ec985]" />
-              <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-[#4ec985]" />
-              <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[#4ec985]" />
+              <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-[#c9a961]" />
+              <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-[#c9a961]" />
+              <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-[#c9a961]" />
+              <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[#c9a961]" />
 
               <div className="flex items-center justify-between border-b border-[#222] pb-6">
                 <span className="text-[#666] text-sm font-mono tracking-wider uppercase">// Estatísticas</span>
-                <span className="w-2 h-2 bg-[#4ec985] animate-pulse" />
+                <span className="w-2 h-2 bg-[#c9a961] animate-pulse" />
               </div>
 
               <div className="grid grid-cols-2 gap-8">
                 <div className="space-y-2">
-                  <div className="font-mono text-5xl font-bold text-[#4ec985]">{Math.round(count1)}<span className="text-[#d4c5a0]">%</span></div>
+                  <div className="font-mono text-5xl font-bold text-[#c9a961]">{Math.round(count1)}<span className="text-[#d4c5a0]">%</span></div>
                   <div className="text-[#666] text-sm tracking-wider uppercase">Economia Média</div>
                 </div>
                 <div className="space-y-2">
@@ -205,12 +205,12 @@ function HeroSection() {
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-5xl font-bold text-white">4.9</span>
-                    <span className="text-[#4ec985]">{Icons.star}</span>
+                    <span className="text-[#c9a961]">{Icons.star}</span>
                   </div>
                   <div className="text-[#666] text-sm tracking-wider uppercase">Avaliação</div>
                 </div>
                 <div className="space-y-2">
-                  <div className="font-mono text-5xl font-bold text-white">R$<span className="text-[#4ec985]">{Math.round(count3)}</span></div>
+                  <div className="font-mono text-5xl font-bold text-white">R$<span className="text-[#c9a961]">{Math.round(count3)}</span></div>
                   <div className="text-[#666] text-sm tracking-wider uppercase">Economizado/mês</div>
                 </div>
               </div>
@@ -219,11 +219,11 @@ function HeroSection() {
               <div className="border-t border-[#222] pt-6">
                 <div className="flex items-center gap-4">
                   <div className="relative">
-                    <span className="w-2 h-2 bg-[#4ec985] absolute animate-ping" />
-                    <span className="w-2 h-2 bg-[#4ec985] relative block" />
+                    <span className="w-2 h-2 bg-[#c9a961] absolute animate-ping" />
+                    <span className="w-2 h-2 bg-[#c9a961] relative block" />
                   </div>
                   <span className="text-[#666] text-sm font-mono">
-                    <span className="text-white">Mariana C.</span> economizou <span className="text-[#4ec985]">R$142</span> agora mesmo
+                    <span className="text-white">Mariana C.</span> economizou <span className="text-[#c9a961]">R$142</span> agora mesmo
                   </span>
                 </div>
               </div>
@@ -243,14 +243,14 @@ function HeroSection() {
 
 function BenefitsSection() {
   return (
-    <section id="benefits" className="py-32 bg-[#0f1410] relative overflow-hidden">
+    <section id="benefits" className="py-32 bg-[#1a4d2e] relative overflow-hidden">
       {/* Top border */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-20 gap-8">
           <div>
-            <span className="text-[#4ec985] font-mono text-sm tracking-widest uppercase mb-4 block">// Benefícios</span>
+            <span className="text-[#c9a961] font-mono text-sm tracking-widest uppercase mb-4 block">// Benefícios</span>
             <h2 className="font-display text-4xl lg:text-6xl font-bold text-white tracking-tighter">
               A Forma Mais<br />
               <span className="text-gradient">Inteligente</span> de<br />
@@ -266,13 +266,13 @@ function BenefitsSection() {
           {BENEFITS.map((benefit, index) => (
             <div
               key={index}
-              className="group bg-[#0f1410] p-8 hover:bg-[#111] transition-all duration-500 relative"
+              className="group bg-[#1a4d2e] p-8 hover:bg-[#111] transition-all duration-500 relative"
             >
               {/* Corner accent */}
-              <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-[#333] opacity-0 group-hover:opacity-100 group-hover:border-[#4ec985] transition-all" />
+              <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-[#333] opacity-0 group-hover:opacity-100 group-hover:border-[#c9a961] transition-all" />
 
               {/* Stat */}
-              <div className="font-mono text-6xl font-bold text-[#222] group-hover:text-[#4ec985]/20 transition-colors mb-4">
+              <div className="font-mono text-6xl font-bold text-[#222] group-hover:text-[#c9a961]/20 transition-colors mb-4">
                 {benefit.stat}
               </div>
 
@@ -280,7 +280,7 @@ function BenefitsSection() {
                 {benefit.statLabel}
               </div>
 
-              <h3 className="font-display text-xl font-bold text-white mb-3 tracking-tight group-hover:text-[#4ec985] transition-colors">
+              <h3 className="font-display text-xl font-bold text-white mb-3 tracking-tight group-hover:text-[#c9a961] transition-colors">
                 {benefit.title}
               </h3>
               <p className="text-[#666] leading-relaxed text-sm">
@@ -288,7 +288,7 @@ function BenefitsSection() {
               </p>
 
               {/* Bottom line */}
-              <div className="absolute bottom-0 left-0 w-0 h-px bg-[#4ec985] group-hover:w-full transition-all duration-500" />
+              <div className="absolute bottom-0 left-0 w-0 h-px bg-[#c9a961] group-hover:w-full transition-all duration-500" />
             </div>
           ))}
         </div>
@@ -311,7 +311,7 @@ function HowItWorksSection() {
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <span className="text-[#4ec985] font-mono text-sm tracking-widest uppercase mb-4 block">// Processo</span>
+          <span className="text-[#c9a961] font-mono text-sm tracking-widest uppercase mb-4 block">// Processo</span>
           <h2 className="font-display text-4xl lg:text-6xl font-bold text-white tracking-tighter mb-6">
             Quatro Passos para<br />
             <span className="text-gradient">Economizar</span>
@@ -333,8 +333,8 @@ function HowItWorksSection() {
                   key={index}
                   onClick={() => setActiveStep(index)}
                   className={`w-full text-left p-6 transition-all duration-300 border group relative ${activeStep === index
-                    ? "bg-[#0f1410] border-[#4ec985] shadow-[0_0_30px_rgba(0,255,136,0.1)]"
-                    : "bg-transparent border-[#222] hover:border-[#333] hover:bg-[#0f1410]/50"
+                    ? "bg-[#1a4d2e] border-[#c9a961] shadow-[0_0_30px_rgba(0,255,136,0.1)]"
+                    : "bg-transparent border-[#222] hover:border-[#333] hover:bg-[#1a4d2e]/50"
                     }`}
                 >
                   {/* Gradient border on hover for inactive */}
@@ -343,12 +343,12 @@ function HowItWorksSection() {
                   <div className="flex items-start gap-6 relative">
                     {/* Step indicator dot */}
                     <div className="relative">
-                      <span className={`font-mono text-3xl font-bold transition-colors ${activeStep === index ? "text-[#4ec985]" : "text-[#333] group-hover:text-[#666]"}`}>
+                      <span className={`font-mono text-3xl font-bold transition-colors ${activeStep === index ? "text-[#c9a961]" : "text-[#333] group-hover:text-[#666]"}`}>
                         {step.number}
                       </span>
                       {/* Active indicator */}
                       {activeStep === index && (
-                        <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-1 h-8 bg-[#4ec985]" />
+                        <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-1 h-8 bg-[#c9a961]" />
                       )}
                     </div>
                     <div>
@@ -372,9 +372,9 @@ function HowItWorksSection() {
               <div className="absolute inset-0 border border-[#222]" />
 
               {/* Inner content */}
-              <div className="absolute inset-8 border border-[#4ec985]/30 bg-[#0f1410] flex items-center justify-center">
+              <div className="absolute inset-8 border border-[#c9a961]/30 bg-[#1a4d2e] flex items-center justify-center">
                 <div className="text-center">
-                  <div className="font-mono text-[120px] font-bold text-[#4ec985] leading-none">
+                  <div className="font-mono text-[120px] font-bold text-[#c9a961] leading-none">
                     {STEPS[activeStep].number}
                   </div>
                   <div className="text-white font-display text-2xl font-bold tracking-tight mt-4">
@@ -384,10 +384,10 @@ function HowItWorksSection() {
               </div>
 
               {/* Corner accents */}
-              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#4ec985]" />
-              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-[#4ec985]" />
-              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-[#4ec985]" />
-              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#4ec985]" />
+              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#c9a961]" />
+              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-[#c9a961]" />
+              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-[#c9a961]" />
+              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#c9a961]" />
             </div>
           </div>
         </div>
@@ -398,12 +398,12 @@ function HowItWorksSection() {
 
 function TestimonialsSection() {
   return (
-    <section className="py-32 bg-[#0f1410] relative">
+    <section className="py-32 bg-[#1a4d2e] relative">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <span className="text-[#4ec985] font-mono text-sm tracking-widest uppercase mb-4 block">// Depoimentos</span>
+          <span className="text-[#c9a961] font-mono text-sm tracking-widest uppercase mb-4 block">// Depoimentos</span>
           <h2 className="font-display text-4xl lg:text-5xl font-bold text-white tracking-tighter">
             Membros Reais,<br />
             <span className="text-gradient">Economias Reais</span>
@@ -412,9 +412,9 @@ function TestimonialsSection() {
 
         <div className="grid md:grid-cols-3 gap-px bg-[#222]">
           {TESTIMONIALS.map((testimonial, index) => (
-            <div key={index} className="bg-[#0f1410] p-8 relative group hover:bg-[#111] transition-all">
+            <div key={index} className="bg-[#1a4d2e] p-8 relative group hover:bg-[#111] transition-all">
               <div className="absolute top-8 right-8">
-                <svg className="w-8 h-8 text-[#222] group-hover:text-[#4ec985]/20 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-8 h-8 text-[#222] group-hover:text-[#c9a961]/20 transition-colors" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z" />
                 </svg>
               </div>
@@ -434,7 +434,7 @@ function TestimonialsSection() {
               </div>
 
               {/* Bottom accent */}
-              <div className="absolute bottom-0 left-0 w-0 h-px bg-[#4ec985] group-hover:w-full transition-all duration-500" />
+              <div className="absolute bottom-0 left-0 w-0 h-px bg-[#c9a961] group-hover:w-full transition-all duration-500" />
             </div>
           ))}
         </div>
@@ -449,7 +449,7 @@ function NewsletterSection() {
       <div className="absolute inset-0 grid-bg opacity-20" />
 
       <div className="relative max-w-3xl mx-auto px-6 lg:px-8 text-center">
-        <span className="text-[#4ec985] font-mono text-sm tracking-widest uppercase mb-4 block">// Newsletter</span>
+        <span className="text-[#c9a961] font-mono text-sm tracking-widest uppercase mb-4 block">// Newsletter</span>
         <h2 className="font-display text-4xl lg:text-5xl font-bold text-white tracking-tighter mb-6">
           Fique Por Dentro das<br />
           <span className="text-gradient">Novidades</span>
@@ -462,9 +462,9 @@ function NewsletterSection() {
           <input
             type="email"
             placeholder="seu@email.com"
-            className="flex-1 px-6 py-4 bg-[#0f1410] border border-[#222] text-white placeholder-[#444] focus:border-[#4ec985] focus:outline-none font-mono text-sm"
+            className="flex-1 px-6 py-4 bg-[#1a4d2e] border border-[#222] text-white placeholder-[#444] focus:border-[#c9a961] focus:outline-none font-mono text-sm"
           />
-          <button className="px-8 py-4 bg-[#4ec985] text-[#0a0a0a] font-bold text-sm tracking-wider uppercase hover:glow-green transition-all">
+          <button className="px-8 py-4 bg-[#c9a961] text-[#0a0a0a] font-bold text-sm tracking-wider uppercase hover:glow-green transition-all">
             Inscrever
           </button>
         </div>
@@ -481,7 +481,7 @@ function NewsletterSection() {
 
 export default function Index() {
   return (
-    <div className="bg-[#0f1410] min-h-screen">
+    <div className="bg-[#1a4d2e] min-h-screen">
       <Navbar />
       <HeroSection />
       <BenefitsSection />

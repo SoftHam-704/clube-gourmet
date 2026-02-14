@@ -122,14 +122,14 @@ const Icons = {
 
 function HeroSection() {
   return (
-    <section className="pt-32 pb-16 bg-[#0f1410] relative overflow-hidden">
+    <section className="pt-32 pb-16 bg-[#1a4d2e] relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 grid-bg opacity-30" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-[#4ec985]/5 blur-[150px]" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-[#c9a961]/5 blur-[150px]" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#d4c5a0]/5 blur-[100px]" />
 
       <div className="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
-        <span className="text-[#4ec985] font-mono text-sm tracking-widest uppercase mb-4 block">// Planos</span>
+        <span className="text-[#c9a961] font-mono text-sm tracking-widest uppercase mb-4 block">// Planos</span>
 
         <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl font-bold text-white tracking-tighter mb-6">
           Escolha Sua<br />
@@ -143,12 +143,12 @@ function HeroSection() {
         {/* Stats */}
         <div className="flex items-center justify-center gap-8 mt-12">
           <div className="text-center">
-            <div className="font-mono text-3xl font-bold text-[#4ec985]">15k<span className="text-[#d4c5a0]">+</span></div>
+            <div className="font-mono text-3xl font-bold text-[#c9a961]">15k<span className="text-[#d4c5a0]">+</span></div>
             <div className="text-[#666] text-xs tracking-widest uppercase mt-1">membros</div>
           </div>
           <div className="w-px h-12 bg-[#222]" />
           <div className="text-center">
-            <div className="font-mono text-3xl font-bold text-white">4.9<span className="text-[#4ec985]">★</span></div>
+            <div className="font-mono text-3xl font-bold text-white">4.9<span className="text-[#c9a961]">★</span></div>
             <div className="text-[#666] text-xs tracking-widest uppercase mt-1">avaliação</div>
           </div>
           <div className="w-px h-12 bg-[#222]" />
@@ -169,12 +169,12 @@ interface PlanCardProps {
 function PlanCard({ plan }: PlanCardProps) {
   return (
     <div className={`relative transition-all duration-300 ${plan.popular
-      ? "border-2 border-[#4ec985] bg-[#111] scale-105 z-10"
+      ? "border-2 border-[#c9a961] bg-[#111] scale-105 z-10"
       : "border border-[#222] bg-[#111] hover:border-[#333]"
       }`}>
       {/* Popular badge */}
       {plan.popular && (
-        <div className="absolute -top-px left-0 right-0 h-1 bg-[#4ec985]" />
+        <div className="absolute -top-px left-0 right-0 h-1 bg-[#c9a961]" />
       )}
 
       <div className="p-8">
@@ -187,7 +187,7 @@ function PlanCard({ plan }: PlanCardProps) {
             <p className="text-[#666] text-sm">{plan.description}</p>
           </div>
           {plan.savings && (
-            <span className="px-3 py-1 bg-[#4ec985]/10 border border-[#4ec985] text-[#4ec985] font-mono text-sm">
+            <span className="px-3 py-1 bg-[#c9a961]/10 border border-[#c9a961] text-[#c9a961] font-mono text-sm">
               {plan.savings}
             </span>
           )}
@@ -204,7 +204,7 @@ function PlanCard({ plan }: PlanCardProps) {
         <ul className="space-y-4 mb-8">
           {plan.benefits.map((benefit, index) => (
             <li key={index} className="flex items-start gap-3">
-              <span className={`mt-0.5 ${plan.popular ? "text-[#4ec985]" : "text-[#666]"}`}>
+              <span className={`mt-0.5 ${plan.popular ? "text-[#c9a961]" : "text-[#666]"}`}>
                 {Icons.check}
               </span>
               <span className="text-[#999] text-sm">{benefit}</span>
@@ -214,8 +214,8 @@ function PlanCard({ plan }: PlanCardProps) {
 
         {/* CTA */}
         <button className={`w-full flex items-center justify-center gap-2 py-4 font-bold text-sm tracking-wider uppercase transition-all ${plan.popular
-          ? "bg-[#4ec985] text-[#0a0a0a] hover:glow-green"
-          : "border border-[#333] text-white hover:border-[#4ec985] hover:text-[#4ec985]"
+          ? "bg-[#c9a961] text-[#0a0a0a] hover:glow-green"
+          : "border border-[#333] text-white hover:border-[#c9a961] hover:text-[#c9a961]"
           }`}>
           <span>{Icons.lightning}</span>
           Assinar Agora
@@ -235,7 +235,7 @@ function PricingSection() {
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("annual");
 
   return (
-    <section className="py-20 bg-[#0f1410] relative">
+    <section className="py-20 bg-[#1a4d2e] relative">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
 
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
@@ -255,7 +255,7 @@ function PricingSection() {
               }`}
           >
             Anual
-            <span className="px-2 py-0.5 bg-[#4ec985]/10 text-[#4ec985] text-xs">-16%</span>
+            <span className="px-2 py-0.5 bg-[#c9a961]/10 text-[#c9a961] text-xs">-16%</span>
           </button>
         </div>
 
@@ -271,15 +271,15 @@ function PricingSection() {
           <p className="text-[#666] mb-8 text-xs font-mono tracking-widest uppercase">Garantias</p>
           <div className="flex flex-wrap justify-center gap-6">
             <div className="flex items-center gap-3 px-6 py-3 border border-[#222] bg-[#111]">
-              <span className="text-[#4ec985]">{Icons.shield}</span>
+              <span className="text-[#c9a961]">{Icons.shield}</span>
               <span className="text-sm text-[#999]">Pagamento Seguro</span>
             </div>
             <div className="flex items-center gap-3 px-6 py-3 border border-[#222] bg-[#111]">
-              <span className="text-[#4ec985]">{Icons.creditCard}</span>
+              <span className="text-[#c9a961]">{Icons.creditCard}</span>
               <span className="text-sm text-[#999]">Todos os Cartões</span>
             </div>
             <div className="flex items-center gap-3 px-6 py-3 border border-[#222] bg-[#111]">
-              <span className="text-[#4ec985]">{Icons.refresh}</span>
+              <span className="text-[#c9a961]">{Icons.refresh}</span>
               <span className="text-sm text-[#999]">Cancele Quando Quiser</span>
             </div>
           </div>
@@ -305,7 +305,7 @@ function ComparisonTable() {
     <section className="py-20 bg-[#111] relative">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-12">
-          <span className="text-[#4ec985] font-mono text-sm tracking-widest uppercase mb-4 block">// Comparativo</span>
+          <span className="text-[#c9a961] font-mono text-sm tracking-widest uppercase mb-4 block">// Comparativo</span>
           <h2 className="font-display text-3xl lg:text-4xl font-bold text-white tracking-tighter">
             Compare os <span className="text-gradient">Planos</span>
           </h2>
@@ -313,21 +313,21 @@ function ComparisonTable() {
 
         <div className="border border-[#222] overflow-hidden">
           {/* Header */}
-          <div className="grid grid-cols-4 bg-[#0f1410] border-b border-[#222]">
+          <div className="grid grid-cols-4 bg-[#1a4d2e] border-b border-[#222]">
             <div className="p-4 text-[#666] text-sm font-mono">Recurso</div>
             <div className="p-4 text-white text-sm font-mono text-center border-l border-[#222]">Mensal</div>
-            <div className="p-4 text-[#4ec985] text-sm font-mono text-center border-l border-[#222]">Anual</div>
+            <div className="p-4 text-[#c9a961] text-sm font-mono text-center border-l border-[#222]">Anual</div>
             <div className="p-4 text-white text-sm font-mono text-center border-l border-[#222]">Família</div>
           </div>
 
           {/* Rows */}
           {features.map((feature, index) => (
-            <div key={index} className="grid grid-cols-4 border-b border-[#222] last:border-b-0 hover:bg-[#0f1410]/50 transition-colors">
+            <div key={index} className="grid grid-cols-4 border-b border-[#222] last:border-b-0 hover:bg-[#1a4d2e]/50 transition-colors">
               <div className="p-4 text-[#999] text-sm">{feature.name}</div>
               <div className="p-4 text-center border-l border-[#222]">
                 {typeof feature.monthly === "boolean" ? (
                   feature.monthly ? (
-                    <span className="text-[#4ec985]">{Icons.check}</span>
+                    <span className="text-[#c9a961]">{Icons.check}</span>
                   ) : (
                     <span className="text-[#333]">—</span>
                   )
@@ -338,7 +338,7 @@ function ComparisonTable() {
               <div className="p-4 text-center border-l border-[#222]">
                 {typeof feature.annual === "boolean" ? (
                   feature.annual ? (
-                    <span className="text-[#4ec985]">{Icons.check}</span>
+                    <span className="text-[#c9a961]">{Icons.check}</span>
                   ) : (
                     <span className="text-[#333]">—</span>
                   )
@@ -349,7 +349,7 @@ function ComparisonTable() {
               <div className="p-4 text-center border-l border-[#222]">
                 {typeof feature.family === "boolean" ? (
                   feature.family ? (
-                    <span className="text-[#4ec985]">{Icons.check}</span>
+                    <span className="text-[#c9a961]">{Icons.check}</span>
                   ) : (
                     <span className="text-[#333]">—</span>
                   )
@@ -369,12 +369,12 @@ function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-20 bg-[#0f1410] relative">
+    <section className="py-20 bg-[#1a4d2e] relative">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
 
       <div className="max-w-3xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="text-[#4ec985] font-mono text-sm tracking-widest uppercase mb-4 block">// FAQ</span>
+          <span className="text-[#c9a961] font-mono text-sm tracking-widest uppercase mb-4 block">// FAQ</span>
           <h2 className="font-display text-3xl lg:text-4xl font-bold text-white tracking-tighter">
             Perguntas <span className="text-gradient">Frequentes</span>
           </h2>
@@ -414,7 +414,7 @@ function CTASection() {
       <div className="absolute inset-0 grid-bg opacity-20" />
 
       {/* Geometric shapes */}
-      <div className="absolute top-10 left-10 w-32 h-32 border border-[#4ec985]/20 rotate-45" />
+      <div className="absolute top-10 left-10 w-32 h-32 border border-[#c9a961]/20 rotate-45" />
       <div className="absolute bottom-10 right-10 w-24 h-24 border border-[#d4c5a0]/20 -rotate-12" />
 
       <div className="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
@@ -425,10 +425,10 @@ function CTASection() {
           Junte-se a mais de 15.000 membros que já economizaram milhares de reais em restaurantes.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button className="px-8 py-4 bg-[#4ec985] text-[#0a0a0a] font-bold text-sm tracking-wider uppercase hover:glow-green transition-all">
+          <button className="px-8 py-4 bg-[#c9a961] text-[#0a0a0a] font-bold text-sm tracking-wider uppercase hover:glow-green transition-all">
             Começar Agora
           </button>
-          <Link href="/restaurants" className="px-8 py-4 border border-[#333] text-white font-bold text-sm tracking-wider uppercase hover:border-[#4ec985] hover:text-[#4ec985] transition-all">
+          <Link href="/restaurants" className="px-8 py-4 border border-[#333] text-white font-bold text-sm tracking-wider uppercase hover:border-[#c9a961] hover:text-[#c9a961] transition-all">
             Ver Restaurantes
           </Link>
         </div>
@@ -441,7 +441,7 @@ function CTASection() {
 
 export default function Plans() {
   return (
-    <div className="bg-[#0f1410] min-h-screen">
+    <div className="bg-[#1a4d2e] min-h-screen">
       <Navbar />
       <HeroSection />
       <PricingSection />

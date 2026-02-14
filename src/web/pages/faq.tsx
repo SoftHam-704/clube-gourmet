@@ -59,14 +59,14 @@ export default function Faq() {
     const filteredFaqs = FAQS.filter(faq => faq.category === activeCategory);
 
     return (
-        <div className="bg-[#0f1410] min-h-screen text-white">
+        <div className="bg-[#1a4d2e] min-h-screen text-white">
             <Navbar />
 
             <section className="pt-32 pb-20 relative overflow-hidden">
                 <div className="absolute inset-0 grid-bg opacity-30" />
 
                 <div className="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
-                    <span className="text-[#4ec985] font-mono text-sm tracking-widest uppercase mb-4 block">// FAQ Completo</span>
+                    <span className="text-[#c9a961] font-mono text-sm tracking-widest uppercase mb-4 block">// FAQ Completo</span>
                     <h1 className="font-display text-5xl lg:text-7xl font-bold tracking-tighter mb-8">
                         Dúvidas <span className="text-gradient">Frequentes</span>
                     </h1>
@@ -88,7 +88,7 @@ export default function Faq() {
                                     setOpenIndex(0);
                                 }}
                                 className={`w-full text-left px-6 py-4 border transition-all font-mono text-sm uppercase tracking-wider ${activeCategory === cat.id
-                                        ? "bg-[#4ec985]/10 border-[#4ec985] text-[#4ec985]"
+                                        ? "bg-[#c9a961]/10 border-[#c9a961] text-[#c9a961]"
                                         : "border-[#222] text-[#666] hover:border-[#333] hover:text-white"
                                     }`}
                             >
@@ -106,7 +106,7 @@ export default function Faq() {
                                     className="w-full flex items-center justify-between p-8 text-left hover:bg-[#111] transition-colors"
                                 >
                                     <span className="text-xl font-bold tracking-tight pr-8">{faq.question}</span>
-                                    <span className={`text-[#666] transition-transform duration-300 ${openIndex === index ? "rotate-180 text-[#4ec985]" : ""}`}>
+                                    <span className={`text-[#666] transition-transform duration-300 ${openIndex === index ? "rotate-180 text-[#c9a961]" : ""}`}>
                                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                         </svg>
@@ -128,7 +128,7 @@ export default function Faq() {
                 <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
                     <h2 className="text-2xl font-bold mb-6">Não encontrou o que procurava?</h2>
                     <p className="text-[#666] mb-8">Nossa equipe de suporte está pronta para ajudar você.</p>
-                    <a href="/contact" className="inline-block px-10 py-4 bg-white text-black font-bold uppercase tracking-widest text-sm hover:bg-[#4ec985] transition-all">
+                    <a href="/contact" className="inline-block px-10 py-4 bg-white text-black font-bold uppercase tracking-widest text-sm hover:bg-[#c9a961] transition-all">
                         Falar com Suporte
                     </a>
                 </div>
