@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "wouter";
 import { Navbar } from "../components/layout/Navbar";
 import { Footer } from "../components/layout/Footer";
@@ -7,27 +6,70 @@ const PLANS = [
   {
     id: "monthly",
     name: "Mensal",
-    price: "29,90",
+    price: "49,90",
     period: "/mês",
-    description: "Perfeito para experimentar",
+    total: null,
+    description: "Ideal para quem quer começar agora",
     popular: false,
+    badge: "💰",
     benefits: [
+      "✔ Flexibilidade total, cancele quando quiser",
       "2 por 1 em todos os restaurantes",
       "Uso ilimitado no mês",
       "Cartão digital de membro",
       "Suporte por e-mail",
+    ],
+  },
+  {
+    id: "quarterly",
+    name: "Trimestral",
+    price: "39,90",
+    period: "/mês",
+    total: "R$ 119,70",
+    description: "Economize pagando por mais tempo",
+    popular: false,
+    badge: "🔥",
+    benefits: [
+      "Economia em relação ao plano mensal",
+      "2 por 1 em todos os restaurantes",
+      "Uso ilimitado durante 3 meses",
+      "Cartão digital de membro",
+      "Suporte prioritário",
       "Cancele quando quiser",
+    ],
+  },
+  {
+    id: "semiannual",
+    name: "Semestral",
+    price: "35,90",
+    period: "/mês",
+    total: "R$ 215,40",
+    description: "O equilíbrio perfeito entre preço e duração",
+    popular: true,
+    badge: "⭐",
+    savings: "Excelente custo-benefício",
+    benefits: [
+      "2 por 1 em todos os restaurantes",
+      "Uso ilimitado durante 6 meses",
+      "Cartão digital de membro",
+      "Suporte prioritário",
+      "Cancele quando quiser",
+      "Acesso antecipado a novos restaurantes",
+      "Oferta especial de aniversário",
     ],
   },
   {
     id: "annual",
     name: "Anual",
-    price: "299",
-    period: "/ano",
-    description: "Melhor custo-benefício",
-    popular: true,
-    savings: "-16%",
+    price: "32,90",
+    period: "/mês",
+    total: "R$ 394,80",
+    description: "🔥 O plano mais vantajoso — maior economia",
+    popular: false,
+    badge: "🚀",
+    savings: "Melhor preço do ano",
     benefits: [
+      "✨ Máxima economia garantida",
       "2 por 1 em todos os restaurantes",
       "Uso ilimitado o ano todo",
       "Cartão digital de membro",
@@ -36,24 +78,6 @@ const PLANS = [
       "Acesso antecipado a novos restaurantes",
       "Oferta especial de aniversário",
       "Acesso a eventos VIP",
-    ],
-  },
-  {
-    id: "family",
-    name: "Família",
-    price: "449",
-    period: "/ano",
-    description: "Para até 4 membros",
-    popular: false,
-    benefits: [
-      "2 por 1 para até 4 membros",
-      "Uso ilimitado para todos",
-      "4 cartões digitais de membro",
-      "Suporte prioritário",
-      "Cancele quando quiser",
-      "Acesso antecipado a novos restaurantes",
-      "Oferta de aniversário para todos",
-      "Destaque família-friendly",
     ],
   },
 ];
@@ -132,12 +156,12 @@ function HeroSection() {
         <span className="text-[#c9a961] font-mono text-sm tracking-widest uppercase mb-4 block">// Planos</span>
 
         <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl font-bold text-white tracking-tighter mb-6">
-          Escolha Sua<br />
-          <span className="text-gradient">Economia</span>
+          Escolha o Plano<br />
+          <span className="text-gradient">Ideal para Você</span>
         </h1>
 
-        <p className="text-[#666] text-lg max-w-xl mx-auto">
-          Um jantar fora já paga sua assinatura do ano inteiro. Pare de pagar preço cheio.
+        <p className="text-[#666] text-lg max-w-2xl mx-auto">
+          Planos que cabem no seu bolso. Aproveite mais pagando menos.
         </p>
 
         {/* Stats */}
@@ -194,11 +218,20 @@ function PlanCard({ plan }: PlanCardProps) {
         </div>
 
         {/* Price */}
-        <div className="flex items-baseline gap-2 mb-8 pb-8 border-b border-[#222]">
-          <span className="text-[#666] font-mono">R$</span>
-          <span className="font-mono text-5xl font-bold text-white">{plan.price}</span>
-          <span className="text-[#666] font-mono">{plan.period}</span>
+        <div className="mb-6">
+          <div className="flex items-baseline gap-2 mb-2">
+            <span className="text-[#666] font-mono text-lg">{plan.badge}</span>
+            <span className="text-[#666] font-mono">R$</span>
+            <span className="font-mono text-5xl font-bold text-white">{plan.price}</span>
+            <span className="text-[#666] font-mono">{plan.period}</span>
+          </div>
+          {plan.total && (
+            <p className="text-[#c9a961] font-mono text-sm">
+              💳 Total: {plan.total}
+            </p>
+          )}
         </div>
+        <div className="pb-6 mb-6 border-b border-[#222]" />
 
         {/* Benefits */}
         <ul className="space-y-4 mb-8">
@@ -232,35 +265,13 @@ function PlanCard({ plan }: PlanCardProps) {
 }
 
 function PricingSection() {
-  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("annual");
-
   return (
     <section className="py-20 bg-[#1a4d2e] relative">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
 
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        {/* Toggle */}
-        <div className="flex items-center justify-center gap-4 mb-16">
-          <button
-            onClick={() => setBillingPeriod("monthly")}
-            className={`px-6 py-2 font-mono text-sm transition-all ${billingPeriod === "monthly" ? "text-white" : "text-[#666] hover:text-white"
-              }`}
-          >
-            Mensal
-          </button>
-          <div className="w-px h-4 bg-[#333]" />
-          <button
-            onClick={() => setBillingPeriod("annual")}
-            className={`px-6 py-2 font-mono text-sm transition-all flex items-center gap-2 ${billingPeriod === "annual" ? "text-white" : "text-[#666] hover:text-white"
-              }`}
-          >
-            Anual
-            <span className="px-2 py-0.5 bg-[#c9a961]/10 text-[#c9a961] text-xs">-16%</span>
-          </button>
-        </div>
-
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Plans grid */}
-        <div className="grid md:grid-cols-3 gap-8 items-start">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
           {PLANS.map((plan) => (
             <PlanCard key={plan.id} plan={plan} />
           ))}
