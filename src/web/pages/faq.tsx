@@ -3,52 +3,63 @@ import { Navbar } from "../components/layout/Navbar";
 import { Footer } from "../components/layout/Footer";
 
 const FAQ_CATEGORIES = [
-    { id: "general", name: "Geral" },
-    { id: "payments", name: "Pagamentos" },
-    { id: "usage", name: "Como Usar" },
-    { id: "restaurants", name: "Restaurantes" }
+    { id: "general", name: "ESTRUTURA GERAL", icon: "🏛️" },
+    { id: "usage", name: "COMO UTILIZAR", icon: "🍽️" },
+    { id: "payments", name: "ASSINATURAS", icon: "💳" },
+    { id: "restaurants", name: "PARCEIROS ELITE", icon: "⭐" },
+    { id: "safety", name: "SEGURANÇA & PRIVACIDADE", icon: "🔐" }
 ];
 
 const FAQS = [
     {
         category: "general",
-        question: "O que é o Club Empar?",
-        answer: "O Club Empar é um clube de benefícios exclusivo para amantes da gastronomia. Membros têm direito ao benefício '2 por 1' em todos os restaurantes parceiros: você compra um prato principal e ganha outro de igual ou menor valor."
+        question: "O que é exatamente o Club Empar Gourmet?",
+        answer: "O Club Empar é um ecossistema de alta gastronomia que oferece aos seus membros o privilégio '2 por 1'. Na compra de um prato principal, o segundo prato (de igual ou menor valor) é uma cortesia exclusiva do clube. É o passaporte para explorar o melhor da culinária regional com inteligência financeira."
     },
     {
         category: "general",
-        question: "Qual o valor da assinatura?",
-        answer: "Temos três planos: o Mensal (R$29,90), o Anual (R$299,00) e o Família (R$449,00 para até 4 pessoas). O plano anual é o mais popular pois oferece o melhor custo-benefício."
-    },
-    {
-        category: "payments",
-        question: "Quais as formas de pagamento?",
-        answer: "Aceitamos todos os principais cartões de crédito e PIX. As assinaturas anuais e mensais são renovadas automaticamente, mas você pode cancelar quando quiser."
-    },
-    {
-        category: "payments",
-        question: "Como faço para cancelar?",
-        answer: "O cancelamento é simples e pode ser feito diretamente na sua dashboard de usuário. Não cobramos taxas de cancelamento e você mantém o acesso até o fim do período já pago."
+        question: "O benefício é vitalício ou tem validade?",
+        answer: "O benefício permanece ativo enquanto sua assinatura estiver vigente. Você pode utilizar o clube 365 dias por ano, respeitando apenas a política de uso diário de um resgate por dia."
     },
     {
         category: "usage",
-        question: "Como utilizo o benefício no restaurante?",
-        answer: "Ao pedir a conta, basta abrir o seu cartão digital no app ou site e mostrar ao atendente. Ele registrará o benefício e aplicará o desconto no prato de menor valor."
+        question: "Como resgato meu benefício no restaurante?",
+        answer: "A experiência é 100% digital e elegante. Ao pedir a conta, informe ao atendente que é membro do Club Empar. Abra seu app ou site, gere o código de validação e apresente-o. O desconto será aplicado imediatamente no prato de menor valor."
     },
     {
         category: "usage",
-        question: "Posso usar o benefício mais de uma vez no mesmo lugar?",
-        answer: "Sim! Não há limites de uso por restaurante. Você pode voltar no seu lugar favorito quantas vezes quiser, respeitando apenas a política de uso diário (limite de 1 resgate por dia)."
+        question: "Preciso reservar mesa com antecedência?",
+        answer: "Não é uma regra do clube, mas alguns restaurantes de alta demanda podem exigir reserva. Recomendamos sempre checar a página individual do restaurante no nosso catálogo para verificar horários e políticas específicas."
+    },
+    {
+        category: "payments",
+        question: "Quais são as modalidades de investimento?",
+        answer: "Oferecemos três níveis de acesso: Mensal (Flexibilidade absoluta), Semestral (O favorito pelos membros) e Anual (A máxima economia). Todos podem ser parcelados e pagos via Cartão de Crédito ou PIX."
+    },
+    {
+        category: "payments",
+        question: "Posso cancelar minha renovação quando desejar?",
+        answer: "Sim. A liberdade é um dos nossos pilares. Você pode gerenciar ou cancelar sua renovação automática diretamente na sua área logada, sem burocracias ou multas escondidas."
     },
     {
         category: "restaurants",
-        question: "Como vejo os restaurantes parceiros?",
-        answer: "Você pode ver a lista completa na nossa página de Restaurantes, com filtros por tipo de cozinha, cidade e faixa de preço."
+        question: "Quais critérios definem um Restaurante Parceiro?",
+        answer: "Nossa curadoria é rigorosa. Avaliamos excelência no atendimento, qualidade gastronômica superior e ambiente excepcional. Apenas estabelecimentos que entregam uma experiência de elite entram para o catálogo do Club Empar."
     },
     {
         category: "restaurants",
-        question: "Posso sugerir um restaurante?",
-        answer: "Com certeza! Adoramos ouvir nossos membros. Você pode sugerir novos parceiros através da nossa página de contato ou diretamente pelo app."
+        question: "Posso sugerir um novo restaurante para o clube?",
+        answer: "Com absoluta certeza. Valorizamos a curadoria colaborativa de nossos membros. Envie sua sugestão através do suporte ou concierge; nossa equipe de expansão fará a análise técnica do estabelecimento sugerido."
+    },
+    {
+        category: "safety",
+        question: "Como meus dados de pagamento são protegidos?",
+        answer: "Utilizamos as tecnologias de criptografia de ponta (SSL/TLS) e gateways de pagamento certificados com PCI Compliance Nível 1. Seus dados de cartão nunca são armazenados em nossos servidores internos."
+    },
+    {
+        category: "safety",
+        question: "O Club Empar compartilha meus dados com terceiros?",
+        answer: "Absolutamente não. Seus dados são utilizados exclusivamente para gerenciar sua assinatura e melhorar sua experiência no clube. Respeitamos integralmente a LGPD (Lei Geral de Proteção de Dados)."
     }
 ];
 
@@ -59,63 +70,103 @@ export default function Faq() {
     const filteredFaqs = FAQS.filter(faq => faq.category === activeCategory);
 
     return (
-        <div className="bg-[#1a4d2e] min-h-screen text-white">
+        <div className="bg-[#1a4d2e] min-h-screen text-white selection:bg-[#c9a961] selection:text-[#0a0a0a]">
             <Navbar />
 
-            <section className="pt-32 pb-20 relative overflow-hidden">
-                <div className="absolute inset-0 grid-bg opacity-30" />
+            <section className="pt-56 pb-24 bg-[#0a0a0a] relative overflow-hidden">
+                <div className="absolute inset-0 grid-bg opacity-10" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
+                    <div className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[1000px] h-[700px] bg-[#c9a961]/10 blur-[200px]" />
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-[#1a4d2e]/40 blur-[150px]" />
+                </div>
 
                 <div className="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
-                    <span className="text-[#c9a961] font-mono text-sm tracking-widest uppercase mb-4 block">// FAQ Completo</span>
-                    <h1 className="font-display text-5xl lg:text-7xl font-bold tracking-tighter mb-8">
-                        Dúvidas <span className="text-gradient">Frequentes</span>
+                    <span className="text-[#c9a961] font-mono text-sm tracking-[0.6em] uppercase mb-10 block animate-pulse">
+            // SUPORTE AO MEMBRO
+                    </span>
+
+                    <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-extrabold text-white leading-[0.85] tracking-tighter mb-12 uppercase">
+                        Centro de<br />
+                        <span className="text-gradient-gold animate-gradient">Respostas.</span>
                     </h1>
-                    <p className="text-[#666] text-lg max-w-2xl mx-auto">
-                        Tudo o que você precisa saber sobre o Club Empar em um só lugar.
+
+                    <p className="text-[#d4c5a0]/70 text-2xl lg:text-3xl font-light leading-relaxed italic font-display">
+                        Tudo o que você precisa entender para elevar sua experiência gastronômica ao próximo nível.
                     </p>
                 </div>
             </section>
 
-            <section className="pb-32 relative">
-                <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row gap-12">
-                    {/* Categories Sidebar */}
-                    <aside className="lg:w-64 space-y-2">
-                        {FAQ_CATEGORIES.map(cat => (
-                            <button
-                                key={cat.id}
-                                onClick={() => {
-                                    setActiveCategory(cat.id);
-                                    setOpenIndex(0);
-                                }}
-                                className={`w-full text-left px-6 py-4 border transition-all font-mono text-sm uppercase tracking-wider ${activeCategory === cat.id
-                                        ? "bg-[#c9a961]/10 border-[#c9a961] text-[#c9a961]"
-                                        : "border-[#222] text-[#666] hover:border-[#333] hover:text-white"
-                                    }`}
-                            >
-                                {cat.name}
-                            </button>
-                        ))}
+            <section className="py-32 bg-[#1a4d2e] relative overflow-hidden">
+                <div className="absolute inset-0 grid-bg opacity-20" />
+
+                <div className="max-w-7xl mx-auto px-6 lg:px-8 relative flex flex-col lg:flex-row gap-20">
+
+                    <aside className="lg:w-80 space-y-4">
+                        <div className="mb-10 lg:sticky lg:top-32">
+                            <span className="text-[#c9a961] font-mono text-[10px] tracking-[0.4em] uppercase font-black block mb-8">Categorias</span>
+                            <div className="space-y-3">
+                                {FAQ_CATEGORIES.map(cat => (
+                                    <button
+                                        key={cat.id}
+                                        onClick={() => {
+                                            setActiveCategory(cat.id);
+                                            setOpenIndex(0);
+                                        }}
+                                        className={`w-full flex items-center gap-4 px-6 py-6 border transition-all duration-500 relative overflow-hidden group ${activeCategory === cat.id
+                                            ? "bg-[#0a0a0a] border-[#c9a961] text-[#c9a961] shadow-2xl"
+                                            : "border-[#c9a961]/10 bg-[#0a0a0a]/40 text-white/40 hover:border-[#c9a961]/40 hover:text-white"
+                                            }`}
+                                    >
+                                        {activeCategory === cat.id && (
+                                            <div className="absolute left-0 top-0 w-1 h-full bg-[#c9a961]" />
+                                        )}
+                                        <span className="text-xl opacity-60 group-hover:opacity-100 transition-opacity">{cat.icon}</span>
+                                        <span className="font-mono text-[10px] font-black tracking-[0.2em] uppercase">{cat.name}</span>
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div className="mt-12 p-8 bg-[#0a0a0a]/60 border border-[#c9a961]/10 hidden lg:block">
+                                <p className="text-[#c9a961] font-mono text-[9px] tracking-widest uppercase mb-4">Ainda com Dúvidas?</p>
+                                <p className="text-white/40 text-sm font-light leading-relaxed italic mb-6">Nossa equipe de concierge está disponível 24/7 para atendê-lo.</p>
+                                <a href="/contact" className="text-[#c9a961] font-black text-[10px] tracking-widest uppercase border-b border-[#c9a961]/20 hover:border-[#c9a961] transition-all pb-1">Falar com Concierge →</a>
+                            </div>
+                        </div>
                     </aside>
 
-                    {/* Faq List */}
-                    <div className="flex-1 space-y-4">
+                    <div className="flex-1 space-y-6">
+                        <div className="mb-10">
+                            <h2 className="text-white font-display text-4xl font-black uppercase tracking-tight">
+                                Perguntas sobre {FAQ_CATEGORIES.find(c => c.id === activeCategory)?.name}
+                            </h2>
+                        </div>
+
                         {filteredFaqs.map((faq, index) => (
-                            <div key={index} className="border border-[#222] bg-[#111]/50 overflow-hidden">
+                            <div
+                                key={index}
+                                className="bg-[#0a0a0a]/60 backdrop-blur-3xl border border-[#c9a961]/10 overflow-hidden relative group hover:border-[#c9a961]/40 transition-all duration-700"
+                            >
+                                <div className="absolute top-0 left-0 w-6 h-6 border-t border-l border-[#c9a961]/20 group-hover:border-[#c9a961] transition-all" />
+
                                 <button
                                     onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                                    className="w-full flex items-center justify-between p-8 text-left hover:bg-[#111] transition-colors"
+                                    className="w-full flex items-center justify-between p-8 text-left transition-colors hover:bg-[#c9a961]/5"
                                 >
-                                    <span className="text-xl font-bold tracking-tight pr-8">{faq.question}</span>
-                                    <span className={`text-[#666] transition-transform duration-300 ${openIndex === index ? "rotate-180 text-[#c9a961]" : ""}`}>
-                                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    <div className="flex items-center gap-6">
+                                        <span className="text-[#c9a961]/20 font-mono text-xs font-black">{String(index + 1).padStart(2, '0')}</span>
+                                        <span className="text-white text-xl font-bold tracking-tight uppercase leading-snug pr-8">{faq.question}</span>
+                                    </div>
+                                    <div className={`text-[#c9a961] transition-transform duration-500 shrink-0 ${openIndex === index ? "rotate-180" : ""}`}>
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                                         </svg>
-                                    </span>
+                                    </div>
                                 </button>
-                                <div className={`transition-all duration-300 ease-in-out ${openIndex === index ? "max-h-96" : "max-h-0"}`}>
-                                    <p className="px-8 pb-8 text-[#999] leading-relaxed text-lg border-t border-[#222]/50 pt-6">
+                                <div className={`overflow-hidden transition-all duration-700 ease-in-out ${openIndex === index ? "max-h-[400px] border-t border-[#c9a961]/10" : "max-h-0"}`}>
+                                    <div className="p-10 pl-24 text-[#d4c5a0]/60 text-lg font-light leading-relaxed italic relative">
+                                        <span className="absolute left-10 top-10 text-4xl text-[#c9a961]/10 font-serif">"</span>
                                         {faq.answer}
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
                         ))}
@@ -123,12 +174,10 @@ export default function Faq() {
                 </div>
             </section>
 
-            {/* CTA */}
-            <section className="py-20 bg-[#111] border-t border-[#222]">
-                <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-                    <h2 className="text-2xl font-bold mb-6">Não encontrou o que procurava?</h2>
-                    <p className="text-[#666] mb-8">Nossa equipe de suporte está pronta para ajudar você.</p>
-                    <a href="/contact" className="inline-block px-10 py-4 bg-white text-black font-bold uppercase tracking-widest text-sm hover:bg-[#c9a961] transition-all">
+            <section className="py-24 bg-[#0a0a0a] border-y border-[#c9a961]/10 text-center">
+                <div className="max-w-4xl mx-auto px-6 lg:px-8">
+                    <h3 className="text-white font-display text-4xl font-black uppercase mb-8 tracking-tighter">Precisa de suporte agora?</h3>
+                    <a href="/contact" className="px-16 py-6 bg-[#c9a961] text-[#0a0a0a] font-black text-xs tracking-[0.4em] uppercase hover:glow-green transition-all shadow-2xl">
                         Falar com Suporte
                     </a>
                 </div>

@@ -21,8 +21,8 @@
     
     /* Texto */
     --text-primary: #ffffff;
-    --text-secondary: #9ca3af;
-    --text-tertiary: #6b7280;
+    --text-secondary: #d4c5a0; /* Champagne/Gold light */
+    --text-tertiary: #b89968;  /* Gold muted */
     
     /* Borders */
     --border-default: #2d7a4f;

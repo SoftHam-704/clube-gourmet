@@ -15,12 +15,7 @@ const CUISINES = [
   "Contemporânea",
 ];
 
-const PRICE_RANGES = [
-  { label: "$ Econômico", value: 1 },
-  { label: "$$ Moderado", value: 2 },
-  { label: "$$$ Sofisticado", value: 3 },
-  { label: "$$$$ Premium", value: 4 },
-];
+
 
 const CITIES = ["São Paulo", "Rio de Janeiro", "Belo Horizonte", "Curitiba", "Brasília"];
 
@@ -33,7 +28,7 @@ const RESTAURANTS = [
     rating: 4.8,
     location: "São Paulo - Jardins",
     description: "Autêntica culinária italiana com massas artesanais e uma seleção curada de vinhos da Toscana.",
-    availability: "dinner",
+    image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=1000",
   },
   {
     id: 2,
@@ -43,7 +38,7 @@ const RESTAURANTS = [
     rating: 4.9,
     location: "São Paulo - Liberdade",
     description: "Experiência omakase premium com peixes importados semanalmente do mercado Tsukiji de Tóquio.",
-    availability: "both",
+    image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&q=80&w=1000",
   },
   {
     id: 3,
@@ -53,7 +48,7 @@ const RESTAURANTS = [
     rating: 4.7,
     location: "São Paulo - Moema",
     description: "Rodízio tradicional com 18 cortes de carnes nobres e salad bar premiado.",
-    availability: "both",
+    image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1000",
   },
   {
     id: 4,
@@ -63,7 +58,7 @@ const RESTAURANTS = [
     rating: 4.9,
     location: "Rio de Janeiro - Leblon",
     description: "Clássica culinária francesa reimaginada com ingredientes brasileiros pelo Chef Pierre Laurent.",
-    availability: "dinner",
+    image: "https://images.unsplash.com/photo-1550966842-28a2a2d3ef8a?auto=format&fit=crop&q=80&w=1000",
   },
   {
     id: 5,
@@ -73,7 +68,7 @@ const RESTAURANTS = [
     rating: 4.6,
     location: "São Paulo - Vila Madalena",
     description: "Sabores vibrantes mexicanos com mezcal artesanal e receitas tradicionais de mole.",
-    availability: "both",
+    image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=1000",
   },
   {
     id: 6,
@@ -83,7 +78,7 @@ const RESTAURANTS = [
     rating: 4.5,
     location: "São Paulo - Pinheiros",
     description: "Especialidades do norte da Índia com pratos do forno tandoor e receitas autênticas de curry.",
-    availability: "both",
+    image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&q=80&w=1000",
   },
   {
     id: 7,
@@ -93,7 +88,7 @@ const RESTAURANTS = [
     rating: 4.6,
     location: "Rio de Janeiro - Ipanema",
     description: "Pratos inspirados na comida de rua com sabores intensos e ingredientes frescos.",
-    availability: "lunch",
+    image: "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=1000",
   },
   {
     id: 8,
@@ -103,7 +98,7 @@ const RESTAURANTS = [
     rating: 4.7,
     location: "Belo Horizonte - Savassi",
     description: "Frutos do mar frescos e mezze com vista para o mar e azeite importado da Grécia.",
-    availability: "both",
+    image: "https://images.unsplash.com/photo-1533777857889-4be7c70b33f8?auto=format&fit=crop&q=80&w=1000",
   },
   {
     id: 9,
@@ -113,7 +108,7 @@ const RESTAURANTS = [
     rating: 4.9,
     location: "São Paulo - Itaim Bibi",
     description: "Menu degustação de vanguarda com gastronomia molecular e ingredientes locais.",
-    availability: "dinner",
+    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=1000",
   },
   {
     id: 10,
@@ -123,7 +118,7 @@ const RESTAURANTS = [
     rating: 4.7,
     location: "Curitiba - Batel",
     description: "Especialidades italianas costeiras com frutos do mar frescos e limoncello artesanal.",
-    availability: "dinner",
+    image: "https://images.unsplash.com/photo-1534080564607-4e37cc66810c?auto=format&fit=crop&q=80&w=1000",
   },
   {
     id: 11,
@@ -133,7 +128,7 @@ const RESTAURANTS = [
     rating: 4.8,
     location: "Rio de Janeiro - Centro",
     description: "Feijoada tradicional servida todo sábado com samba ao vivo e caipirinhas.",
-    availability: "lunch",
+    image: "https://images.unsplash.com/photo-1625938140722-234d967189c7?auto=format&fit=crop&q=80&w=1000",
   },
   {
     id: 12,
@@ -143,7 +138,7 @@ const RESTAURANTS = [
     rating: 4.8,
     location: "Brasília - Lago Sul",
     description: "Cozinha experimental que mistura sabores asiáticos e latino-americanos de formas surpreendentes.",
-    availability: "dinner",
+    image: "https://images.unsplash.com/photo-1551218808-94e220e0349b?auto=format&fit=crop&q=80&w=1000",
   },
 ];
 
@@ -191,336 +186,202 @@ const Icons = {
   ),
 };
 
-// Navbar removed
-
-function HeroSection() {
+export default function Restaurants() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCuisine, setSelectedCuisine] = useState("Todas");
   const [selectedCity, setSelectedCity] = useState(CITIES[0]);
 
-  return (
-    <section className="pt-32 pb-16 bg-[#1a4d2e] relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 grid-bg opacity-30" />
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#c9a961]/5 blur-[150px]" />
-
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="max-w-3xl">
-          <span className="text-[#c9a961] font-mono text-sm tracking-widest uppercase mb-4 block">// Restaurantes</span>
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tighter mb-6">
-            Descubra Onde<br />
-            <span className="text-gradient">Economizar</span>
-          </h1>
-          <p className="text-[#666] text-lg mb-8">
-            Mais de 500 restaurantes parceiros esperando por você.
-          </p>
-        </div>
-
-        {/* Search bar */}
-        <div className="flex flex-col md:flex-row gap-4 max-w-2xl">
-          <div className="flex-1 relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#444]">{Icons.search}</span>
-            <input
-              type="text"
-              placeholder="Buscar restaurantes..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-[#111] border border-[#222] text-white placeholder-[#444] focus:border-[#c9a961] focus:outline-none font-mono text-sm"
-            />
-          </div>
-          <div className="relative">
-            <select
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.target.value)}
-              className="w-full md:w-48 px-4 py-4 bg-[#111] border border-[#222] text-white focus:border-[#c9a961] focus:outline-none appearance-none font-mono text-sm cursor-pointer"
-            >
-              {CITIES.map((city) => (
-                <option key={city} value={city}>{city}</option>
-              ))}
-            </select>
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#444] pointer-events-none">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="square" d="M19 9l-7 7-7-7" />
-              </svg>
-            </span>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-interface FilterSidebarProps {
-  selectedCuisine: string;
-  setSelectedCuisine: (cuisine: string) => void;
-  selectedPrice: number | null;
-  setSelectedPrice: (price: number | null) => void;
-  showFilters: boolean;
-  setShowFilters: (show: boolean) => void;
-}
-
-function FilterSidebar({ selectedCuisine, setSelectedCuisine, selectedPrice, setSelectedPrice, showFilters, setShowFilters }: FilterSidebarProps) {
-  return (
-    <>
-      {/* Mobile overlay */}
-      {showFilters && (
-        <div className="fixed inset-0 bg-black/80 z-40 lg:hidden" onClick={() => setShowFilters(false)} />
-      )}
-
-      <aside className={`fixed lg:relative top-0 left-0 h-full lg:h-auto w-80 lg:w-64 bg-[#111] lg:bg-transparent z-50 lg:z-auto transform transition-transform lg:transform-none ${showFilters ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
-        <div className="p-6 lg:p-0 h-full lg:h-auto overflow-y-auto">
-          {/* Mobile header */}
-          <div className="flex items-center justify-between mb-8 lg:hidden">
-            <span className="text-white font-semibold">Filtros</span>
-            <button onClick={() => setShowFilters(false)} className="text-[#666] hover:text-white">
-              {Icons.close}
-            </button>
-          </div>
-
-          {/* Cuisine filter */}
-          <div className="mb-8">
-            <h3 className="text-[#666] font-mono text-xs tracking-widest uppercase mb-4">Cozinha</h3>
-            <div className="space-y-2">
-              {CUISINES.map((cuisine) => (
-                <button
-                  key={cuisine}
-                  onClick={() => setSelectedCuisine(cuisine)}
-                  className={`w-full text-left px-4 py-2 text-sm transition-all border ${selectedCuisine === cuisine
-                    ? "bg-[#c9a961]/10 border-[#c9a961] text-[#c9a961]"
-                    : "bg-transparent border-[#222] text-[#666] hover:border-[#333] hover:text-white"
-                    }`}
-                >
-                  {cuisine}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Price filter */}
-          <div className="mb-8">
-            <h3 className="text-[#666] font-mono text-xs tracking-widest uppercase mb-4">Faixa de Preço</h3>
-            <div className="space-y-2">
-              {PRICE_RANGES.map((range) => (
-                <button
-                  key={range.value}
-                  onClick={() => setSelectedPrice(selectedPrice === range.value ? null : range.value)}
-                  className={`w-full text-left px-4 py-2 text-sm transition-all border ${selectedPrice === range.value
-                    ? "bg-[#c9a961]/10 border-[#c9a961] text-[#c9a961]"
-                    : "bg-transparent border-[#222] text-[#666] hover:border-[#333] hover:text-white"
-                    }`}
-                >
-                  {range.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Clear filters */}
-          <button
-            onClick={() => {
-              setSelectedCuisine("Todas");
-              setSelectedPrice(null);
-            }}
-            className="w-full px-4 py-3 border border-[#333] text-[#666] hover:border-[#d4c5a0] hover:text-[#d4c5a0] transition-all text-sm font-mono"
-          >
-            Limpar Filtros
-          </button>
-        </div>
-      </aside>
-    </>
-  );
-}
-
-interface RestaurantCardProps {
-  restaurant: typeof RESTAURANTS[0];
-  index: number;
-}
-
-function RestaurantCard({ restaurant, index }: RestaurantCardProps) {
-  return (
-    <div
-      className="group border border-[#222] bg-[#111] hover:border-[#c9a961]/50 transition-all duration-300 relative overflow-hidden"
-      style={{ animationDelay: `${index * 50}ms` }}
-    >
-      {/* Image placeholder with abstract design */}
-      <div className="relative h-48 bg-[#1a4d2e] overflow-hidden">
-        <div className="absolute inset-0 grid-bg opacity-50" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="font-mono text-6xl font-bold text-[#222] group-hover:text-[#c9a961]/20 transition-colors">
-            {String(index + 1).padStart(2, '0')}
-          </div>
-        </div>
-
-        {/* Rating badge */}
-        <div className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-[#1a4d2e]/90 border border-[#222]">
-          <span className="text-[#c9a961]">{Icons.star}</span>
-          <span className="text-white font-mono text-sm">{restaurant.rating}</span>
-        </div>
-
-        {/* Cuisine tag */}
-        <div className="absolute bottom-4 left-4">
-          <span className="px-3 py-1 bg-[#1a4d2e]/90 border border-[#222] text-[#666] font-mono text-xs uppercase">
-            {restaurant.cuisine}
-          </span>
-        </div>
-
-        {/* Hover overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-      </div>
-
-      <div className="p-6">
-        <div className="flex items-start justify-between mb-2">
-          <h3 className="font-display text-lg font-bold text-white group-hover:text-[#c9a961] transition-colors">
-            {restaurant.name}
-          </h3>
-          <span className="text-[#666] font-mono text-sm">
-            {"$".repeat(restaurant.price)}
-          </span>
-        </div>
-
-        <div className="flex items-center gap-2 mb-4">
-          <span className="text-[#444]">{Icons.location}</span>
-          <span className="text-[#666] text-sm">{restaurant.location}</span>
-        </div>
-
-        <p className="text-[#666] text-sm leading-relaxed mb-6 line-clamp-2">
-          {restaurant.description}
-        </p>
-
-        <button className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-[#333] text-[#666] hover:border-[#c9a961] hover:text-[#c9a961] transition-all text-sm font-mono group/btn">
-          Ver Detalhes
-          <span className="transition-transform group-hover/btn:translate-x-1">{Icons.arrow}</span>
-        </button>
-      </div>
-
-      {/* Bottom accent */}
-      <div className="absolute bottom-0 left-0 w-0 h-px bg-[#c9a961] group-hover:w-full transition-all duration-500" />
-    </div>
-  );
-}
-
-function RestaurantsGrid() {
-  const [selectedCuisine, setSelectedCuisine] = useState("Todas");
-  const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
-  const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
-  const [showFilters, setShowFilters] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 9;
-
-  const filteredRestaurants = RESTAURANTS.filter((restaurant) => {
-    const cuisineMatch = selectedCuisine === "Todas" || restaurant.cuisine === selectedCuisine;
-    const priceMatch = !selectedPrice || restaurant.price === selectedPrice;
-    return cuisineMatch && priceMatch;
+  const filteredRestaurants = RESTAURANTS.filter((r) => {
+    const queryMatch = r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      r.location.toLowerCase().includes(searchQuery.toLowerCase());
+    const cuisineMatch = selectedCuisine === "Todas" || r.cuisine === selectedCuisine;
+    return queryMatch && cuisineMatch;
   });
 
-  const totalPages = Math.ceil(filteredRestaurants.length / itemsPerPage);
-  const paginatedRestaurants = filteredRestaurants.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
   return (
-    <section className="py-12 bg-[#1a4d2e]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex lg:gap-12">
-          <FilterSidebar
-            selectedCuisine={selectedCuisine}
-            setSelectedCuisine={setSelectedCuisine}
-            selectedPrice={selectedPrice}
-            setSelectedPrice={setSelectedPrice}
-            showFilters={showFilters}
-            setShowFilters={setShowFilters}
-          />
+    <div className="bg-[#0a0a0a] min-h-screen text-white selection:bg-[#c9a961] selection:text-[#0a0a0a]">
+      <Navbar />
 
-          <div className="flex-1">
-            {/* Toolbar */}
-            <div className="flex items-center justify-between mb-8 pb-6 border-b border-[#222]">
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setShowFilters(true)}
-                  className="lg:hidden flex items-center gap-2 px-4 py-2 border border-[#222] text-[#666] hover:border-[#333]"
-                >
-                  {Icons.filter}
-                  <span className="text-sm">Filtros</span>
-                </button>
-                <span className="text-[#666] font-mono text-sm">
-                  <span className="text-white">{filteredRestaurants.length}</span> restaurantes encontrados
-                </span>
-              </div>
+      {/* Hero Header */}
+      <section className="pt-48 pb-20 relative overflow-hidden">
+        <div className="absolute inset-0 grid-bg opacity-10" />
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#c9a961]/5 blur-[200px]" />
 
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-2 border transition-all ${viewMode === "grid" ? "border-[#c9a961] text-[#c9a961]" : "border-[#222] text-[#666] hover:border-[#333]"}`}
-                >
-                  {Icons.grid}
-                </button>
-                <button
-                  onClick={() => setViewMode("map")}
-                  className={`p-2 border transition-all ${viewMode === "map" ? "border-[#c9a961] text-[#c9a961]" : "border-[#222] text-[#666] hover:border-[#333]"}`}
-                >
-                  {Icons.map}
-                </button>
-              </div>
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12">
+            <div className="max-w-3xl">
+              <span className="text-[#c9a961] font-mono text-sm tracking-[0.6em] uppercase mb-10 block animate-pulse">
+                // Onde a Experiência Começa
+              </span>
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-extrabold leading-[0.85] tracking-tighter mb-8 italic lg:not-italic">
+                Curadoria de<br />
+                <span className="text-gradient-gold animate-gradient">Elite.</span>
+              </h1>
+              <p className="text-[#d4c5a0]/60 text-xl font-light max-w-xl leading-relaxed">
+                Navegue por um ecossistema seletivo de gastronomia. Onde cada parceiro é uma promessa de excelência.
+              </p>
             </div>
 
-            {/* Restaurant grid */}
-            {viewMode === "grid" ? (
-              <>
-                <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {paginatedRestaurants.map((restaurant, index) => (
-                    <RestaurantCard key={restaurant.id} restaurant={restaurant} index={index} />
-                  ))}
-                </div>
-
-                {/* Empty state */}
-                {filteredRestaurants.length === 0 && (
-                  <div className="text-center py-20">
-                    <div className="font-mono text-6xl text-[#222] mb-4">404</div>
-                    <p className="text-[#666]">Nenhum restaurante encontrado com esses filtros.</p>
-                  </div>
-                )}
-
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-2 mt-12">
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                      <button
-                        key={page}
-                        onClick={() => setCurrentPage(page)}
-                        className={`w-10 h-10 font-mono text-sm transition-all border ${currentPage === page
-                          ? "bg-[#c9a961] text-[#0a0a0a] border-[#c9a961]"
-                          : "bg-transparent text-[#666] border-[#222] hover:border-[#333]"
-                          }`}
-                      >
-                        {String(page).padStart(2, '0')}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="h-[600px] border border-[#222] bg-[#111] flex items-center justify-center">
-                <div className="text-center">
-                  <div className="font-mono text-[#222] text-6xl mb-4">{Icons.map}</div>
-                  <p className="text-[#666]">Visualização de mapa em breve</p>
-                </div>
+            {/* Quick Stats Grid */}
+            <div className="grid grid-cols-2 gap-8 border-l border-[#c9a961]/20 pl-12 h-fit">
+              <div>
+                <div className="text-4xl font-mono font-black text-white">500+</div>
+                <div className="text-[#c9a961] text-[10px] tracking-[0.3em] uppercase font-bold mt-1">Acordos Ativos</div>
               </div>
-            )}
+              <div>
+                <div className="text-4xl font-mono font-black text-white">22</div>
+                <div className="text-[#c9a961] text-[10px] tracking-[0.3em] uppercase font-bold mt-1">Cidades</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-// Footer removed
+      {/* Filter Bar - Floating Glassmorphic */}
+      <section className="sticky top-20 z-40 px-6 lg:px-8 -mt-8 mb-20">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-[#111]/80 backdrop-blur-3xl border border-[#c9a961]/20 p-2 shadow-2xl flex flex-col lg:flex-row gap-2">
+            {/* Search */}
+            <div className="flex-1 relative group">
+              <span className="absolute left-6 top-1/2 -translate-y-1/2 text-[#c9a961]/40 group-focus-within:text-[#c9a961] transition-colors">
+                {Icons.search}
+              </span>
+              <input
+                type="text"
+                placeholder="Buscar por nome ou região..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-white/5 border border-transparent focus:border-[#c9a961]/30 focus:bg-[#c9a961]/5 pl-16 pr-8 py-5 outline-none transition-all text-sm font-medium"
+              />
+            </div>
 
-export default function Restaurants() {
-  return (
-    <div className="bg-[#1a4d2e] min-h-screen">
-      <Navbar />
-      <HeroSection />
-      <RestaurantsGrid />
+            {/* Cuisine Select */}
+            <div className="lg:w-64 relative">
+              <select
+                value={selectedCuisine}
+                onChange={(e) => setSelectedCuisine(e.target.value)}
+                className="w-full bg-white/5 border border-transparent focus:border-[#c9a961]/30 px-8 py-5 outline-none transition-all text-sm font-medium appearance-none cursor-pointer text-[#d4c5a0]/80"
+              >
+                {CUISINES.map((c) => (
+                  <option key={c} value={c} className="bg-[#111]">{c}</option>
+                ))}
+              </select>
+              <span className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-[#c9a961]/40 text-[10px]">▼</span>
+            </div>
+
+            {/* City Select */}
+            <div className="lg:w-48 relative">
+              <select
+                value={selectedCity}
+                onChange={(e) => setSelectedCity(e.target.value)}
+                className="w-full bg-white/5 border border-transparent focus:border-[#c9a961]/30 px-8 py-5 outline-none transition-all text-sm font-medium appearance-none cursor-pointer text-[#d4c5a0]"
+              >
+                {CITIES.map((city) => (
+                  <option key={city} value={city} className="bg-[#111]">{city}</option>
+                ))}
+              </select>
+              <span className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-[#c9a961]/40 text-[10px]">▼</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Results Grid */}
+      <section className="pb-32 px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          {filteredRestaurants.length > 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+              {filteredRestaurants.map((res, i) => (
+                <div
+                  key={res.id}
+                  className="group relative bg-[#111] border border-[#c9a961]/10 hover:border-[#c9a961]/40 transition-all duration-700 animate-fade-in"
+                  style={{ animationDelay: `${i * 100}ms` }}
+                >
+                  {/* Image Container */}
+                  <div className="relative aspect-[4/5] overflow-hidden">
+                    <img
+                      src={res.image}
+                      alt={res.name}
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent opacity-60" />
+
+                    {/* Floating Info */}
+                    <div className="absolute top-6 right-6 bg-[#0a0a0a]/80 backdrop-blur-md border border-[#c9a961]/20 px-3 py-1 flex items-center gap-2">
+                      <span className="text-[#c9a961]">{Icons.star}</span>
+                      <span className="text-white font-mono text-xs font-black">{res.rating}</span>
+                    </div>
+
+                    <div className="absolute bottom-6 left-6 right-6">
+                      <span className="inline-block bg-[#c9a961] text-[#0a0a0a] px-3 py-1 text-[9px] font-black tracking-widest uppercase mb-4">
+                        {res.cuisine}
+                      </span>
+                      <h3 className="text-white font-display text-3xl font-black uppercase tracking-tighter leading-none group-hover:text-gradient-gold transition-all">
+                        {res.name}
+                      </h3>
+                    </div>
+                  </div>
+
+                  {/* Details Container */}
+                  <div className="p-8 space-y-6">
+                    <div className="flex items-center justify-between text-[#d4c5a0]/40 font-mono text-[10px] tracking-[0.2em] uppercase">
+                      <div className="flex items-center gap-2">
+                        {Icons.location}
+                        {res.location}
+                      </div>
+                      <div className="text-[#c9a961]">
+                        {"$".repeat(res.price)}
+                      </div>
+                    </div>
+
+                    <p className="text-[#d4c5a0]/60 text-sm font-light leading-relaxed italic line-clamp-2">
+                      "{res.description}"
+                    </p>
+
+                    <button className="w-full py-5 bg-white/5 border border-[#c9a961]/10 text-white font-black text-[10px] tracking-[0.4em] uppercase hover:bg-[#c9a961] hover:text-[#0a0a0a] hover:border-[#c9a961] hover:-translate-y-1 transition-all">
+                      Garantir Reserva VIP
+                    </button>
+                  </div>
+
+                  {/* Corner Brégnights */}
+                  <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-[#c9a961]/0 group-hover:border-[#c9a961]/100 transition-all duration-700" />
+                  <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-[#c9a961]/0 group-hover:border-[#c9a961]/100 transition-all duration-700" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="py-40 text-center space-y-8">
+              <div className="text-[#c9a961] text-6xl animate-bounce">🍽️</div>
+              <h2 className="text-4xl font-display font-black uppercase tracking-widest text-[#d4c5a0]">Nenhum local encontrado</h2>
+              <p className="text-[#d4c5a0]/40 max-w-sm mx-auto italic">Refine sua curadoria para encontrar o extraordinário.</p>
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCuisine("Todas");
+                }}
+                className="px-12 py-4 border border-[#c9a961]/40 text-[#c9a961] font-black text-xs tracking-widest uppercase hover:bg-[#c9a961] hover:text-[#0a0a0a] transition-all"
+              >
+                Resetar Filtros
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Promotion Banner */}
+      <section className="py-24 bg-[#1a4d2e] relative overflow-hidden">
+        <div className="absolute inset-0 grid-bg opacity-10" />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative text-center">
+          <h2 className="text-white font-display text-4xl lg:text-6xl font-black uppercase tracking-tighter mb-8 max-w-4xl mx-auto">
+            Não encontrou seu restaurante favorito?<br />
+            <span className="text-gradient-gold">Sugira um novo parceiro.</span>
+          </h2>
+          <button className="px-12 py-6 bg-white text-[#0a0a0a] font-black text-xs tracking-[0.5em] uppercase hover:glow-green hover:-translate-y-2 transition-all">
+            Fazer Indicação
+          </button>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );

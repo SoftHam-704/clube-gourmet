@@ -4,6 +4,7 @@ import { Link, useLocation } from "wouter";
 const NAV_LINKS = [
   { label: "Restaurantes", href: "/restaurants", isPage: true },
   { label: "Planos", href: "/plans", isPage: true },
+  { label: "Experiências", href: "/experiences", isPage: true },
   { label: "Benefícios", href: "/#benefits", isPage: false },
   { label: "Como Funciona", href: "/#how-it-works", isPage: false },
 ];
@@ -33,41 +34,45 @@ export function Navbar() {
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "glass border-b border-[#222]" : "bg-transparent"}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "glass border-b border-[#c9a961]/20 py-2" : "bg-transparent py-4"}`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between min-h-[140px] py-4">
+        <div className={`flex items-center justify-between transition-all duration-500 ${scrolled ? "min-h-[140px]" : "min-h-[240px]"}`}>
           <Link href="/" className="flex items-center group py-2">
-            <img src="/logo-lateral.png" alt="Club Empar Gourmet" className="h-32 md:h-40 w-auto transition-transform group-hover:scale-105" />
+            <img
+              src="/logo-final-gold.png"
+              alt="Club Empar Gourmet"
+              className={`w-auto transition-all duration-700 
+                saturate-[2.2] brightness-[1.15] contrast-[1.25]
+                [filter:drop-shadow(0_0_15px_rgba(201,169,97,0.5))]
+                group-hover:scale-105 group-hover:brightness-[1.3] group-hover:saturate-[2.8]
+                group-hover:[filter:drop-shadow(0_0_25px_rgba(201,169,97,0.7))]
+                ${scrolled ? "h-28 md:h-40" : "h-48 md:h-72"}`}
+            />
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-10">
             {NAV_LINKS.map((link) => (
               link.isPage ? (
-                <Link 
-                  key={link.href} 
-                  href={link.href} 
-                  className={`transition-colors font-medium text-sm tracking-wide uppercase ${
-                    location === link.href ? "text-[#c9a961]" : "text-[#666] hover:text-white"
-                  }`}
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`transition-colors font-bold text-sm tracking-[0.2em] uppercase px-2 ${location === link.href ? "text-[#c9a961]" : "text-[#d4c5a0]/50 hover:text-white"}`}
                 >
                   {link.label}
                 </Link>
               ) : (
-                <a 
-                  key={link.href} 
-                  href={link.href} 
-                  className="text-[#666] hover:text-white transition-colors font-medium text-sm tracking-wide uppercase"
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="transition-colors font-bold text-sm tracking-[0.2em] uppercase px-2 text-[#d4c5a0]/50 hover:text-white"
                 >
                   {link.label}
                 </a>
               )
             ))}
-            <Link href="/plans" className="px-6 py-2.5 bg-[#c9a961] text-[#0a0a0a] font-semibold text-sm tracking-wide uppercase hover:glow-green transition-all">
-              Começar
-            </Link>
           </div>
 
-          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-white" aria-label="Abrir menu">
+          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-[#c9a961]" aria-label="Abrir menu">
             {isOpen ? Icons.close : Icons.menu}
           </button>
         </div>
@@ -75,21 +80,18 @@ export function Navbar() {
 
       {/* Mobile menu */}
       <div className={`md:hidden overflow-hidden transition-all duration-300 ${isOpen ? "max-h-96" : "max-h-0"}`}>
-        <div className="px-6 py-4 glass border-t border-[#222] space-y-4">
+        <div className="px-6 py-8 glass border-t border-[#c9a961]/20 space-y-6">
           {NAV_LINKS.map((link) => (
             link.isPage ? (
-              <Link key={link.href} href={link.href} onClick={() => setIsOpen(false)} className="block text-[#666] hover:text-white transition-colors font-medium py-2 text-sm tracking-wide uppercase">
+              <Link key={link.href} href={link.href} onClick={() => setIsOpen(false)} className="block text-[#d4c5a0] hover:text-white transition-colors font-bold py-2 text-sm tracking-widest uppercase">
                 {link.label}
               </Link>
             ) : (
-              <a key={link.href} href={link.href} onClick={() => setIsOpen(false)} className="block text-[#666] hover:text-white transition-colors font-medium py-2 text-sm tracking-wide uppercase">
+              <a key={link.href} href={link.href} onClick={() => setIsOpen(false)} className="block text-[#d4c5a0] hover:text-white transition-colors font-bold py-2 text-sm tracking-widest uppercase">
                 {link.label}
               </a>
             )
           ))}
-          <Link href="/plans" className="block w-full text-center px-6 py-3 bg-[#c9a961] text-[#0a0a0a] font-semibold text-sm tracking-wide uppercase">
-            Começar
-          </Link>
         </div>
       </div>
     </nav>
