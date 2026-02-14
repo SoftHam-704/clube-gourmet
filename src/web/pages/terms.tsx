@@ -29,7 +29,7 @@ export default function Terms() {
         <div className="bg-[#0a0a0a] min-h-screen text-white selection:bg-[#c9a961] selection:text-[#0a0a0a]">
             <Navbar />
 
-            <section className="pt-56 pb-24 relative overflow-hidden">
+            <section className="pt-80 pb-24 relative overflow-hidden">
                 <div className="absolute inset-0 grid-bg opacity-10" />
                 <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#c9a961]/5 blur-[200px]" />
 
