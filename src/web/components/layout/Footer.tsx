@@ -26,12 +26,21 @@ export function Footer() {
                     </div>
 
                     <div>
-                        <h4 className="text-white font-semibold mb-4 text-sm tracking-wider uppercase">Institucional</h4>
+                        <h4 className="text-white font-semibold mb-4 text-sm tracking-wider uppercase">Contato</h4>
                         <ul className="space-y-3">
-                            <li><Link href="/about" className="text-[#666] hover:text-[#c9a961] transition-colors text-sm">Sobre Nós</Link></li>
-                            <li><Link href="/faq" className="text-[#666] hover:text-[#c9a961] transition-colors text-sm">FAQ</Link></li>
-                            <li><Link href="/contact" className="text-[#666] hover:text-[#c9a961] transition-colors text-sm">Contato</Link></li>
-                            <li><Link href="/partners" className="text-[#666] hover:text-[#c9a961] transition-colors text-sm">Seja um Parceiro</Link></li>
+                            <li>
+                                <a href="https://wa.me/5566992412448" target="_blank" rel="noopener noreferrer" className="text-[#666] hover:text-[#c9a961] transition-colors text-sm flex items-center gap-2">
+                                    <span>📱</span> (66) 99241-2448
+                                </a>
+                            </li>
+                            <li>
+                                <a href="mailto:contato@clubempar.com.br" className="text-[#666] hover:text-[#c9a961] transition-colors text-sm flex items-center gap-2">
+                                    <span>✉️</span> contato@clubempar.com.br
+                                </a>
+                            </li>
+                            <li>
+                                <Link href="/contact" className="text-[#666] hover:text-[#c9a961] transition-colors text-sm">Fale Conosco</Link>
+                            </li>
                         </ul>
                     </div>
                 </div>

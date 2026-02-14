@@ -64,7 +64,7 @@ const PLANS = [
     price: "32,90",
     period: "/mês",
     total: "R$ 394,80",
-    description: "🔥 O plano mais vantajoso — maior economia",
+    description: "O plano mais vantajoso — maior economia",
     popular: false,
     badge: "🚀",
     savings: "Melhor preço do ano",
@@ -78,6 +78,84 @@ const PLANS = [
       "Acesso antecipado a novos restaurantes",
       "Oferta especial de aniversário",
       "Acesso a eventos VIP",
+    ],
+  },
+];
+
+const FAMILY_PLANS = [
+  {
+    id: "family-monthly",
+    name: "Família Mensal",
+    price: "39,91",
+    period: "/pessoa",
+    total: "Média c/ 4 pessoas",
+    description: "Quanto mais pessoas, maior o desconto",
+    popular: false,
+    badge: "👨‍👩‍👧‍👦",
+    benefits: [
+      "2ª pessoa: 10% OFF (R$ 44,91/mês)",
+      "3ª pessoa: 20% OFF (R$ 39,92/mês)",
+      "4ª pessoa: 30% OFF (R$ 34,93/mês)",
+      "2 por 1 para todos os membros",
+      "Cartões digitais individuais",
+      "Cancele quando quiser",
+    ],
+  },
+  {
+    id: "family-quarterly",
+    name: "Família Trimestral",
+    price: "33,91",
+    period: "/pessoa",
+    total: "Média c/ 4 pessoas",
+    description: "Economia progressiva para toda família",
+    popular: false,
+    badge: "👨‍👩‍👧‍👦",
+    benefits: [
+      "2ª pessoa: 10% OFF (R$ 35,91/mês)",
+      "3ª pessoa: 20% OFF (R$ 31,92/mês)",
+      "4ª pessoa: 30% OFF (R$ 27,93/mês)",
+      "2 por 1 para todos os membros",
+      "Cartões digitais individuais",
+      "Suporte prioritário",
+    ],
+  },
+  {
+    id: "family-semiannual",
+    name: "Família Semestral",
+    price: "30,66",
+    period: "/pessoa",
+    total: "Média c/ 4 pessoas",
+    description: "Excelente custo-benefício familiar",
+    popular: true,
+    badge: "👨‍👩‍👧‍👦",
+    savings: "Recomendado",
+    benefits: [
+      "2ª pessoa: 10% OFF (R$ 32,90/mês)",
+      "3ª pessoa: 20% OFF (R$ 28,72/mês)",
+      "4ª pessoa: 30% OFF (R$ 25,13/mês)",
+      "2 por 1 para todos os membros",
+      "Cartões digitais individuais",
+      "Acesso antecipado a novos restaurantes",
+    ],
+  },
+  {
+    id: "family-annual",
+    name: "Família Anual",
+    price: "27,96",
+    period: "/pessoa",
+    total: "Média c/ 4 pessoas",
+    description: "Máxima economia para sua família",
+    popular: false,
+    badge: "👨‍👩‍👧‍👦",
+    savings: "Maior desconto",
+    benefits: [
+      "2ª pessoa: 10% OFF (R$ 29,61/mês)",
+      "3ª pessoa: 20% OFF (R$ 26,32/mês)",
+      "4ª pessoa: 30% OFF (R$ 23,03/mês)",
+      "2 por 1 para todos os membros",
+      "Cartões digitais individuais",
+      "Acesso a eventos VIP",
+      "Oferta de aniversário para todos",
     ],
   },
 ];
@@ -266,37 +344,81 @@ function PlanCard({ plan }: PlanCardProps) {
 
 function PricingSection() {
   return (
-    <section className="py-20 bg-[#1a4d2e] relative">
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
+    <>
+      {/* Individual Plans */}
+      <section className="py-20 bg-[#1a4d2e] relative">
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Plans grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
-          {PLANS.map((plan) => (
-            <PlanCard key={plan.id} plan={plan} />
-          ))}
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="font-display text-3xl lg:text-4xl font-bold text-white tracking-tighter mb-4">
+              Planos <span className="text-gradient">Individuais</span>
+            </h2>
+            <p className="text-[#666] max-w-2xl mx-auto">
+              Escolha o plano ideal e aproveite 2 por 1 em todos os restaurantes parceiros
+            </p>
+          </div>
+
+          {/* Plans grid */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+            {PLANS.map((plan) => (
+              <PlanCard key={plan.id} plan={plan} />
+            ))}
+          </div>
         </div>
+      </section>
 
-        {/* Trust indicators */}
-        <div className="mt-20 text-center">
-          <p className="text-[#666] mb-8 text-xs font-mono tracking-widest uppercase">Garantias</p>
-          <div className="flex flex-wrap justify-center gap-6">
-            <div className="flex items-center gap-3 px-6 py-3 border border-[#222] bg-[#111]">
-              <span className="text-[#c9a961]">{Icons.shield}</span>
-              <span className="text-sm text-[#999]">Pagamento Seguro</span>
+      {/* Family Plans */}
+      <section className="py-20 bg-[#0a0a0a] relative">
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#222] to-transparent" />
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="text-[#c9a961] font-mono text-sm tracking-widest uppercase mb-4 block">// Planos Família</span>
+            <h2 className="font-display text-3xl lg:text-4xl font-bold text-white tracking-tighter mb-4">
+              Quanto Mais Pessoas, <span className="text-gradient">Maior o Desconto</span>
+            </h2>
+            <p className="text-[#666] max-w-2xl mx-auto mb-6">
+              Plano Família com descontos progressivos: 2ª pessoa 10% OFF, 3ª pessoa 20% OFF, 4ª pessoa 30% OFF
+            </p>
+            <div className="inline-flex items-center gap-3 px-6 py-3 border border-[#c9a961]/30 bg-[#c9a961]/5 rounded-lg">
+              <span className="text-2xl">👨‍👩‍👧‍👦</span>
+              <span className="text-[#c9a961] font-mono text-sm">Economia de verdade para toda família!</span>
             </div>
-            <div className="flex items-center gap-3 px-6 py-3 border border-[#222] bg-[#111]">
-              <span className="text-[#c9a961]">{Icons.creditCard}</span>
-              <span className="text-sm text-[#999]">Todos os Cartões</span>
-            </div>
-            <div className="flex items-center gap-3 px-6 py-3 border border-[#222] bg-[#111]">
-              <span className="text-[#c9a961]">{Icons.refresh}</span>
-              <span className="text-sm text-[#999]">Cancele Quando Quiser</span>
+          </div>
+
+          {/* Family Plans grid */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+            {FAMILY_PLANS.map((plan) => (
+              <PlanCard key={plan.id} plan={plan} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust indicators */}
+      <section className="py-12 bg-[#1a4d2e]">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-[#666] mb-8 text-xs font-mono tracking-widest uppercase">Garantias</p>
+            <div className="flex flex-wrap justify-center gap-6">
+              <div className="flex items-center gap-3 px-6 py-3 border border-[#222] bg-[#111]">
+                <span className="text-[#c9a961]">{Icons.shield}</span>
+                <span className="text-sm text-[#999]">Pagamento Seguro</span>
+              </div>
+              <div className="flex items-center gap-3 px-6 py-3 border border-[#222] bg-[#111]">
+                <span className="text-[#c9a961]">{Icons.creditCard}</span>
+                <span className="text-sm text-[#999]">Todos os Cartões</span>
+              </div>
+              <div className="flex items-center gap-3 px-6 py-3 border border-[#222] bg-[#111]">
+                <span className="text-[#c9a961]">{Icons.refresh}</span>
+                <span className="text-sm text-[#999]">Cancele Quando Quiser</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 
