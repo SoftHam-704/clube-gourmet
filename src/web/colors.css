@@ -1,0 +1,31 @@
+/* Club Empar - Paleta Verde Premium Tech */
+@layer base {
+  :root {
+    /* Backgrounds */
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #0f1410;
+    --bg-elevated: #0f3520;
+    --bg-card: #1a4d2e;
+    
+    /* Verde System */
+    --green-darker: #0f3520;
+    --green-dark: #1a4d2e;
+    --green-medium: #2d7a4f;
+    --green-accent: #3da56a;
+    --green-bright: #4ec985;
+    
+    /* Dourado Premium */
+    --gold-dark: #b89968;
+    --gold: #d4c5a0;
+    --gold-light: #e6d7b8;
+    
+    /* Texto */
+    --text-primary: #ffffff;
+    --text-secondary: #9ca3af;
+    --text-tertiary: #6b7280;
+    
+    /* Borders */
+    --border-default: #2d7a4f;
+    --border-subtle: #1a4d2e;
+  }
+}
