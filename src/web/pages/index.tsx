@@ -141,14 +141,11 @@ function HeroSection() {
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#c9a961]/5 blur-[150px]" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#d4c5a0]/5 blur-[120px]" />
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20 w-full">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-80 pb-20 w-full">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           {/* Left side - Text */}
           <div className="lg:col-span-7 space-y-8 animate-fade-in pr-4">
-            <div className="inline-flex items-center gap-3 px-4 py-2 border border-[#c9a961]/20 bg-[#0a0a0a]/40 backdrop-blur-md">
-              <span className="w-2 h-2 bg-[#c9a961] animate-pulse" />
-              <span className="text-[#d4c5a0] text-sm font-mono tracking-[0.2em]">500+ RESTAURANTES PARCEIROS</span>
-            </div>
+
 
             <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-extrabold text-white leading-[0.85] tracking-tighter">
               Alta
