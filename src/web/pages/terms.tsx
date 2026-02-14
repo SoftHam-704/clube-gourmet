@@ -26,33 +26,46 @@ export default function Terms() {
     ];
 
     return (
-        <div className="bg-[#1a4d2e] min-h-screen text-white text-justify">
+        <div className="bg-[#0a0a0a] min-h-screen text-white selection:bg-[#c9a961] selection:text-[#0a0a0a]">
             <Navbar />
 
-            <section className="pt-32 pb-20 relative overflow-hidden">
-                <div className="absolute inset-0 grid-bg opacity-30" />
-                <div className="relative max-w-4xl mx-auto px-6 lg:px-8">
-                    <span className="text-[#c9a961] font-mono text-sm tracking-widest uppercase mb-4 block">// Legal</span>
-                    <h1 className="font-display text-5xl lg:text-7xl font-bold tracking-tighter mb-8">
-                        Termos de <span className="text-gradient">Uso</span>
+            <section className="pt-56 pb-24 relative overflow-hidden">
+                <div className="absolute inset-0 grid-bg opacity-10" />
+                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#c9a961]/5 blur-[200px]" />
+
+                <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+                    <span className="text-[#c9a961] font-mono text-sm tracking-[0.6em] uppercase mb-10 block animate-pulse">
+                        // LEGAL & COMPLIANCE
+                    </span>
+                    <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-extrabold text-white leading-[0.85] tracking-tighter mb-12 uppercase">
+                        Termos de<br />
+                        <span className="text-gradient-gold animate-gradient">Uso.</span>
                     </h1>
-                    <p className="text-[#666] font-mono text-sm">Última atualização: 27 de Janeiro de 2026</p>
+                    <p className="text-[#d4c5a0]/40 font-mono text-xs tracking-widest uppercase">Última atualização: 14 de Fevereiro de 2026</p>
                 </div>
             </section>
 
             <section className="pb-32 relative">
-                <div className="max-w-4xl mx-auto px-6 lg:px-8 bg-[#111]/50 border border-[#222] p-8 lg:p-16 space-y-12">
-                    {sections.map((section, i) => (
-                        <div key={i} className="space-y-4">
-                            <h2 className="text-2xl font-bold text-white border-l-2 border-[#c9a961] pl-6">{section.title}</h2>
-                            <p className="text-[#999] leading-relaxed text-lg pl-6">{section.content}</p>
-                        </div>
-                    ))}
+                <div className="max-w-4xl mx-auto px-6 lg:px-8">
+                    <div className="bg-[#111] border border-[#c9a961]/10 p-12 lg:p-20 space-y-20 relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-[#c9a961] to-transparent opacity-20" />
 
-                    <div className="pt-12 border-t border-[#222]">
-                        <p className="text-[#666] text-sm">
-                            Para dúvidas sobre nossos termos, entre em contato através do e-mail <a href="mailto:legal@clubempar.com" className="text-[#c9a961] hover:underline">legal@clubempar.com</a>.
-                        </p>
+                        {sections.map((section, i) => (
+                            <div key={i} className="space-y-6 group">
+                                <h2 className="text-[#c9a961] font-display text-2xl lg:text-3xl font-black uppercase tracking-tight group-hover:text-white transition-colors">
+                                    {section.title}
+                                </h2>
+                                <p className="text-[#d4c5a0]/60 leading-relaxed text-lg lg:text-xl font-light italic">
+                                    {section.content}
+                                </p>
+                            </div>
+                        ))}
+
+                        <div className="pt-16 border-t border-[#c9a961]/10">
+                            <p className="text-[#d4c5a0]/30 text-sm font-mono tracking-widest leading-loose">
+                                Para esclarecimentos adicionais sobre nossas diretrizes jurídicas, contate nosso departamento via <a href="mailto:legal@clubempar.com" className="text-[#c9a961] hover:underline">legal@clubempar.com</a>.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
