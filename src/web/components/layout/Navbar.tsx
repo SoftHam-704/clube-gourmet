@@ -37,9 +37,7 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 border border-[#4ec985] flex items-center justify-center transition-all group-hover:bg-[#4ec985] group-hover:glow-green">
-              <span className="text-[#4ec985] font-mono font-bold text-lg group-hover:text-[#0a0a0a] transition-colors">C</span>
-            </div>
+            <img src="/logo.png" alt="Club Empar" className="w-10 h-10 transition-transform group-hover:scale-110" />
             <span className="font-display text-xl font-bold text-white tracking-tighter">Club Empar</span>
           </Link>
 

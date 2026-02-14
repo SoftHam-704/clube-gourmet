@@ -7,9 +7,7 @@ export function Footer() {
                 <div className="grid md:grid-cols-4 gap-12 mb-16">
                     <div className="md:col-span-2">
                         <Link href="/" className="flex items-center gap-3 mb-6 group">
-                            <div className="w-10 h-10 border border-[#4ec985] flex items-center justify-center transition-all group-hover:bg-[#4ec985]">
-                                <span className="text-[#4ec985] font-mono font-bold text-lg group-hover:text-[#0a0a0a] transition-colors">C</span>
-                            </div>
+                            <img src="/logo.png" alt="Club Empar" className="w-10 h-10 transition-transform group-hover:scale-110" />
                             <span className="font-display text-xl font-bold text-white tracking-tighter">Club Empar</span>
                         </Link>
                         <p className="text-[#666] text-sm leading-relaxed max-w-sm">
