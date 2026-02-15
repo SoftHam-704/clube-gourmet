@@ -40,18 +40,15 @@ app.get('/plans', async (c) => {
 
 app.get('/debug', (c) => c.json({ status: 'ok', message: "API está ativa!" }));
 
-// Motor de Partida Local (Só inicia se rodar via terminal)
-if (typeof process !== 'undefined') {
+// Motor de Partida Local (Só inicia se rodar DIRETAMENTE via terminal/npx)
+// Na Vercel, este bloco é ignorado completamente.
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
   try {
     const { serve } = await import('@hono/node-server');
     serve({ fetch: app.fetch, port: 3000 }, (info) => {
-      console.log(`\n-----------------------------------------`);
-      console.log(`🚀 MOTOR DE DADOS ATIVO!`);
-      console.log(`🔗 Porta: ${info.port}`);
-      console.log(`📡 Endereço: http://localhost:${info.port}`);
-      console.log(`-----------------------------------------\n`);
+      console.log(`\n🚀 MOTOR LOCAL ATIVO: http://localhost:${info.port}`);
     });
-  } catch (e) { /* Erro esperado em produção */ }
+  } catch (e) { }
 }
 
 export default app;

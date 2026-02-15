@@ -157,12 +157,16 @@ export default function Plans() {
   ];
 
   useEffect(() => {
-    fetch('/api/plans')
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+    fetch('/api/plans', { signal: controller.signal })
       .then(res => {
         if (!res.ok) throw new Error("API Indisponível");
         return res.json();
       })
       .then(data => {
+        clearTimeout(timeoutId);
         if (data && Array.isArray(data) && data.length > 0) {
           setDbPlans(data);
         } else {
@@ -171,10 +175,13 @@ export default function Plans() {
         setLoading(false);
       })
       .catch(err => {
-        console.warn("Usando planos de backup devido a erro:", err.message);
+        clearTimeout(timeoutId);
+        console.warn("Usando planos de backup (Timeout ou Erro):", err.message);
         setDbPlans(fallbackPlans);
         setLoading(false);
       });
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const filteredPlans = Array.isArray(dbPlans) ? dbPlans.filter(p =>
