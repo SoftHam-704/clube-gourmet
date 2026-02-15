@@ -22,22 +22,29 @@ const FALLBACK_PLANS = [
 ];
 
 app.get('/plans', async (c) => {
+  // Versão: 1.0.8 (Purge)
+  c.header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  c.header('Pragma', 'no-cache');
+  c.header('Expires', '0');
+
   const timeoutPromise = new Promise((resolve) =>
-    setTimeout(() => resolve({ isFallback: true }), 3000)
+    setTimeout(() => resolve({ isFallback: true }), 5000) // Aumentado para 5s
   );
 
   try {
+    console.log("💎 API: Buscando planos reais na SaveInCloud...");
     const dbPromise = db.select().from(plans).where(eq(plans.active, true));
     const result: any = await Promise.race([dbPromise, timeoutPromise]);
 
     if (result.isFallback) {
-      console.warn("⚠️ API: Banco SaveInCloud lento ou porta bloqueada. Usando Fallback.");
+      console.warn("⚠️ API: Timeout na SaveInCloud. Usando Fallback de Segurança.");
       return c.json(FALLBACK_PLANS);
     }
 
+    console.log(`✅ API: Sucesso! Retornando ${result.length} planos.`);
     return c.json(result.length > 0 ? result : FALLBACK_PLANS);
   } catch (error) {
-    console.error("API_ERROR:", error);
+    console.error("❌ API_ERROR:", error);
     return c.json(FALLBACK_PLANS);
   }
 });
