@@ -1,13 +1,15 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
-
-// Em ambientes de borda (Cloudflare/Vercel), as variáveis vem de process.env ou bindings
 const connectionString = process.env.DATABASE_URL;
 
+if (!connectionString) {
+    console.warn("⚠️ DATABASE_URL não encontrada! A API funcionará apenas em modo debug.");
+}
+
 const pool = new pg.Pool({
-    connectionString,
+    connectionString: connectionString || "",
     ssl: connectionString?.includes('sp1.br.saveincloud') ? false : { rejectUnauthorized: false },
-    max: 10, // Limite de conexões
+    max: 10,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 5000,
 });
