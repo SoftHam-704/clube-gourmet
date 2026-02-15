@@ -1,9 +1,10 @@
 {
     "version": 2,
+    "framework": "vite",
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "/api/server"
+            "destination": "/api/server.ts"
         },
         {
             "source": "/((?!api/).*)",

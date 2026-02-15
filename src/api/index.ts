@@ -4,25 +4,28 @@ import { db } from '../db/index.js';
 import { plans } from './database/schema.js';
 import { eq } from 'drizzle-orm';
 
-const app = new Hono();
+const app = new Hono().basePath('api');
 
 app.use(cors({
   origin: "*"
 }))
 
+// Dados de segurança (Fallback) caso o banco falhe
+const FALLBACK_PLANS = [
+  { id: "monthly", name: "Plano Mensal", description: "Ideal para começar", price: 49.90, type: "individual", active: true },
+  { id: "quarterly", name: "Plano Trimestral", description: "Melhor custo-benefício", price: 119.70, type: "individual", active: true },
+  { id: "semiannual", name: "Plano Semestral", description: "Favorito dos membros", price: 215.40, type: "individual", active: true },
+  { id: "family-semiannual", name: "Família Semestral", description: "Para toda sua mesa", price: 122.64, type: "family", active: true }
+];
+
 app.get('/plans', async (c) => {
   try {
-    console.log("Fetching plans from database...");
     const allPlans = await db.select().from(plans).where(eq(plans.active, true));
-    console.log(`Found ${allPlans.length} plans.`);
+    if (allPlans.length === 0) return c.json(FALLBACK_PLANS);
     return c.json(allPlans);
-  } catch (error: any) {
-    console.error("DATABASE_ERROR:", error);
-    return c.json({
-      error: "Internal Server Error",
-      details: error.message,
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
-    }, 500);
+  } catch (error) {
+    console.error("DB_ERROR_USING_FALLBACK:", error);
+    return c.json(FALLBACK_PLANS);
   }
 });
 
