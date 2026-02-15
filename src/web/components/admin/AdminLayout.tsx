@@ -8,7 +8,7 @@ interface AdminLayoutProps {
 
 const NavItem = ({ href, icon, label, active }: { href: string; icon: React.ReactNode; label: string; active: boolean }) => (
     <Link href={href}>
-        <a className={`flex items-center gap-4 px-6 py-4 transition-all duration-300 group ${active
+        <div className={`flex items-center gap-4 px-6 py-4 transition-all duration-300 group cursor-pointer ${active
             ? "bg-[#c9a961] text-[#0a0a0a]"
             : "text-[#d4c5a0]/60 hover:bg-[#c9a961]/10 hover:text-white"
             }`}>
@@ -18,7 +18,7 @@ const NavItem = ({ href, icon, label, active }: { href: string; icon: React.Reac
             <span className="font-mono text-[10px] font-black tracking-[0.3em] uppercase">
                 {label}
             </span>
-        </a>
+        </div>
     </Link>
 );
 

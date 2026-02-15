@@ -6,15 +6,15 @@ import { eq } from 'drizzle-orm';
 
 const app = new Hono();
 
-// Middleware para JSON body
-app.use('*', async (c, next) => {
-  if (c.req.header('Content-Type')?.includes('application/json')) {
-    try {
-      (c.req as any).jsonBody = await c.req.json();
-    } catch (e) { }
-  }
-  await next();
-});
+// Middleware para JSON body removido para evitar conflito de leitura de stream
+// app.use('*', async (c, next) => {
+//   if (c.req.header('Content-Type')?.includes('application/json')) {
+//     try {
+//       (c.req as any).jsonBody = await c.req.json();
+//     } catch (e) { }
+//   }
+//   await next();
+// });
 
 app.use(cors({
   origin: "*"
@@ -31,9 +31,11 @@ const FALLBACK_PLANS = [
   { id: "fam-anual", name: "Família Anual", description: "O ápice do Club Empar", price: 111.84, type: "family", active: true }
 ];
 
+const api = new Hono();
+
 // --- ENDPOINTS DE PLANOS ---
 
-app.get('/membership-plans', async (c) => {
+api.get('/membership-plans', async (c) => {
   // Purge Cache Final: 1.0.15
   c.header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   c.header('Pragma', 'no-cache');
@@ -45,7 +47,7 @@ app.get('/membership-plans', async (c) => {
 
   try {
     console.log("💎 API: Consultando SaveInCloud (Plans)...");
-    const dbPromise = db.select().from(plans);
+    const dbPromise = db.select().from(plans).orderBy(plans.price);
     const result: any = await Promise.race([dbPromise, timeoutPromise]);
 
     if (result.isFallback) {
@@ -60,28 +62,32 @@ app.get('/membership-plans', async (c) => {
   }
 });
 
-app.post('/membership-plans', async (c) => {
+api.post('/membership-plans', async (c) => {
   try {
     const body = await c.req.json();
-    const result = await db.insert(plans).values(body).returning();
+    const { createdAt, ...data } = body;
+    const result = await db.insert(plans).values(data).returning();
     return c.json(result[0]);
   } catch (error) {
+    console.error("❌ API_ERROR (POST Plans):", error);
     return c.json({ error: String(error) }, 500);
   }
 });
 
-app.put('/membership-plans/:id', async (c) => {
+api.put('/membership-plans/:id', async (c) => {
   try {
     const id = c.req.param('id');
     const body = await c.req.json();
-    const result = await db.update(plans).set(body).where(eq(plans.id, id)).returning();
+    const { createdAt, id: _, ...data } = body;
+    const result = await db.update(plans).set(data).where(eq(plans.id, id)).returning();
     return c.json(result[0]);
   } catch (error) {
+    console.error("❌ API_ERROR (PUT Plans):", error);
     return c.json({ error: String(error) }, 500);
   }
 });
 
-app.delete('/membership-plans/:id', async (c) => {
+api.delete('/membership-plans/:id', async (c) => {
   try {
     const id = c.req.param('id');
     await db.delete(plans).where(eq(plans.id, id));
@@ -93,7 +99,7 @@ app.delete('/membership-plans/:id', async (c) => {
 
 // --- ENDPOINTS DE CIDADES ---
 
-app.get('/cities', async (c) => {
+api.get('/cities', async (c) => {
   try {
     const result = await db.select().from(cities);
     return c.json(result);
@@ -102,28 +108,32 @@ app.get('/cities', async (c) => {
   }
 });
 
-app.post('/cities', async (c) => {
+api.post('/cities', async (c) => {
   try {
     const body = await c.req.json();
-    const result = await db.insert(cities).values(body).returning();
+    const { createdAt, ...data } = body;
+    const result = await db.insert(cities).values(data).returning();
     return c.json(result[0]);
   } catch (error) {
+    console.error("❌ API_ERROR (POST Cities):", error);
     return c.json({ error: String(error) }, 500);
   }
 });
 
-app.put('/cities/:id', async (c) => {
+api.put('/cities/:id', async (c) => {
   try {
     const id = c.req.param('id');
     const body = await c.req.json();
-    const result = await db.update(cities).set(body).where(eq(cities.id, id)).returning();
+    const { createdAt, id: _, ...data } = body;
+    const result = await db.update(cities).set(data).where(eq(cities.id, id)).returning();
     return c.json(result[0]);
   } catch (error) {
+    console.error("❌ API_ERROR (PUT Cities):", error);
     return c.json({ error: String(error) }, 500);
   }
 });
 
-app.delete('/cities/:id', async (c) => {
+api.delete('/cities/:id', async (c) => {
   try {
     const id = c.req.param('id');
     await db.delete(cities).where(eq(cities.id, id));
@@ -134,7 +144,9 @@ app.delete('/cities/:id', async (c) => {
 });
 
 
-app.get('/debug', (c) => c.json({ status: 'ok', message: "API está ativa!" }));
+api.get('/debug', (c) => c.json({ status: 'ok', message: "API está ativa!" }));
+
+app.route('/api', api);
 
 // Motor de Partida Local (Só inicia se rodar DIRETAMENTE via terminal/npx)
 // Na Vercel, este bloco é ignorado completamente.

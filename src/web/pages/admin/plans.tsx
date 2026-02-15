@@ -130,7 +130,13 @@ export default function AdminPlans() {
                             {filteredPlans.map((plan) => (
                                 <tr key={plan.id} className="border-b border-[#c9a961]/5 hover:bg-[#c9a961]/5 transition-colors group">
                                     <td className="p-8">
-                                        <span className="bg-[#c9a961]/10 text-[#c9a961] px-3 py-1 font-mono text-[9px] font-black uppercase tracking-widest">{plan.id}</span>
+                                        <span className="bg-[#c9a961]/10 text-[#c9a961] px-3 py-1 font-mono text-[9px] font-black uppercase tracking-widest">
+                                            {plan.id === 'monthly' ? 'MENSAL' :
+                                                plan.id === 'quarterly' ? 'TRIMESTRAL' :
+                                                    plan.id === 'semiannual' ? 'SEMESTRAL' :
+                                                        plan.id === 'annual' ? 'ANUAL' :
+                                                            plan.id.replace(/-/g, ' ')}
+                                        </span>
                                     </td>
                                     <td className="p-8">
                                         <div className="flex flex-col gap-1">
@@ -174,6 +180,10 @@ export default function AdminPlans() {
                     </table>
                 )}
 
+                {!loading && filteredPlans.length === 0 && (
+                    <div className="p-20 text-center font-mono text-[#d4c5a0]/20 uppercase tracking-[0.5em]">Nenhum plano {activeTab === "family" ? "família" : "individual"} cadastrado</div>
+                )}
+
                 <div className="p-8 bg-[#0a0a0a]/20 border-t border-[#c9a961]/10 flex justify-center">
                     <p className="text-[#c9a961]/40 font-mono text-[8px] tracking-[0.5em] uppercase font-black italic">Security Key Required for Bulk Changes</p>
                 </div>
@@ -213,10 +223,14 @@ export default function AdminPlans() {
                             <div>
                                 <label className="block font-mono text-[10px] tracking-[0.3em] uppercase text-[#c9a961]/60 mb-2">Preço (R$)</label>
                                 <input
-                                    type="number"
-                                    step="0.01"
-                                    value={editingPlan.price}
-                                    onChange={e => setEditingPlan({ ...editingPlan, price: Number(e.target.value) })}
+                                    type="text"
+                                    placeholder="R$ 0,00"
+                                    value={Number(editingPlan.price).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    onChange={e => {
+                                        const value = e.target.value.replace(/\D/g, "");
+                                        const numberValue = Number(value) / 100;
+                                        setEditingPlan({ ...editingPlan, price: numberValue });
+                                    }}
                                     className="w-full bg-white/5 border border-[#c9a961]/20 p-4 text-sm outline-none focus:border-[#c9a961]"
                                     required
                                 />
