@@ -12,6 +12,12 @@ import Partnerships from "./pages/partnerships";
 import Business from "./pages/business";
 import Referral from "./pages/referral";
 import ClassicVision from "./pages/classic-vision";
+
+// Admin Pages
+import AdminLogin from "./pages/admin/login";
+import AdminDashboard from "./pages/admin/dashboard";
+import AdminPlans from "./pages/admin/plans";
+
 import { Provider } from "./components/provider";
 import { ScrollToTop } from "./components/layout/ScrollToTop";
 
@@ -33,6 +39,11 @@ function App() {
                                 <Route path="/business" component={Business} />
                                 <Route path="/referral" component={Referral} />
                                 <Route path="/classic-vision" component={ClassicVision} />
+
+                                {/* Admin Routes */}
+                                <Route path="/admin/login" component={AdminLogin} />
+                                <Route path="/admin" component={AdminDashboard} />
+                                <Route path="/admin/plans" component={AdminPlans} />
                         </Switch>
                 </Provider>
         );
