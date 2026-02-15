@@ -230,7 +230,7 @@ export default function Plans() {
         <div className="absolute inset-0 grid-bg opacity-20" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-black/10 blur-[180px] pointer-events-none rounded-full" />
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-8 relative">
           <div className="flex flex-col items-center mb-28">
             <span className="text-[#c9a961] font-mono text-[11px] tracking-[0.4em] uppercase mb-12 opacity-60 font-black">Seleção De Categoria</span>
 
@@ -268,9 +268,11 @@ export default function Plans() {
               <p className="font-mono text-[10px] text-[#c9a961] tracking-[0.5em] uppercase font-black">Sincronizando com Banco SaveInCloud...</p>
             </div>
           ) : (
-            <div key={activeTab} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 items-stretch animate-fade-in">
+            <div key={activeTab} className="grid sm:grid-cols-2 xl:grid-cols-4 gap-8 items-stretch animate-fade-in">
               {filteredPlans.map((plan) => (
-                <PlanCard key={plan.id} plan={plan} />
+                <div key={plan.id} className="w-full">
+                  <PlanCard plan={plan} />
+                </div>
               ))}
             </div>
           )}

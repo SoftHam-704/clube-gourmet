@@ -4,7 +4,7 @@ import { db } from '../db/index.js';
 import { plans } from './database/schema.js';
 import { eq } from 'drizzle-orm';
 
-const app = new Hono().basePath('api');
+const app = new Hono();
 
 app.use(cors({
   origin: "*"
