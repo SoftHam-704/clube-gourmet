@@ -26,6 +26,17 @@ app.get('/plans', async (c) => {
   }
 });
 
+app.get('/debug', (c) => {
+  return c.json({
+    status: 'ok',
+    env: {
+      hasDbUrl: !!process.env.DATABASE_URL,
+      nodeEnv: process.env.NODE_ENV
+    },
+    message: "API server is running!"
+  });
+});
+
 app.get('/ping', (c) => c.json({ message: `Pong! ${Date.now()}` }));
 
 export default app;
