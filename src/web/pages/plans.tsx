@@ -156,9 +156,10 @@ export default function Plans() {
     return () => clearTimeout(timeoutId);
   }, []);
 
-  const filteredPlans = dbPlans.filter(p =>
-    activeTab === "individual" ? p.type === 'individual' : p.type === 'family'
-  );
+  const filteredPlans = dbPlans.filter(p => {
+    const isFamilyPlan = p.type === 'family' || p.id?.toLowerCase().includes('family') || p.id?.toLowerCase().includes('fam-');
+    return activeTab === "individual" ? !isFamilyPlan : isFamilyPlan;
+  });
 
   return (
     <div className="bg-[#1a4d2e] min-h-screen selection:bg-[#c9a961] selection:text-[#0a0a0a]">
