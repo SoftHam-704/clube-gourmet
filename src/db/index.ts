@@ -3,11 +3,12 @@ import pg from 'pg';
 
 const connectionString = process.env.DATABASE_URL;
 
-// Configuração ultra-resiliente
 const pool = new pg.Pool({
     connectionString,
-    ssl: connectionString?.includes('saveincloud') ? false : { rejectUnauthorized: false },
-    connectionTimeoutMillis: 5000,
+    // Forçando SSL false para SaveInCloud e aumentando a resiliência
+    ssl: false,
+    connectionTimeoutMillis: 10000, // Dá 10 segundos para a Vercel respirar
+    max: 10, // Limite de conexões para não estourar o banco
 });
 
 export const db = drizzle(pool);

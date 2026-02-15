@@ -22,7 +22,7 @@ const FALLBACK_PLANS = [
 ];
 
 app.get('/plans', async (c) => {
-  // Versão: 1.0.8 (Purge)
+  // Purge Cache Versão: 1.0.12
   c.header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   c.header('Pragma', 'no-cache');
   c.header('Expires', '0');
