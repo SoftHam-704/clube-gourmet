@@ -1,10 +1,20 @@
 import { Hono } from 'hono';
 import { cors } from "hono/cors"
-import { db } from '../db/index.js';
-import { plans } from './database/schema.js';
+import { db } from '../db/index';
+import { plans, cities } from './database/schema';
 import { eq } from 'drizzle-orm';
 
 const app = new Hono();
+
+// Middleware para JSON body
+app.use('*', async (c, next) => {
+  if (c.req.header('Content-Type')?.includes('application/json')) {
+    try {
+      (c.req as any).jsonBody = await c.req.json();
+    } catch (e) { }
+  }
+  await next();
+});
 
 app.use(cors({
   origin: "*"
@@ -21,6 +31,8 @@ const FALLBACK_PLANS = [
   { id: "fam-anual", name: "Família Anual", description: "O ápice do Club Empar", price: 111.84, type: "family", active: true }
 ];
 
+// --- ENDPOINTS DE PLANOS ---
+
 app.get('/membership-plans', async (c) => {
   // Purge Cache Final: 1.0.15
   c.header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
@@ -32,8 +44,8 @@ app.get('/membership-plans', async (c) => {
   );
 
   try {
-    console.log("💎 API: Consultando SaveInCloud...");
-    const dbPromise = db.select().from(plans).where(eq(plans.active, true));
+    console.log("💎 API: Consultando SaveInCloud (Plans)...");
+    const dbPromise = db.select().from(plans);
     const result: any = await Promise.race([dbPromise, timeoutPromise]);
 
     if (result.isFallback) {
@@ -41,13 +53,86 @@ app.get('/membership-plans', async (c) => {
       return c.json(FALLBACK_PLANS);
     }
 
-    console.log(`✅ API: Sucesso! Servindo ${result.length} planos reais.`);
     return c.json(result.length > 0 ? result : FALLBACK_PLANS);
   } catch (error) {
-    console.error("❌ API_ERROR:", error);
+    console.error("❌ API_ERROR (Plans):", error);
     return c.json(FALLBACK_PLANS);
   }
 });
+
+app.post('/membership-plans', async (c) => {
+  try {
+    const body = await c.req.json();
+    const result = await db.insert(plans).values(body).returning();
+    return c.json(result[0]);
+  } catch (error) {
+    return c.json({ error: String(error) }, 500);
+  }
+});
+
+app.put('/membership-plans/:id', async (c) => {
+  try {
+    const id = c.req.param('id');
+    const body = await c.req.json();
+    const result = await db.update(plans).set(body).where(eq(plans.id, id)).returning();
+    return c.json(result[0]);
+  } catch (error) {
+    return c.json({ error: String(error) }, 500);
+  }
+});
+
+app.delete('/membership-plans/:id', async (c) => {
+  try {
+    const id = c.req.param('id');
+    await db.delete(plans).where(eq(plans.id, id));
+    return c.json({ success: true });
+  } catch (error) {
+    return c.json({ error: String(error) }, 500);
+  }
+});
+
+// --- ENDPOINTS DE CIDADES ---
+
+app.get('/cities', async (c) => {
+  try {
+    const result = await db.select().from(cities);
+    return c.json(result);
+  } catch (error) {
+    return c.json({ error: String(error) }, 500);
+  }
+});
+
+app.post('/cities', async (c) => {
+  try {
+    const body = await c.req.json();
+    const result = await db.insert(cities).values(body).returning();
+    return c.json(result[0]);
+  } catch (error) {
+    return c.json({ error: String(error) }, 500);
+  }
+});
+
+app.put('/cities/:id', async (c) => {
+  try {
+    const id = c.req.param('id');
+    const body = await c.req.json();
+    const result = await db.update(cities).set(body).where(eq(cities.id, id)).returning();
+    return c.json(result[0]);
+  } catch (error) {
+    return c.json({ error: String(error) }, 500);
+  }
+});
+
+app.delete('/cities/:id', async (c) => {
+  try {
+    const id = c.req.param('id');
+    await db.delete(cities).where(eq(cities.id, id));
+    return c.json({ success: true });
+  } catch (error) {
+    return c.json({ error: String(error) }, 500);
+  }
+});
+
 
 app.get('/debug', (c) => c.json({ status: 'ok', message: "API está ativa!" }));
 

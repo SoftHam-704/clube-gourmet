@@ -17,6 +17,8 @@ import ClassicVision from "./pages/classic-vision";
 import AdminLogin from "./pages/admin/login";
 import AdminDashboard from "./pages/admin/dashboard";
 import AdminPlans from "./pages/admin/plans";
+import AdminCities from "./pages/admin/cities";
+
 
 import { Provider } from "./components/provider";
 import { ScrollToTop } from "./components/layout/ScrollToTop";
@@ -44,7 +46,9 @@ function App() {
                                 <Route path="/admin/login" component={AdminLogin} />
                                 <Route path="/admin" component={AdminDashboard} />
                                 <Route path="/admin/plans" component={AdminPlans} />
+                                <Route path="/admin/cities" component={AdminCities} />
                         </Switch>
+
                 </Provider>
         );
 }

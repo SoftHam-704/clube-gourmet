@@ -1,4 +1,4 @@
-import { pgTable, pgSchema, varchar, decimal, text, integer, boolean, timestamp } from "drizzle-orm/pg-core";
+import { pgSchema, varchar, decimal, text, integer, boolean, timestamp } from "drizzle-orm/pg-core";
 
 export const emparclubSchema = pgSchema("emparclub");
 
@@ -12,3 +12,13 @@ export const plans = emparclubSchema.table("plans", {
     type: varchar("type", { length: 20 }).default("individual"), // individual / family
     createdAt: timestamp("created_at").defaultNow(),
 });
+
+export const cities = emparclubSchema.table("cities", {
+    id: varchar("id", { length: 50 }).primaryKey(),
+    name: varchar("name", { length: 255 }).notNull(),
+    state: varchar("state", { length: 2 }).notNull(),
+    active: boolean("active").default(true),
+    image: text("image"),
+    createdAt: timestamp("created_at").defaultNow(),
+});
+
