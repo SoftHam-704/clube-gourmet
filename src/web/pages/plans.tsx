@@ -205,7 +205,7 @@ export default function Plans() {
             </div>
             <div className="mt-20 text-center max-w-2xl">
               <h2 className="font-display text-4xl lg:text-7xl font-black text-white tracking-tighter mb-6 uppercase">
-                {activeTab === "individual" ? "Experiência Singular" : "CONEXÃO V5 - SYNC"}
+                {activeTab === "individual" ? "Experiência Singular" : "Privilégio Família"}
               </h2>
               <p className="text-[#d4c5a0]/50 text-xl font-light italic leading-relaxed">
                 {activeTab === "individual"
