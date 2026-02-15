@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { Link, useLocation } from "wouter";
 
 interface AdminLayoutProps {
@@ -22,7 +23,15 @@ const NavItem = ({ href, icon, label, active }: { href: string; icon: React.Reac
 );
 
 export const AdminLayout = ({ children, title }: AdminLayoutProps) => {
-    const [location] = useLocation();
+    const [location, setLocation] = useLocation();
+
+    // Proteção de Rota: Verifica se o admin está logado
+    useEffect(() => {
+        const isAuthenticated = localStorage.getItem("clube_gourmet_admin") === "true";
+        if (!isAuthenticated) {
+            setLocation("/admin/login");
+        }
+    }, [location, setLocation]);
 
     return (
         <div className="flex min-h-screen bg-[#0a0a0a] text-white selection:bg-[#c9a961] selection:text-[#0a0a0a]">

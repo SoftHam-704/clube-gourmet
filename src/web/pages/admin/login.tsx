@@ -16,6 +16,7 @@ export default function AdminLogin() {
         // Lógica de autenticação simplificada para o cliente testar
         // Futuramente conectaremos com o Better Auth
         if (email === "admin@emparclub.com.br" && password === "admin123") {
+            localStorage.setItem("clube_gourmet_admin", "true");
             setTimeout(() => {
                 setLocation("/admin");
             }, 1500);
