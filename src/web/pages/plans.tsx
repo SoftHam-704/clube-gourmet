@@ -145,9 +145,6 @@ function PlanCard({ plan }: { plan: any }) {
 export default function Plans() {
   const [activeTab, setActiveTab] = useState<"individual" | "family">("individual");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [dbPlans, setDbPlans] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
   const fallbackPlans = [
     { id: "mensal", name: "Plano Mensal", description: "Experimente a elite", price: 49.90, type: "individual", active: true },
     { id: "trimestral", name: "Plano Trimestral", description: "O mais popular", price: 119.70, type: "individual", active: true },
@@ -156,29 +153,26 @@ export default function Plans() {
     { id: "fam-semes", name: "Família Semestral", description: "Momentos compartilhados", price: 122.64, type: "family", active: true }
   ];
 
+  const [dbPlans, setDbPlans] = useState<any[]>(fallbackPlans);
+  const [loading, setLoading] = useState(false);
+  const [syncing, setSyncing] = useState(true);
+
   useEffect(() => {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000);
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
 
     fetch('/api/plans', { signal: controller.signal })
-      .then(res => {
-        if (!res.ok) throw new Error("API Indisponível");
-        return res.json();
-      })
+      .then(res => res.json())
       .then(data => {
         clearTimeout(timeoutId);
         if (data && Array.isArray(data) && data.length > 0) {
           setDbPlans(data);
-        } else {
-          setDbPlans(fallbackPlans);
         }
-        setLoading(false);
+        setSyncing(false);
       })
-      .catch(err => {
+      .catch(() => {
         clearTimeout(timeoutId);
-        console.warn("Usando planos de backup (Timeout ou Erro):", err.message);
-        setDbPlans(fallbackPlans);
-        setLoading(false);
+        setSyncing(false);
       });
 
     return () => clearTimeout(timeoutId);

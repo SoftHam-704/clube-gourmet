@@ -1,15 +1,13 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
 
-const rawConnectionString = process.env.DATABASE_URL;
-const connectionString = rawConnectionString?.includes('?')
-    ? `${rawConnectionString}&sslmode=disable`
-    : `${rawConnectionString}?sslmode=disable`;
+const connectionString = process.env.DATABASE_URL;
 
+// Configuração ultra-resiliente
 const pool = new pg.Pool({
     connectionString,
-    ssl: false,
-    connectionTimeoutMillis: 2000,
+    ssl: connectionString?.includes('saveincloud') ? false : { rejectUnauthorized: false },
+    connectionTimeoutMillis: 5000,
 });
 
 export const db = drizzle(pool);
