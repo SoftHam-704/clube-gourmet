@@ -21,27 +21,27 @@ const FALLBACK_PLANS = [
   { id: "fam-anual", name: "Família Anual", description: "O ápice do Club Empar", price: 111.84, type: "family", active: true }
 ];
 
-app.get('/plans', async (c) => {
-  // Purge Cache Versão: 1.0.12
+app.get('/membership-plans', async (c) => {
+  // Purge Cache Final: 1.0.15
   c.header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   c.header('Pragma', 'no-cache');
   c.header('Expires', '0');
 
   const timeoutPromise = new Promise((resolve) =>
-    setTimeout(() => resolve({ isFallback: true }), 5000) // Aumentado para 5s
+    setTimeout(() => resolve({ isFallback: true }), 6000)
   );
 
   try {
-    console.log("💎 API: Buscando planos reais na SaveInCloud...");
+    console.log("💎 API: Consultando SaveInCloud...");
     const dbPromise = db.select().from(plans).where(eq(plans.active, true));
     const result: any = await Promise.race([dbPromise, timeoutPromise]);
 
     if (result.isFallback) {
-      console.warn("⚠️ API: Timeout na SaveInCloud. Usando Fallback de Segurança.");
+      console.warn("⚠️ API: Timeout. Entregando 8 planos de backup.");
       return c.json(FALLBACK_PLANS);
     }
 
-    console.log(`✅ API: Sucesso! Retornando ${result.length} planos.`);
+    console.log(`✅ API: Sucesso! Servindo ${result.length} planos reais.`);
     return c.json(result.length > 0 ? result : FALLBACK_PLANS);
   } catch (error) {
     console.error("❌ API_ERROR:", error);
