@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Navbar } from "../components/layout/Navbar";
 import { Footer } from "../components/layout/Footer";
@@ -32,126 +32,6 @@ const Icons = {
   )
 };
 
-const PLANS = [
-  {
-    id: "monthly",
-    name: "Plano Mensal",
-    price: "49,90",
-    period: "/mês",
-    total: "R$ 49,90",
-    description: "Ideal para quem quer começar agora",
-    popular: false,
-    savings: null,
-    benefits: [
-      "Flexibilidade total, cancele quando quiser",
-      "Experiência 2 por 1 ilimitada",
-      "Acesso a mais de 500 restaurantes",
-      "Cartão Digital de Membro",
-      "Suporte via Central Gourmet"
-    ],
-  },
-  {
-    id: "quarterly",
-    name: "Plano Trimestral",
-    price: "39,90",
-    period: "/mês",
-    total: "R$ 119,70",
-    description: "Economize pagando por mais tempo",
-    popular: false,
-    savings: "Economia Real",
-    benefits: [
-      "Economia em relação ao plano mensal",
-      "Válido por 3 meses de experiências",
-      "Experiência 2 por 1 ilimitada",
-      "Cartão Digital de Membro",
-      "Suporte prioritário"
-    ],
-  },
-  {
-    id: "semiannual",
-    name: "Plano Semestral",
-    price: "35,90",
-    period: "/mês",
-    total: "R$ 215,40",
-    description: "O equilíbrio perfeito entre preço e duração",
-    popular: true,
-    savings: "Excelente Custo-Benefício",
-    benefits: [
-      "O plano favorito dos nossos membros",
-      "Válido por 6 meses de experiências",
-      "Experiência 2 por 1 ilimitada",
-      "Atendimento exclusivo via WhatsApp",
-      "Acesso antecipado a novos parceiros"
-    ],
-  },
-  {
-    id: "annual",
-    name: "Plano Anual",
-    price: "32,90",
-    period: "/mês",
-    total: "R$ 394,80",
-    description: "🚀 Melhor preço do ano — máxima economia",
-    popular: false,
-    savings: "Máxima Economia",
-    benefits: [
-      "Máxima economia garantida em 12 meses",
-      "Experiência 2 por 1 o ano todo",
-      "Cartão VIP Metal Edition (Digital)",
-      "Anuidade parcelada sem juros",
-      "Acesso a eventos e degustações VIP"
-    ],
-  },
-];
-
-const FAMILY_PLANS = [
-  {
-    id: "family-monthly",
-    name: "Família Mensal",
-    price: "39,91",
-    period: "/pessoa",
-    total: "Média p/ 4 pessoas",
-    description: "Quanto mais pessoas, maior o desconto!",
-    popular: false,
-    detailedDiscounts: ["2ª pess: 10% OFF", "3ª pess: 20% OFF", "4ª pess: 30% OFF"],
-    benefits: ["2 por 1 para todos", "Cartões individuais", "Cancele quando quiser", "Economia compartilhada"],
-  },
-  {
-    id: "family-quarterly",
-    name: "Família Trimestral",
-    price: "33,91",
-    period: "/pessoa",
-    total: "Média p/ 4 pessoas",
-    description: "Economia real pra todo mundo!",
-    popular: false,
-    detailedDiscounts: ["2ª pess: 10% OFF", "3ª pess: 20% OFF", "4ª pess: 30% OFF"],
-    benefits: ["Economia por 3 meses", "2 por 1 ilimitado", "Gestão única da conta", "Suporte prioritário"],
-  },
-  {
-    id: "family-semiannual",
-    name: "Família Semestral",
-    price: "30,66",
-    period: "/pessoa",
-    total: "Média p/ 4 pessoas",
-    description: "Economia de verdade para sua família!",
-    popular: true,
-    savings: "Mais Popular",
-    detailedDiscounts: ["2ª pess: 10% OFF", "3ª pess: 20% OFF", "4ª pess: 30% OFF"],
-    benefits: ["Destaque em custo-benefício", "6 meses de experiências", "Atendimento via WhatsApp", "Prioridade em reservas"],
-  },
-  {
-    id: "family-annual",
-    name: "Família Anual",
-    price: "27,96",
-    period: "/pessoa",
-    total: "Média p/ 4 pessoas",
-    description: "🚀 Plano mais vantajoso familiar",
-    popular: false,
-    savings: "Melhor Valor",
-    detailedDiscounts: ["2ª pess: 10% OFF", "3ª pess: 20% OFF", "4ª pess: 30% OFF"],
-    benefits: ["O maior desconto do Clube", "Anuidade exclusiva para o grupo", "Cartão VIP Família", "Experiências memoráveis"],
-  },
-];
-
 const FAQS = [
   {
     question: "Como funciona a oferta 2 por 1?",
@@ -171,21 +51,35 @@ const FAQS = [
   },
 ];
 
+const DEFAULT_BENEFITS = [
+  "Experiência 2 por 1 ilimitada",
+  "Acesso a mais de 500 restaurantes",
+  "Cartão Digital de Membro",
+  "Suporte via Central Gourmet",
+  "Benefícios exclusivos do clube"
+];
+
 function PlanCard({ plan }: { plan: any }) {
+  // Parsing dinâmico dos dados do banco para o layout
+  const isFamily = plan.type === 'family' || plan.id.startsWith('family');
+  const priceDisplay = (Number(plan.price) / (isFamily ? 4 : 1)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+  const totalDisplay = Number(plan.price).toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' });
+  const isPopular = plan.id.includes('semiannual') || plan.duration_months === 6;
+
   return (
-    <div className={`group relative transition-all duration-700 ${plan.popular
+    <div className={`group relative transition-all duration-700 ${isPopular
       ? "bg-[#0a0a0a]/80 backdrop-blur-2xl border-2 border-[#c9a961] scale-105 z-10 shadow-[0_40px_80px_rgba(0,0,0,0.4)]"
       : "bg-[#0a0a0a]/60 backdrop-blur-xl border border-[#c9a961]/10 hover:border-[#c9a961]/40"
       } p-10 flex flex-col h-full overflow-hidden`}>
 
-      {/* Corner accents - Signature Brégnights (Fixed & Responsive) */}
+      {/* Corner accents */}
       <div className="absolute top-0 left-0 w-10 h-10 border-t-2 border-l-2 border-[#c9a961]/30 group-hover:border-[#c9a961] transition-all duration-500" />
       <div className="absolute top-0 right-0 w-10 h-10 border-t-2 border-r-2 border-[#c9a961]/30 group-hover:border-[#c9a961] transition-all duration-500" />
       <div className="absolute bottom-0 left-0 w-10 h-10 border-b-2 border-l-2 border-[#c9a961]/30 group-hover:border-[#c9a961] transition-all duration-500" />
       <div className="absolute bottom-0 right-0 w-10 h-10 border-b-2 border-r-2 border-[#c9a961]/30 group-hover:border-[#c9a961] transition-all duration-500" />
 
       {/* Floating Popular Label */}
-      {plan.popular && (
+      {isPopular && (
         <div className="absolute -top-1 left-1/2 -translate-x-1/2 px-6 py-1.5 bg-[#c9a961] text-[#0a0a0a] text-[10px] font-black tracking-[0.4em] uppercase shadow-2xl skew-x-[-12deg]">
           Recomendado
         </div>
@@ -194,14 +88,9 @@ function PlanCard({ plan }: { plan: any }) {
       {/* Header Area */}
       <div className="mb-10 text-center lg:text-left">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
-          <h3 className={`font-display text-2xl font-black tracking-tight ${plan.popular ? "text-[#c9a961]" : "text-white"}`}>
+          <h3 className={`font-display text-2xl font-black tracking-tight ${isPopular ? "text-[#c9a961]" : "text-white"}`}>
             {plan.name}
           </h3>
-          {plan.savings && (
-            <span className="inline-block px-3 py-1 bg-[#c9a961]/10 border border-[#c9a961]/30 text-[#c9a961] font-mono text-[9px] font-black tracking-widest uppercase">
-              {plan.savings}
-            </span>
-          )}
         </div>
         <p className="text-[#d4c5a0]/40 text-sm leading-relaxed font-light italic">"{plan.description}"</p>
       </div>
@@ -210,38 +99,26 @@ function PlanCard({ plan }: { plan: any }) {
       <div className="mb-10 text-center lg:text-left">
         <div className="flex items-baseline justify-center lg:justify-start gap-2 mb-3">
           <span className="text-[#c9a961] font-mono text-xl font-bold">R$</span>
-          <span className={`font-mono text-6xl font-black tracking-tighter ${plan.popular ? "text-gradient-gold animate-gradient" : "text-white"}`}>
-            {plan.price}
+          <span className={`font-mono text-6xl font-black tracking-tighter ${isPopular ? "text-gradient-gold animate-gradient" : "text-white"}`}>
+            {priceDisplay}
           </span>
-          <span className="text-[#d4c5a0]/30 font-mono text-sm tracking-widest uppercase">{plan.period}</span>
+          <span className="text-[#d4c5a0]/30 font-mono text-sm tracking-widest uppercase">
+            {isFamily ? "/pessoa" : "/mês"}
+          </span>
         </div>
-        {plan.total && (
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/5 rounded-none">
-            <span className="text-white/60 font-mono text-[11px] font-bold tracking-widest uppercase opacity-60">Total:</span>
-            <span className="text-[#c9a961] font-mono text-xs font-black">{plan.total}</span>
-          </div>
-        )}
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/5 rounded-none">
+          <span className="text-white/60 font-mono text-[11px] font-bold tracking-widest uppercase opacity-60">
+            {isFamily ? "Lote p/ 4:" : "Total:"}
+          </span>
+          <span className="text-[#c9a961] font-mono text-xs font-black">{totalDisplay}</span>
+        </div>
       </div>
-
-      {/* Progressive Upgrade (Family) */}
-      {plan.detailedDiscounts && (
-        <div className="mb-10 p-6 bg-[#c9a961]/5 border border-[#c9a961]/10 space-y-3 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-20 h-20 bg-[#c9a961]/5 blur-2xl rotate-45" />
-          <p className="text-[#c9a961] font-mono text-[9px] font-black tracking-[0.3em] uppercase mb-4 border-b border-[#c9a961]/20 pb-2">Upgrade Progressivo</p>
-          {plan.detailedDiscounts.map((discount: string, i: number) => (
-            <div key={i} className="flex justify-between items-center text-[11px] font-medium tracking-wide">
-              <span className="text-white/30 uppercase tracking-[0.1em]">{discount.split(":")[0]}</span>
-              <span className="text-[#c9a961] font-mono font-black">{discount.split(":")[1]}</span>
-            </div>
-          ))}
-        </div>
-      )}
 
       {/* Benefits List */}
       <ul className="space-y-5 mb-12 flex-grow">
-        {plan.benefits.map((benefit: string, index: number) => (
+        {(isFamily ? ["2 por 1 para todos", "Economia compartilhada"] : []).concat(DEFAULT_BENEFITS).slice(0, 5).map((benefit: string, index: number) => (
           <li key={index} className="flex items-start gap-4 group/item">
-            <div className={`mt-1 flex-shrink-0 w-5 h-5 rounded-full border border-[#c9a961]/30 flex items-center justify-center transition-all ${plan.popular ? "bg-[#c9a961]/10 border-[#c9a961]" : "group-hover/item:border-[#c9a961]"}`}>
+            <div className={`mt-1 flex-shrink-0 w-5 h-5 rounded-full border border-[#c9a961]/30 flex items-center justify-center transition-all ${isPopular ? "bg-[#c9a961]/10 border-[#c9a961]" : "group-hover/item:border-[#c9a961]"}`}>
               <span className="text-[#c9a961] scale-75">{Icons.check}</span>
             </div>
             <span className="text-[#d4c5a0]/60 text-sm font-light leading-snug group-hover/item:text-white transition-colors">
@@ -252,7 +129,7 @@ function PlanCard({ plan }: { plan: any }) {
       </ul>
 
       {/* Button CTA */}
-      <button className={`w-full flex items-center justify-center gap-5 py-6 font-black text-xs tracking-[0.4em] uppercase transition-all duration-700 ${plan.popular
+      <button className={`w-full flex items-center justify-center gap-5 py-6 font-black text-xs tracking-[0.4em] uppercase transition-all duration-700 ${isPopular
         ? "bg-[#c9a961] text-[#0a0a0a] hover:glow-green hover:-translate-y-2 shadow-[0_20px_40px_rgba(201,169,97,0.3)]"
         : "border-2 border-[#c9a961]/20 text-[#c9a961] hover:bg-[#c9a961] hover:text-[#0a0a0a] hover:border-[#c9a961] shadow-2xl"
         }`}>
@@ -268,6 +145,25 @@ function PlanCard({ plan }: { plan: any }) {
 export default function Plans() {
   const [activeTab, setActiveTab] = useState<"individual" | "family">("individual");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [dbPlans, setDbPlans] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/plans')
+      .then(res => res.json())
+      .then(data => {
+        setDbPlans(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Erro ao carregar planos:", err);
+        setLoading(false);
+      });
+  }, []);
+
+  const filteredPlans = dbPlans.filter(p =>
+    activeTab === "individual" ? p.type === 'individual' : p.type === 'family'
+  );
 
   return (
     <div className="bg-[#1a4d2e] min-h-screen selection:bg-[#c9a961] selection:text-[#0a0a0a]">
@@ -349,13 +245,19 @@ export default function Plans() {
             </div>
           </div>
 
-          {/* Individual/Family Cards Grid */}
-          <div key={activeTab} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 items-stretch animate-fade-in">
-            {activeTab === "individual"
-              ? PLANS.map((plan) => <PlanCard key={plan.id} plan={plan} />)
-              : FAMILY_PLANS.map((plan) => <PlanCard key={plan.id} plan={plan} />)
-            }
-          </div>
+          {/* Loader */}
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 gap-6">
+              <div className="w-16 h-16 border-2 border-[#c9a961]/20 border-t-[#c9a961] rounded-full animate-spin" />
+              <p className="font-mono text-[10px] text-[#c9a961] tracking-[0.5em] uppercase font-black">Sincronizando com Banco SaveInCloud...</p>
+            </div>
+          ) : (
+            <div key={activeTab} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 items-stretch animate-fade-in">
+              {filteredPlans.map((plan) => (
+                <PlanCard key={plan.id} plan={plan} />
+              ))}
+            </div>
+          )}
 
           {/* Family Plan Footer Note */}
           {activeTab === "family" && (
