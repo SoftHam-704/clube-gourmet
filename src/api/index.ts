@@ -40,12 +40,18 @@ app.get('/plans', async (c) => {
 
 app.get('/debug', (c) => c.json({ status: 'ok', message: "API está ativa!" }));
 
-// Se rodar via Node diretamente, ele liga o servidor
-if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
-  const { serve } = await import('@hono/node-server');
-  serve({ fetch: app.fetch, port: 3000 }, (info) => {
-    console.log(`🚀 Servidor de Dados ATIVO em http://localhost:${info.port}`);
-  });
+// Motor de Partida Local (Só inicia se rodar via terminal)
+if (typeof process !== 'undefined') {
+  try {
+    const { serve } = await import('@hono/node-server');
+    serve({ fetch: app.fetch, port: 3000 }, (info) => {
+      console.log(`\n-----------------------------------------`);
+      console.log(`🚀 MOTOR DE DADOS ATIVO!`);
+      console.log(`🔗 Porta: ${info.port}`);
+      console.log(`📡 Endereço: http://localhost:${info.port}`);
+      console.log(`-----------------------------------------\n`);
+    });
+  } catch (e) { /* Erro esperado em produção */ }
 }
 
 export default app;

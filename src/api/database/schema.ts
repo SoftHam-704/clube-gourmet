@@ -11,5 +11,4 @@ export const plans = emparclubSchema.table("plans", {
     active: boolean("active").default(true),
     type: varchar("type", { length: 20 }).default("individual"), // individual / family
     createdAt: timestamp("created_at").defaultNow(),
-    updatedAt: timestamp("updated_at").defaultNow(),
 });
