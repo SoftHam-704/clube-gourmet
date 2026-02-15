@@ -12,10 +12,17 @@ app.use(cors({
 
 app.get('/plans', async (c) => {
   try {
+    console.log("Fetching plans from database...");
     const allPlans = await db.select().from(plans).where(eq(plans.active, true));
+    console.log(`Found ${allPlans.length} plans.`);
     return c.json(allPlans);
   } catch (error: any) {
-    return c.json({ error: error.message }, 500);
+    console.error("DATABASE_ERROR:", error);
+    return c.json({
+      error: "Internal Server Error",
+      details: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    }, 500);
   }
 });
 
