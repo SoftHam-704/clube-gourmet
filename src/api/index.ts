@@ -47,7 +47,7 @@ api.get('/membership-plans', async (c) => {
 
   try {
     console.log("💎 API: Consultando SaveInCloud (Plans)...");
-    const dbPromise = db.select().from(plans).orderBy(plans.price);
+    const dbPromise = db.select().from(plans);
     const result: any = await Promise.race([dbPromise, timeoutPromise]);
 
     if (result.isFallback) {

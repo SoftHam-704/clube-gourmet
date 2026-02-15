@@ -23,7 +23,9 @@ export default function AdminPlans() {
         try {
             const res = await fetch("/api/membership-plans");
             const data = await res.json();
-            setPlans(data);
+            // Ordenação frontend para garantir visualização correta (Menor preço -> Maior preço)
+            const sortedData = data.sort((a: Plan, b: Plan) => Number(a.price) - Number(b.price));
+            setPlans(sortedData);
         } catch (error) {
             console.error("Erro ao buscar planos:", error);
         } finally {
