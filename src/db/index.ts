@@ -6,9 +6,10 @@ const connectionString = process.env.DATABASE_URL;
 
 const pool = new pg.Pool({
     connectionString,
-    // Para o SaveInCloud, manter SSL como false por enquanto, 
-    // mas em produção (AWS/Heroku) mudar para { rejectUnauthorized: false }
-    ssl: false,
+    ssl: connectionString?.includes('sp1.br.saveincloud') ? false : { rejectUnauthorized: false },
+    max: 10, // Limite de conexões
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 5000,
 });
 
 export const db = drizzle(pool);
