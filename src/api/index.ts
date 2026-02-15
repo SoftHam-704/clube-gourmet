@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { cors } from "hono/cors"
-import { db } from '../db/index';
-import { plans } from './database/schema';
+import { db } from '../db/index.js';
+import { plans } from './database/schema.js';
 import { eq } from 'drizzle-orm';
 
 const app = new Hono();
