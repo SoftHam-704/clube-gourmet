@@ -3,12 +3,21 @@ import pg from 'pg';
 
 const connectionString = process.env.DATABASE_URL;
 
-const pool = new pg.Pool({
+// Configuração segura para evitar crash na inicialização
+const poolConfig = connectionString ? {
     connectionString,
-    // Forçando SSL false para SaveInCloud e aumentando a resiliência
-    ssl: false,
-    connectionTimeoutMillis: 10000, // Dá 10 segundos para a Vercel respirar
-    max: 10, // Limite de conexões para não estourar o banco
-});
+    ssl: false, // SaveInCloud compatibility
+    connectionTimeoutMillis: 10000,
+    max: 10,
+} : {
+    // Configuração dummy para não quebrar a inicialização se faltar a ENV
+    connectionString: "postgres://user:pass@localhost:5432/db",
+};
+
+if (!connectionString) {
+    console.error("❌ ERRO CRÍTICO: DATABASE_URL não definida! O app vai rodar em modo fallback.");
+}
+
+const pool = new pg.Pool(poolConfig as any);
 
 export const db = drizzle(pool);

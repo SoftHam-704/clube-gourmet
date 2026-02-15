@@ -146,6 +146,31 @@ api.delete('/cities/:id', async (c) => {
 
 api.get('/debug', (c) => c.json({ status: 'ok', message: "API está ativa!" }));
 
+api.get('/debug-db', async (c) => {
+  try {
+    const start = Date.now();
+    // Teste simples de conexão
+    const result = await db.execute('SELECT 1');
+    const duration = Date.now() - start;
+
+    return c.json({
+      status: 'ok',
+      message: "Database conectada!",
+      duration: `${duration}ms`,
+      env_db_configured: !!process.env.DATABASE_URL,
+      // Retorna parte da string para confirmação (user:***@host)
+      db_host: process.env.DATABASE_URL ? process.env.DATABASE_URL.split('@')[1] : 'N/A'
+    });
+  } catch (error) {
+    return c.json({
+      status: 'error',
+      message: "Falha na conexão com BD",
+      error: String(error),
+      env_db_configured: !!process.env.DATABASE_URL
+    }, 500);
+  }
+});
+
 app.route('/api', api);
 
 // Motor de Partida Local (Só inicia se rodar DIRETAMENTE via terminal/npx)
