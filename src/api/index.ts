@@ -19,10 +19,24 @@ const FALLBACK_PLANS = [
 ];
 
 app.get('/plans', async (c) => {
+  // Criamos uma promessa de "desistência" para não deixar o usuário esperando
+  const timeoutPromise = new Promise((resolve) =>
+    setTimeout(() => resolve({ isFallback: true }), 2500)
+  );
+
   try {
-    const allPlans = await db.select().from(plans).where(eq(plans.active, true));
-    if (allPlans.length === 0) return c.json(FALLBACK_PLANS);
-    return c.json(allPlans);
+    const dbPromise = db.select().from(plans).where(eq(plans.active, true));
+
+    // Quem chegar primeiro vence: o Banco ou os 2.5 segundos de limite
+    const result: any = await Promise.race([dbPromise, timeoutPromise]);
+
+    if (result.isFallback) {
+      console.warn("⚠️ Timeout na conexão com SaveInCloud. Usando Fallback.");
+      return c.json(FALLBACK_PLANS);
+    }
+
+    if (result.length === 0) return c.json(FALLBACK_PLANS);
+    return c.json(result);
   } catch (error) {
     console.error("DB_ERROR_USING_FALLBACK:", error);
     return c.json(FALLBACK_PLANS);
