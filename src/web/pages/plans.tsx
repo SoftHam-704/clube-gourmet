@@ -152,18 +152,24 @@ export default function Plans() {
     fetch('/api/plans')
       .then(res => res.json())
       .then(data => {
-        setDbPlans(data);
+        if (data && Array.isArray(data)) {
+          setDbPlans(data);
+        } else {
+          console.error("Dados inválidos recebidos da API:", data);
+          setDbPlans([]);
+        }
         setLoading(false);
       })
       .catch(err => {
         console.error("Erro ao carregar planos:", err);
+        setDbPlans([]);
         setLoading(false);
       });
   }, []);
 
-  const filteredPlans = dbPlans.filter(p =>
+  const filteredPlans = Array.isArray(dbPlans) ? dbPlans.filter(p =>
     activeTab === "individual" ? p.type === 'individual' : p.type === 'family'
-  );
+  ) : [];
 
   return (
     <div className="bg-[#1a4d2e] min-h-screen selection:bg-[#c9a961] selection:text-[#0a0a0a]">
