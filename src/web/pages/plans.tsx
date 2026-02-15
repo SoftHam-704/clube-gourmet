@@ -148,21 +148,31 @@ export default function Plans() {
   const [dbPlans, setDbPlans] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const fallbackPlans = [
+    { id: "mensal", name: "Plano Mensal", description: "Experimente a elite", price: 49.90, type: "individual", active: true },
+    { id: "trimestral", name: "Plano Trimestral", description: "O mais popular", price: 119.70, type: "individual", active: true },
+    { id: "semestral", name: "Plano Semestral", description: "Elegância contínua", price: 215.40, type: "individual", active: true },
+    { id: "anual", name: "Plano Anual", description: "Experiência completa", price: 394.80, type: "individual", active: true },
+    { id: "fam-semes", name: "Família Semestral", description: "Momentos compartilhados", price: 122.64, type: "family", active: true }
+  ];
+
   useEffect(() => {
     fetch('/api/plans')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error("API Indisponível");
+        return res.json();
+      })
       .then(data => {
-        if (data && Array.isArray(data)) {
+        if (data && Array.isArray(data) && data.length > 0) {
           setDbPlans(data);
         } else {
-          console.error("Dados inválidos recebidos da API:", data);
-          setDbPlans([]);
+          setDbPlans(fallbackPlans);
         }
         setLoading(false);
       })
       .catch(err => {
-        console.error("Erro ao carregar planos:", err);
-        setDbPlans([]);
+        console.warn("Usando planos de backup devido a erro:", err.message);
+        setDbPlans(fallbackPlans);
         setLoading(false);
       });
   }, []);
