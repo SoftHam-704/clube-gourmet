@@ -1,28 +1,36 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
 
-const connectionString = process.env.DATABASE_URL;
+let internalDb: any = null;
 
-// Configuração segura para evitar crash na inicialização
-const poolConfig = connectionString ? {
-    connectionString,
-    ssl: false, // SaveInCloud compatibility
-    connectionTimeoutMillis: 10000,
-    max: 10,
-} : {
-    // Configuração dummy para não quebrar a inicialização se faltar a ENV
-    connectionString: "postgres://user:pass@localhost:5432/db",
+export const getDb = () => {
+    if (internalDb) return internalDb;
+
+    const connectionString = process.env.DATABASE_URL;
+
+    // Configuração segura para evitar crash
+    const poolConfig = connectionString ? {
+        connectionString,
+        ssl: false,
+        connectionTimeoutMillis: 5000,
+        max: 5,
+    } : null;
+
+    if (!poolConfig) {
+        console.warn("⚠️ DATABASE_URL não definida.");
+        return null;
+    }
+
+    try {
+        const pool = new pg.Pool(poolConfig as any);
+        pool.on('error', (err) => console.error('❌ PG Pool Error:', err.message));
+        internalDb = drizzle(pool);
+        return internalDb;
+    } catch (e) {
+        console.error("❌ Falha crítica ao inicializar Pool:", e);
+        return null;
+    }
 };
 
-if (!connectionString) {
-    console.error("❌ ERRO CRÍTICO: DATABASE_URL não definida! O app vai rodar em modo fallback.");
-}
-
-const pool = new pg.Pool(poolConfig as any);
-
-// Prevenir crash do processo em erros inesperados no pool
-pool.on('error', (err) => {
-    console.error('❌ PG Pool Error:', err);
-});
-
-export const db = drizzle(pool);
+// Mantém export para compatibilidade, mas tenta inicializar agora
+export const db = getDb();
