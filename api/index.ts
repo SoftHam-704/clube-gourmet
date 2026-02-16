@@ -3,7 +3,16 @@ import { handle } from 'hono/vercel'
 import { cors } from 'hono/cors'
 
 const app = new Hono().basePath('/api')
+
 app.use('*', cors())
+
+app.get('/debug', (c) => {
+    return c.json({
+        status: 'ok',
+        message: 'API Minimalista - Teste de Roteamento',
+        time: new Date().toISOString()
+    })
+})
 
 const FALLBACK_PLANS = [
     { id: "mensal", name: "Plano Mensal", description: "Experimente a elite", price: 49.90, type: "individual", active: true },
@@ -17,29 +26,13 @@ const FALLBACK_PLANS = [
 ];
 
 app.get('/membership-plans', async (c) => {
+    console.log("Rota /membership-plans acessada!");
     try {
-        console.log("Tentando carregar banco dinamicamente...");
-        // Importação dinâmica para evitar crash de inicialização na Vercel
-        const { default: pg } = await import('pg');
-        const { drizzle } = await import('drizzle-orm/node-postgres');
-        const { pgSchema, varchar, decimal, text, integer, boolean, timestamp } = await import("drizzle-orm/pg-core");
-        const { eq } = await import('drizzle-orm');
-
+        // Tenta carregar o banco se possível, senão manda o fallback sem medo
         const connectionString = process.env.DATABASE_URL;
         if (!connectionString) return c.json(FALLBACK_PLANS);
 
-        const emparclubSchema = pgSchema("emparclub");
-        const plansTable = emparclubSchema.table("plans", {
-            id: varchar("id", { length: 50 }).primaryKey(),
-            name: varchar("name", { length: 255 }).notNull(),
-            description: text("description"),
-            price: decimal("price", { precision: 10, scale: 2 }).notNull(),
-            duration_months: integer("duration_months").default(1),
-            active: boolean("active").default(true),
-            type: varchar("type", { length: 20 }).default("individual"),
-            createdAt: timestamp("created_at").defaultNow(),
-        });
-
+        const { default: pg } = await import('pg');
         const client = new pg.Client({
             connectionString,
             ssl: { rejectUnauthorized: false },
@@ -47,17 +40,14 @@ app.get('/membership-plans', async (c) => {
         });
 
         await client.connect();
-        const db = drizzle(client);
-        const result = await db.select().from(plansTable).execute();
+        const res = await client.query('SELECT * FROM emparclub.plans');
         await client.end();
 
-        return c.json(Array.isArray(result) && result.length > 0 ? result : FALLBACK_PLANS);
-    } catch (e: any) {
-        console.error("❌ ERRO API:", e.message);
+        return c.json(res.rows.length > 0 ? res.rows : FALLBACK_PLANS);
+    } catch (e) {
+        console.error("Erro na API:", e);
         return c.json(FALLBACK_PLANS);
     }
 });
-
-app.get('/debug', (c) => c.json({ status: 'ok', msg: 'Vercel Debug OK' }));
 
 export default handle(app)
