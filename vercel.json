@@ -11,6 +11,14 @@
             "destination": "/api/membership-plans.js"
         },
         {
+            "source": "/api/cities/:id",
+            "destination": "/api/cities.js?id=:id"
+        },
+        {
+            "source": "/api/cities",
+            "destination": "/api/cities.js"
+        },
+        {
             "source": "/api/:path*",
             "destination": "/api/:path*.js"
         },
