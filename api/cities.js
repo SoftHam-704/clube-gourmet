@@ -23,8 +23,6 @@ export default async function handler(req, res) {
 
     try {
         if (req.method === 'GET') {
-            // Buscamos apenas as cidades que estão marcadas como ativas ou todas para o admin?
-            // O admin provavelmente quer ver todas.
             const result = await client.query('SELECT slug as id, nome as name, uf as state, ativo as active FROM emparclub.cidades ORDER BY nome ASC');
             await client.end();
             return res.status(200).json(result.rows);
@@ -69,6 +67,10 @@ export default async function handler(req, res) {
     } catch (e) {
         console.error("ERRO_CIDADES:", e.message);
         try { await client.end(); } catch (err) { }
-        return res.status(500).json({ error: e.message });
+        return res.status(200).json({
+            isError: true,
+            message: e.message,
+            stack: e.stack
+        });
     }
 }
