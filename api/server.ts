@@ -6,7 +6,7 @@ import pg from 'pg'
 import { pgSchema, varchar, decimal, text, integer, boolean, timestamp } from "drizzle-orm/pg-core"
 import { eq } from 'drizzle-orm'
 
-// Schema Replicado
+// Schema Replicado para Performance Máxima na Vercel
 const emparclubSchema = pgSchema("emparclub");
 const plans = emparclubSchema.table("plans", {
     id: varchar("id", { length: 50 }).primaryKey(),
@@ -33,14 +33,15 @@ const FALLBACK_PLANS = [
     { id: "fam-anual", name: "Família Anual", description: "O ápice do Club Empar", price: 111.84, type: "family", active: true }
 ];
 
-app.get('/api/membership-plans', async (c) => {
+// O Roteamento agora é relativo ao Vercel Rewrite (/api/...)
+app.get('/membership-plans', async (c) => {
     const connectionString = process.env.DATABASE_URL;
     if (!connectionString) return c.json(FALLBACK_PLANS);
 
     const client = new pg.Client({
         connectionString,
         ssl: { rejectUnauthorized: false },
-        connectionTimeoutMillis: 2500, // Timeout bem curto para não travar a Vercel
+        connectionTimeoutMillis: 3000,
     });
 
     try {
@@ -49,16 +50,20 @@ app.get('/api/membership-plans', async (c) => {
         const result = await db.select().from(plans).execute();
         await client.end();
         return c.json(Array.isArray(result) && result.length > 0 ? result : FALLBACK_PLANS);
-    } catch (e) {
-        console.error("❌ Erro de Conexão:", e);
+    } catch (e: any) {
+        console.error("❌ DB_FAIL:", e.message);
         try { await client.end(); } catch (err) { }
         return c.json(FALLBACK_PLANS);
     }
 });
 
-app.get('/api/debug', (c) => c.json({ status: 'ok', message: 'API V4 - Ultra Light Ativa' }));
+app.get('/debug', (c) => c.json({
+    status: 'ok',
+    message: 'API V5 - Configuração Definitiva Vercel Ativa',
+    env: process.env.NODE_ENV
+}));
 
-app.put('/api/membership-plans/:id', async (c) => {
+app.put('/membership-plans/:id', async (c) => {
     const connectionString = process.env.DATABASE_URL;
     if (!connectionString) return c.json({ error: "No DB URL" }, 500);
 
