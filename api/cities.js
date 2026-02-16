@@ -23,40 +23,43 @@ export default async function handler(req, res) {
 
     try {
         if (req.method === 'GET') {
-            const result = await client.query('SELECT * FROM emparclub.cities ORDER BY name ASC');
+            // Buscamos apenas as cidades que estão marcadas como ativas ou todas para o admin?
+            // O admin provavelmente quer ver todas.
+            const result = await client.query('SELECT slug as id, nome as name, uf as state, ativo as active FROM emparclub.cidades ORDER BY nome ASC');
             await client.end();
             return res.status(200).json(result.rows);
         }
 
         if (req.method === 'POST') {
-            const { id, name, state, active, image } = req.body;
+            const { id, name, state, active } = req.body;
             const query = `
-                INSERT INTO emparclub.cities (id, name, state, active, image)
-                VALUES ($1, $2, $3, $4, $5)
-                RETURNING *
+                INSERT INTO emparclub.cidades (slug, nome, uf, ativo)
+                VALUES ($1, $2, $3, $4)
+                RETURNING slug as id, nome as name, uf as state, ativo as active
             `;
-            const result = await client.query(query, [id, name, state, active, image]);
+            const result = await client.query(query, [id, name, state, active]);
             await client.end();
             return res.status(201).json(result.rows[0]);
         }
 
         if (req.method === 'PUT') {
             const id = req.query.id || req.url.split('/').pop()?.split('?')[0];
-            const { createdAt, id: _id, ...data } = req.body;
+            const { name, state, active } = req.body;
 
-            const keys = Object.keys(data);
-            const values = Object.values(data);
-            const setClause = keys.map((key, i) => `${key} = $${i + 1}`).join(', ');
-
-            const query = `UPDATE emparclub.cities SET ${setClause} WHERE id = $${keys.length + 1} RETURNING *`;
-            const result = await client.query(query, [...values, id]);
+            const query = `
+                UPDATE emparclub.cidades 
+                SET nome = $1, uf = $2, ativo = $3 
+                WHERE slug = $4 
+                RETURNING slug as id, nome as name, uf as state, ativo as active
+            `;
+            const result = await client.query(query, [name, state, active, id]);
             await client.end();
             return res.status(200).json(result.rows[0]);
         }
 
         if (req.method === 'DELETE') {
             const id = req.query.id || req.url.split('/').pop()?.split('?')[0];
-            await client.query('DELETE FROM emparclub.cities WHERE id = $1', [id]);
+            await client.query('DELETE FROM emparclub.cidades WHERE slug = $1', [id]);
             await client.end();
             return res.status(204).end();
         }
