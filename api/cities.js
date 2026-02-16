@@ -10,25 +10,26 @@ export default async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(200).end();
 
     let connectionString = process.env.DATABASE_URL;
-    if (connectionString) {
-        connectionString = connectionString.split('?')[0] + '?sslmode=disable';
+    if (connectionString && !connectionString.includes('sslmode=')) {
+        connectionString += (connectionString.includes('?') ? '&' : '?') + 'sslmode=disable';
     }
 
-    const client = new pg.Pool({
+    const client = new pg.Client({
         connectionString,
         ssl: false,
         connectionTimeoutMillis: 5000,
-        max: 1
     });
 
     try {
         if (req.method === 'GET') {
+            await client.connect();
             const result = await client.query('SELECT slug as id, nome as name, uf as state, ativo as active FROM emparclub.cidades ORDER BY nome ASC');
             await client.end();
             return res.status(200).json(result.rows);
         }
 
         if (req.method === 'POST') {
+            await client.connect();
             const { id, name, state, active } = req.body;
             const query = `
                 INSERT INTO emparclub.cidades (slug, nome, uf, ativo)
@@ -41,6 +42,7 @@ export default async function handler(req, res) {
         }
 
         if (req.method === 'PUT') {
+            await client.connect();
             const id = req.query.id || req.url.split('/').pop()?.split('?')[0];
             const { name, state, active } = req.body;
 
@@ -56,13 +58,13 @@ export default async function handler(req, res) {
         }
 
         if (req.method === 'DELETE') {
+            await client.connect();
             const id = req.query.id || req.url.split('/').pop()?.split('?')[0];
             await client.query('DELETE FROM emparclub.cidades WHERE slug = $1', [id]);
             await client.end();
             return res.status(204).end();
         }
 
-        await client.end();
         return res.status(405).json({ error: "Method not allowed" });
     } catch (e) {
         console.error("ERRO_CIDADES:", e.message);
