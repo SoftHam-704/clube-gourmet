@@ -18,7 +18,7 @@ import AdminLogin from "./pages/admin/login";
 import AdminDashboard from "./pages/admin/dashboard";
 import AdminPlans from "./pages/admin/plans";
 import AdminCities from "./pages/admin/cities";
-
+import AdminRestaurants from "./pages/admin/restaurants";
 
 import { Provider } from "./components/provider";
 import { ScrollToTop } from "./components/layout/ScrollToTop";
@@ -47,6 +47,7 @@ function App() {
                                 <Route path="/admin" component={AdminDashboard} />
                                 <Route path="/admin/plans" component={AdminPlans} />
                                 <Route path="/admin/cities" component={AdminCities} />
+                                <Route path="/admin/restaurants" component={AdminRestaurants} />
                         </Switch>
 
                 </Provider>

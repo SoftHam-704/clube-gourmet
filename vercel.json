@@ -19,6 +19,14 @@
             "destination": "/api/cities.js"
         },
         {
+            "source": "/api/restaurants/:id",
+            "destination": "/api/restaurants.js?id=:id"
+        },
+        {
+            "source": "/api/restaurants",
+            "destination": "/api/restaurants.js"
+        },
+        {
             "source": "/api/:path*",
             "destination": "/api/:path*.js"
         },
