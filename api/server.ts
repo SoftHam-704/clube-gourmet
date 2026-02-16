@@ -6,7 +6,7 @@ import pg from 'pg'
 import { pgSchema, varchar, decimal, text, integer, boolean, timestamp } from "drizzle-orm/pg-core"
 import { eq } from 'drizzle-orm'
 
-// Schema Replicado para Resiliência
+// Schema Replicado
 const emparclubSchema = pgSchema("emparclub");
 const plans = emparclubSchema.table("plans", {
     id: varchar("id", { length: 50 }).primaryKey(),
@@ -19,7 +19,7 @@ const plans = emparclubSchema.table("plans", {
     createdAt: timestamp("created_at").defaultNow(),
 });
 
-const app = new Hono() // Removido basePath para testar compatibilidade direta
+const app = new Hono()
 app.use('*', cors())
 
 const FALLBACK_PLANS = [
@@ -33,54 +33,52 @@ const FALLBACK_PLANS = [
     { id: "fam-anual", name: "Família Anual", description: "O ápice do Club Empar", price: 111.84, type: "family", active: true }
 ];
 
-let _db: any = null;
-const getDb = () => {
-    if (_db) return _db;
+app.get('/api/membership-plans', async (c) => {
     const connectionString = process.env.DATABASE_URL;
-    if (!connectionString) return null;
-    const pool = new pg.Pool({
+    if (!connectionString) return c.json(FALLBACK_PLANS);
+
+    const client = new pg.Client({
         connectionString,
         ssl: { rejectUnauthorized: false },
-        connectionTimeoutMillis: 3000,
-        max: 3
+        connectionTimeoutMillis: 2500, // Timeout bem curto para não travar a Vercel
     });
-    _db = drizzle(pool);
-    return _db;
-}
 
-// Rota respondendo em AMBOS os formatos para garantir que o frontend ache
-app.get('/api/membership-plans', async (c) => {
-    console.log("Planos chamados em /api/membership-plans");
-    return fetchPlans(c);
-});
-
-async function fetchPlans(c: any) {
     try {
-        const db = getDb();
-        if (!db) return c.json(FALLBACK_PLANS);
-        const dataPromise = db.select().from(plans).execute();
-        const timeout = new Promise((resolve) => setTimeout(() => resolve({ isTimeout: true }), 3500));
-        const result: any = await Promise.race([dataPromise, timeout]);
-        if (result && result.isTimeout) return c.json(FALLBACK_PLANS);
+        await client.connect();
+        const db = drizzle(client);
+        const result = await db.select().from(plans).execute();
+        await client.end();
         return c.json(Array.isArray(result) && result.length > 0 ? result : FALLBACK_PLANS);
     } catch (e) {
+        console.error("❌ Erro de Conexão:", e);
+        try { await client.end(); } catch (err) { }
         return c.json(FALLBACK_PLANS);
     }
-}
+});
 
-app.get('/api/debug', (c) => c.json({ status: 'ok', message: 'API V3 Ativa' }));
+app.get('/api/debug', (c) => c.json({ status: 'ok', message: 'API V4 - Ultra Light Ativa' }));
 
-// Handler para PUT (Edição)
 app.put('/api/membership-plans/:id', async (c) => {
+    const connectionString = process.env.DATABASE_URL;
+    if (!connectionString) return c.json({ error: "No DB URL" }, 500);
+
+    const client = new pg.Client({
+        connectionString,
+        ssl: { rejectUnauthorized: false },
+        connectionTimeoutMillis: 5000,
+    });
+
     try {
-        const db = getDb();
-        if (!db) return c.json({ error: "DB Offline" }, 503);
+        await client.connect();
+        const db = drizzle(client);
         const id = c.req.param('id');
         const body = await c.req.json();
         const { createdAt, id: _, ...data } = body;
         const result = await db.update(plans).set(data).where(eq(plans.id, id)).returning();
+        await client.end();
         return c.json(result[0]);
     } catch (e: any) {
+        try { await client.end(); } catch (err) { }
         return c.json({ error: e.message }, 500);
     }
 });
