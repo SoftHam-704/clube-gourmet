@@ -20,13 +20,15 @@ export default async function handler(req, res) {
 
     if (req.method === 'OPTIONS') return res.status(200).end();
 
-    const connectionString = process.env.DATABASE_URL;
+    let connectionString = process.env.DATABASE_URL;
+    if (connectionString && !connectionString.includes('sslmode=')) {
+        connectionString += (connectionString.includes('?') ? '&' : '?') + 'sslmode=disable';
+    }
 
     if (req.method === 'GET') {
         const client = new pg.Client({
             connectionString,
-            ssl: false, // DESATIVADO: SaveInCloud não aceita SSL na porta 13062
-            connectionTimeoutMillis: 5000,
+            ssl: false
         });
 
         try {
@@ -36,28 +38,25 @@ export default async function handler(req, res) {
             return res.status(200).json(result.rows.length > 0 ? result.rows : FALLBACK_PLANS);
         } catch (e) {
             try { await client.end(); } catch (err) { }
-            // Se falhar mesmo sem SSL, retorna o fallback com o erro no header
-            res.setHeader('X-DB-Error', e.message);
-            return res.status(200).json(FALLBACK_PLANS);
+            return res.status(200).json({
+                isError: true,
+                error: e.message,
+                hint: "Tentei sslmode=disable na string",
+                fallback: FALLBACK_PLANS
+            });
         }
     }
 
     if (req.method === 'PUT') {
-        const client = new pg.Client({
-            connectionString,
-            ssl: false,
-        });
-
+        const client = new pg.Client({ connectionString, ssl: false });
         try {
             await client.connect();
             const { id } = req.query;
             const body = req.body;
             const { createdAt, id: _id, ...data } = body;
-
             const keys = Object.keys(data);
             const values = Object.values(data);
             const setClause = keys.map((key, i) => `${key} = $${i + 1}`).join(', ');
-
             const query = `UPDATE emparclub.plans SET ${setClause} WHERE id = $${keys.length + 1} RETURNING *`;
             const result = await client.query(query, [...values, id]);
             await client.end();
