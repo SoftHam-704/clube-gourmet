@@ -190,8 +190,8 @@ export default function AdminRestaurants() {
 
             {/* Modal de Restaurante */}
             {isModalOpen && editingRes && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-md overflow-y-auto pt-24 pb-24">
-                    <div className="relative bg-[#0a0a0a] border border-[#c9a961]/30 p-12 max-w-4xl w-full shadow-[0_0_100px_rgba(0,0,0,0.8)] text-white">
+                <div className="fixed inset-0 z-[100] flex items-start justify-center p-6 bg-black/80 backdrop-blur-md overflow-y-auto pt-20 pb-20">
+                    <div className="relative bg-[#0a0a0a] border border-[#c9a961]/30 p-12 max-w-4xl w-full shadow-[0_0_100px_rgba(0,0,0,1)] text-white my-auto">
                         <h2 className="font-display text-4xl font-black text-white tracking-tighter uppercase mb-10">
                             {editingRes.id ? "Ajustar Curadoria" : "Novo Restaurante"}
                         </h2>
