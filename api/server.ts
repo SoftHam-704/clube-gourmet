@@ -6,7 +6,7 @@ import pg from 'pg'
 import { pgSchema, varchar, decimal, text, integer, boolean, timestamp } from "drizzle-orm/pg-core"
 import { eq } from 'drizzle-orm'
 
-// --- DEFINIÇÃO DO SCHEMA (REPLICADO PARA EVITAR IMPORTS QUEBRAM NO BUNDLE) ---
+// Schema Replicado para Resiliência
 const emparclubSchema = pgSchema("emparclub");
 const plans = emparclubSchema.table("plans", {
     id: varchar("id", { length: 50 }).primaryKey(),
@@ -19,7 +19,7 @@ const plans = emparclubSchema.table("plans", {
     createdAt: timestamp("created_at").defaultNow(),
 });
 
-const app = new Hono().basePath('/api')
+const app = new Hono() // Removido basePath para testar compatibilidade direta
 app.use('*', cors())
 
 const FALLBACK_PLANS = [
@@ -33,47 +33,45 @@ const FALLBACK_PLANS = [
     { id: "fam-anual", name: "Família Anual", description: "O ápice do Club Empar", price: 111.84, type: "family", active: true }
 ];
 
-// Instância Lazy do DB
 let _db: any = null;
 const getDb = () => {
     if (_db) return _db;
     const connectionString = process.env.DATABASE_URL;
     if (!connectionString) return null;
-
     const pool = new pg.Pool({
         connectionString,
-        ssl: connectionString.includes('localhost') ? false : { rejectUnauthorized: false },
-        connectionTimeoutMillis: 5000,
-        max: 5
+        ssl: { rejectUnauthorized: false },
+        connectionTimeoutMillis: 3000,
+        max: 3
     });
     _db = drizzle(pool);
     return _db;
 }
 
-app.get('/membership-plans', async (c) => {
+// Rota respondendo em AMBOS os formatos para garantir que o frontend ache
+app.get('/api/membership-plans', async (c) => {
+    console.log("Planos chamados em /api/membership-plans");
+    return fetchPlans(c);
+});
+
+async function fetchPlans(c: any) {
     try {
         const db = getDb();
         if (!db) return c.json(FALLBACK_PLANS);
-
-        // Timer de segurança para não deixar a página "Sincronizando..." para sempre
         const dataPromise = db.select().from(plans).execute();
-        const timeout = new Promise((resolve) => setTimeout(() => resolve({ isTimeout: true }), 4000));
-
+        const timeout = new Promise((resolve) => setTimeout(() => resolve({ isTimeout: true }), 3500));
         const result: any = await Promise.race([dataPromise, timeout]);
-
-        if (result && result.isTimeout) {
-            console.error("⚠️ Timeout na conexão com banco.");
-            return c.json(FALLBACK_PLANS);
-        }
-
+        if (result && result.isTimeout) return c.json(FALLBACK_PLANS);
         return c.json(Array.isArray(result) && result.length > 0 ? result : FALLBACK_PLANS);
-    } catch (e: any) {
-        console.error("❌ Erro DB:", e.message);
+    } catch (e) {
         return c.json(FALLBACK_PLANS);
     }
-});
+}
 
-app.put('/membership-plans/:id', async (c) => {
+app.get('/api/debug', (c) => c.json({ status: 'ok', message: 'API V3 Ativa' }));
+
+// Handler para PUT (Edição)
+app.put('/api/membership-plans/:id', async (c) => {
     try {
         const db = getDb();
         if (!db) return c.json({ error: "DB Offline" }, 503);
