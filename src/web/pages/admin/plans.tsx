@@ -21,7 +21,7 @@ export default function AdminPlans() {
     const fetchPlans = async () => {
         setLoading(true);
         try {
-            const res = await fetch("/api/membership-plans");
+            const res = await fetch(`/api/membership-plans?t=${Date.now()}`);
             const data = await res.json();
             // Ordenação frontend para garantir visualização correta (Menor preço -> Maior preço)
             const sortedData = data.sort((a: Plan, b: Plan) => Number(a.price) - Number(b.price));
