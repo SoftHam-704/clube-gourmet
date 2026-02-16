@@ -12,11 +12,10 @@ const FALLBACK_PLANS = [
 ];
 
 export default async function handler(req, res) {
-    // Configuração de CORS para Vercel Functions
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PUT');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     if (req.method === 'OPTIONS') {
         res.status(200).end();
@@ -28,20 +27,18 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
         if (!connectionString) return res.status(200).json(FALLBACK_PLANS);
 
-        const client = new pg.Client({
+        const client = new pg.Pool({
             connectionString,
             ssl: { rejectUnauthorized: false },
             connectionTimeoutMillis: 3000,
+            max: 1
         });
 
         try {
-            await client.connect();
             const result = await client.query('SELECT * FROM emparclub.plans');
             await client.end();
-            const data = result.rows.length > 0 ? result.rows : FALLBACK_PLANS;
-            return res.status(200).json(data);
+            return res.status(200).json(result.rows.length > 0 ? result.rows : FALLBACK_PLANS);
         } catch (e) {
-            console.error("ERRO_DB:", e);
             try { await client.end(); } catch (err) { }
             return res.status(200).json(FALLBACK_PLANS);
         }
@@ -50,13 +47,13 @@ export default async function handler(req, res) {
     if (req.method === 'PUT') {
         if (!connectionString) return res.status(500).json({ error: "No DB URL" });
 
-        const client = new pg.Client({
+        const client = new pg.Pool({
             connectionString,
             ssl: { rejectUnauthorized: false },
+            max: 1
         });
 
         try {
-            await client.connect();
             const { id } = req.query;
             const { createdAt, id: _, ...data } = req.body;
 
