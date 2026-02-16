@@ -25,37 +25,47 @@ export default async function handler(req, res) {
     const connectionString = process.env.DATABASE_URL;
 
     if (req.method === 'GET') {
-        if (!connectionString) return res.status(200).json(FALLBACK_PLANS);
+        if (!connectionString) return res.status(200).json({ status: "warning", message: "DATABASE_URL missing", data: FALLBACK_PLANS });
 
-        const client = new pg.Pool({
+        // Usando Client direto em vez de Pool para evitar problemas de socket na Vercel
+        const client = new pg.Client({
             connectionString,
             ssl: { rejectUnauthorized: false },
-            connectionTimeoutMillis: 3000,
-            max: 1
+            connectionTimeoutMillis: 5000,
         });
 
         try {
-            const result = await client.query('SELECT * FROM emparclub.plans');
+            await client.connect();
+            const result = await client.query('SELECT * FROM emparclub.plans ORDER BY price ASC');
             await client.end();
-            return res.status(200).json(result.rows.length > 0 ? result.rows : FALLBACK_PLANS);
+
+            if (result.rows.length > 0) {
+                return res.status(200).json(result.rows);
+            } else {
+                return res.status(200).json(FALLBACK_PLANS);
+            }
         } catch (e) {
+            console.error("❌ Erro ao conectar ao banco na Vercel:", e.message);
             try { await client.end(); } catch (err) { }
+            // Em caso de erro, retornamos o fallback mas com um header de aviso
+            res.setHeader('X-DB-Error', e.message);
             return res.status(200).json(FALLBACK_PLANS);
         }
     }
 
     if (req.method === 'PUT') {
-        if (!connectionString) return res.status(500).json({ error: "No DB URL" });
-
-        const client = new pg.Pool({
+        const client = new pg.Client({
             connectionString,
             ssl: { rejectUnauthorized: false },
-            max: 1
         });
 
         try {
+            await client.connect();
             const { id } = req.query;
-            const { createdAt, id: _, ...data } = req.body;
+            const body = req.body;
+
+            // Remove campos que não devem ser editados no UPDATE manual
+            const { createdAt, id: _id, ...data } = body;
 
             const keys = Object.keys(data);
             const values = Object.values(data);
