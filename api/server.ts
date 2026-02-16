@@ -17,16 +17,73 @@ const FALLBACK_PLANS = [
     { id: "fam-anual", name: "Família Anual", description: "O ápice do Club Empar", price: 111.84, type: "family", active: true }
 ];
 
-app.get('/membership-plans', (c) => {
-    return c.json(FALLBACK_PLANS)
-})
+// --- AUXILIARES DE BANCO (DYNAMIC) ---
+async function getContext() {
+    const { getDb } = await import('../src/db/index');
+    const { plans, cities } = await import('../src/api/database/schema');
+    const { eq } = await import('drizzle-orm');
+    const db = getDb();
+    return { db, plans, cities, eq };
+}
 
-app.get('/debug', (c) => {
-    return c.json({
-        status: 'ok',
-        message: 'API Independente Ativa na Vercel!',
-        time: new Date().toISOString()
-    })
-})
+// --- ROTAS DE PLANOS ---
+
+app.get('/membership-plans', async (c) => {
+    try {
+        const { db, plans } = await getContext();
+        if (!db) return c.json(FALLBACK_PLANS);
+
+        const dbPromise = db.select().from(plans).execute();
+        const timeout = new Promise((r) => setTimeout(() => r({ isTimeout: true }), 4000));
+        const result: any = await Promise.race([dbPromise, timeout]);
+
+        if (result.isTimeout) return c.json(FALLBACK_PLANS);
+        return c.json(result.length > 0 ? result : FALLBACK_PLANS);
+    } catch (e) {
+        return c.json(FALLBACK_PLANS);
+    }
+});
+
+app.put('/membership-plans/:id', async (c) => {
+    try {
+        const { db, plans, eq } = await getContext();
+        if (!db) return c.json({ error: "DB Offline" }, 503);
+
+        const id = c.req.param('id');
+        const body = await c.req.json();
+        const { createdAt, id: _, ...data } = body;
+
+        const result = await db.update(plans).set(data).where(eq.eq(plans.id, id)).returning();
+        return c.json(result[0]);
+    } catch (e: any) {
+        return c.json({ error: e.message }, 500);
+    }
+});
+
+app.post('/membership-plans', async (c) => {
+    try {
+        const { db, plans } = await getContext();
+        if (!db) return c.json({ error: "DB Offline" }, 503);
+
+        const body = await c.req.json();
+        const { createdAt, ...data } = body;
+
+        const result = await db.insert(plans).values(data).returning();
+        return c.json(result[0]);
+    } catch (e: any) {
+        return c.json({ error: e.message }, 500);
+    }
+});
+
+app.get('/debug-db', async (c) => {
+    try {
+        const { db } = await getContext();
+        if (!db) return c.json({ status: 'error', message: 'No DB' });
+        await db.execute('SELECT 1');
+        return c.json({ status: 'ok', database: 'connected' });
+    } catch (e: any) {
+        return c.json({ status: 'error', error: e.message });
+    }
+});
 
 export default handle(app)
