@@ -1,15 +1,7 @@
-import { Hono } from 'hono'
-import { handle } from 'hono/vercel'
-
-const app = new Hono().basePath('/api')
-
-app.get('/debug', (c) => {
-    return c.json({
+export default function handler(request, response) {
+    response.status(200).json({
         status: 'ok',
-        message: 'API Standalone - Debug OK',
-        env: process.env.NODE_ENV,
-        db_configured: !!process.env.DATABASE_URL
-    })
-})
-
-export default handle(app)
+        message: 'Nativo Vercel - Sem Hono',
+        time: new Date().toISOString()
+    });
+}
