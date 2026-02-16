@@ -20,4 +20,9 @@ if (!connectionString) {
 
 const pool = new pg.Pool(poolConfig as any);
 
+// Prevenir crash do processo em erros inesperados no pool
+pool.on('error', (err) => {
+    console.error('❌ PG Pool Error:', err);
+});
+
 export const db = drizzle(pool);

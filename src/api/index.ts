@@ -36,28 +36,37 @@ const api = new Hono();
 // --- ENDPOINTS DE PLANOS ---
 
 api.get('/membership-plans', async (c) => {
-  // Purge Cache Final: 1.0.15
+  // Purge Cache Final: 1.0.17
   c.header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   c.header('Pragma', 'no-cache');
   c.header('Expires', '0');
 
   const timeoutPromise = new Promise((resolve) =>
-    setTimeout(() => resolve({ isFallback: true }), 6000)
+    setTimeout(() => resolve({ isFallback: true }), 5000)
   );
 
   try {
-    console.log("💎 API: Consultando SaveInCloud (Plans)...");
-    const dbPromise = db.select().from(plans);
+    console.log("💎 API: Buscando planos...");
+
+    // Explicitamente converter para Promise real
+    const dbPromise = db.select().from(plans).execute();
+
     const result: any = await Promise.race([dbPromise, timeoutPromise]);
 
-    if (result.isFallback) {
-      console.warn("⚠️ API: Timeout. Entregando 8 planos de backup.");
+    if (result && result.isFallback) {
+      console.warn("⚠️ API: Timeout (5s). Usando fallback.");
       return c.json(FALLBACK_PLANS);
     }
 
-    return c.json(result.length > 0 ? result : FALLBACK_PLANS);
+    if (!Array.isArray(result) || result.length === 0) {
+      console.log("ℹ️ API: Nenhum plano no BD, usando fallback.");
+      return c.json(FALLBACK_PLANS);
+    }
+
+    return c.json(result);
   } catch (error) {
-    console.error("❌ API_ERROR (Plans):", error);
+    console.error("❌ API_ERROR (Get Plans):", error);
+    // Em caso de erro, SEMPRE retornar o fallback em vez de falhar 500
     return c.json(FALLBACK_PLANS);
   }
 });
@@ -150,7 +159,7 @@ api.get('/debug-db', async (c) => {
   try {
     const start = Date.now();
     // Teste simples de conexão
-    const result = await db.execute('SELECT 1');
+    await db.execute('SELECT 1');
     const duration = Date.now() - start;
 
     return c.json({
@@ -162,13 +171,18 @@ api.get('/debug-db', async (c) => {
       db_host: process.env.DATABASE_URL ? process.env.DATABASE_URL.split('@')[1] : 'N/A'
     });
   } catch (error) {
-    return c.json({
-      status: 'error',
-      message: "Falha na conexão com BD",
-      error: String(error),
-      env_db_configured: !!process.env.DATABASE_URL
-    }, 500);
+    return c.json({ error: String(error) }, 500);
   }
+});
+
+// --- GLOBAL ERROR HANDLER ---
+app.onError((err, c) => {
+  console.error("🔥 HONO_CRASH:", err);
+  return c.json({
+    error: 'Internal Server Error',
+    message: err.message,
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+  }, 500);
 });
 
 app.route('/api', api);
