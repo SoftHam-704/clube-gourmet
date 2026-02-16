@@ -19,7 +19,8 @@ const plans = emparclubSchema.table("plans", {
     createdAt: timestamp("created_at").defaultNow(),
 });
 
-const app = new Hono()
+// CRITICAL: .basePath('/api') garante que o Hono entenda o prefixo da Vercel
+const app = new Hono().basePath('/api')
 app.use('*', cors())
 
 const FALLBACK_PLANS = [
@@ -33,7 +34,6 @@ const FALLBACK_PLANS = [
     { id: "fam-anual", name: "Família Anual", description: "O ápice do Club Empar", price: 111.84, type: "family", active: true }
 ];
 
-// O Roteamento agora é relativo ao Vercel Rewrite (/api/...)
 app.get('/membership-plans', async (c) => {
     const connectionString = process.env.DATABASE_URL;
     if (!connectionString) return c.json(FALLBACK_PLANS);
@@ -59,8 +59,8 @@ app.get('/membership-plans', async (c) => {
 
 app.get('/debug', (c) => c.json({
     status: 'ok',
-    message: 'API V5 - Configuração Definitiva Vercel Ativa',
-    env: process.env.NODE_ENV
+    message: 'API V6 - Final Routing Fix',
+    timestamp: new Date().toISOString()
 }));
 
 app.put('/membership-plans/:id', async (c) => {
