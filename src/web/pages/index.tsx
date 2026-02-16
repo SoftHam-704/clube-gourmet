@@ -476,10 +476,12 @@ function NewsletterSection() {
             placeholder="SEU MELHOR E-MAIL"
             className="flex-1 px-10 py-6 bg-transparent text-white placeholder-[#c9a961]/20 focus:outline-none font-mono text-sm tracking-[0.2em]"
           />
-          <button className="group px-14 py-6 bg-[#c9a961] text-[#0a0a0a] font-black text-sm tracking-[0.3em] uppercase hover:glow-green hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-3">
-            Associar-se
-            <span className="transition-transform group-hover:translate-x-1">{Icons.arrow}</span>
-          </button>
+          <Link href="/sign-up" className="contents">
+            <button className="group px-14 py-6 bg-[#c9a961] text-[#0a0a0a] font-black text-sm tracking-[0.3em] uppercase hover:glow-green hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-3 w-full sm:w-auto">
+              Associar-se
+              <span className="transition-transform group-hover:translate-x-1">{Icons.arrow}</span>
+            </button>
+          </Link>
         </div>
 
         <p className="text-[#c9a961]/30 text-xs mt-12 font-mono tracking-[0.4em] uppercase">

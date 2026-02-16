@@ -49,10 +49,13 @@
 ## 📋 Próximas Etapas Sugeridas
 
 ### Fase 2 - Funcionalidades Core
-- [ ] Sistema de cadastro/login
-- [ ] Dashboard do usuário
-- [ ] Página de perfil
-- [ ] Sistema de favoritos
+- [x] Dashboard Admin dinâmico (estatísticas reais do DB)
+- [x] Integração Better Auth (infraestrutura backend e frontend)
+- [x] Sistema de cadastro/login (Páginas prontas, integração funcional)
+- [x] Dashboard do usuário (QR Code, Histórico, Assinatura)
+- [x] Página de perfil (Edição de nome e imagem)
+- [x] Sistema de favoritos (Integrado ao Dashboard)
+- [x] Catálogo de Restaurantes dinâmico (conectado ao DB)
 
 ### Fase 3 - Integração de Pagamentos
 - [ ] Integração Stripe ou Mercado Pago

@@ -12,6 +12,8 @@ import Partnerships from "./pages/partnerships";
 import Business from "./pages/business";
 import Referral from "./pages/referral";
 import ClassicVision from "./pages/classic-vision";
+import Dashboard from "./pages/dashboard";
+import Profile from "./pages/profile";
 
 // Admin Pages
 import AdminLogin from "./pages/admin/login";
@@ -19,6 +21,10 @@ import AdminDashboard from "./pages/admin/dashboard";
 import AdminPlans from "./pages/admin/plans";
 import AdminCities from "./pages/admin/cities";
 import AdminRestaurants from "./pages/admin/restaurants";
+
+// Auth Pages
+import SignIn from "./pages/auth/sign-in";
+import SignUp from "./pages/auth/sign-up";
 
 import { Provider } from "./components/provider";
 import { ScrollToTop } from "./components/layout/ScrollToTop";
@@ -41,6 +47,12 @@ function App() {
                                 <Route path="/business" component={Business} />
                                 <Route path="/referral" component={Referral} />
                                 <Route path="/classic-vision" component={ClassicVision} />
+                                <Route path="/dashboard" component={Dashboard} />
+                                <Route path="/profile" component={Profile} />
+
+                                {/* Auth Routes */}
+                                <Route path="/sign-in" component={SignIn} />
+                                <Route path="/sign-up" component={SignUp} />
 
                                 {/* Admin Routes */}
                                 <Route path="/admin/login" component={AdminLogin} />

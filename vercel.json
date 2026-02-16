@@ -27,6 +27,22 @@
             "destination": "/api/restaurants.js"
         },
         {
+            "source": "/api/admin-stats",
+            "destination": "/api/admin-stats.js"
+        },
+        {
+            "source": "/api/user-dashboard",
+            "destination": "/api/user-dashboard.js"
+        },
+        {
+            "source": "/api/profile",
+            "destination": "/api/profile.js"
+        },
+        {
+            "source": "/api/favorites",
+            "destination": "/api/favorites.js"
+        },
+        {
             "source": "/api/:path*",
             "destination": "/api/:path*.js"
         },

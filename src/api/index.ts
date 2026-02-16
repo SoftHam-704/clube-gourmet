@@ -1,9 +1,14 @@
 import { Hono } from 'hono';
 import { cors } from "hono/cors";
 
+import { authRoutes } from './routes/auth.ts';
+import { authMiddleware } from './middleware/auth.ts';
+
 const app = new Hono();
 
 app.use(cors({ origin: "*" }));
+app.use(authMiddleware);
+app.route('/', authRoutes);
 
 const FALLBACK_PLANS = [
   { id: "mensal", name: "Plano Mensal", description: "Experimente a elite", price: 49.90, type: "individual", active: true },

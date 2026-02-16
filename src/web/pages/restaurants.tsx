@@ -1,148 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar } from "../components/layout/Navbar";
 import { Footer } from "../components/layout/Footer";
 
-const CUISINES = [
-  "Todas",
-  "Italiana",
-  "Japonesa",
-  "Brasileira",
-  "Francesa",
-  "Mexicana",
-  "Indiana",
-  "Tailandesa",
-  "Mediterrânea",
-  "Contemporânea",
-];
+interface Restaurant {
+  id: number;
+  name: string;
+  cuisine: string;
+  description: string;
+  address: string;
+  image: string;
+  slug: string;
+  highlighted: boolean;
+  active: boolean;
+  city_slug: string;
+  city_name: string;
+  rating?: number; // Placeholder for now
+  price_level?: number; // Placeholder for now
+}
 
-
-
-const CITIES = ["São Paulo", "Rio de Janeiro", "Belo Horizonte", "Curitiba", "Brasília"];
-
-const RESTAURANTS = [
-  {
-    id: 1,
-    name: "Trattoria Bella Vista",
-    cuisine: "Italiana",
-    price: 3,
-    rating: 4.8,
-    location: "São Paulo - Jardins",
-    description: "Autêntica culinária italiana com massas artesanais e uma seleção curada de vinhos da Toscana.",
-    image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=1000",
-  },
-  {
-    id: 2,
-    name: "Sakura House",
-    cuisine: "Japonesa",
-    price: 4,
-    rating: 4.9,
-    location: "São Paulo - Liberdade",
-    description: "Experiência omakase premium com peixes importados semanalmente do mercado Tsukiji de Tóquio.",
-    image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&q=80&w=1000",
-  },
-  {
-    id: 3,
-    name: "Churrascaria Gaúcha",
-    cuisine: "Brasileira",
-    price: 3,
-    rating: 4.7,
-    location: "São Paulo - Moema",
-    description: "Rodízio tradicional com 18 cortes de carnes nobres e salad bar premiado.",
-    image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1000",
-  },
-  {
-    id: 4,
-    name: "Le Petit Bistro",
-    cuisine: "Francesa",
-    price: 4,
-    rating: 4.9,
-    location: "Rio de Janeiro - Leblon",
-    description: "Clássica culinária francesa reimaginada com ingredientes brasileiros pelo Chef Pierre Laurent.",
-    image: "https://images.unsplash.com/photo-1550966842-28a2a2d3ef8a?auto=format&fit=crop&q=80&w=1000",
-  },
-  {
-    id: 5,
-    name: "Casa Oaxaca",
-    cuisine: "Mexicana",
-    price: 2,
-    rating: 4.6,
-    location: "São Paulo - Vila Madalena",
-    description: "Sabores vibrantes mexicanos com mezcal artesanal e receitas tradicionais de mole.",
-    image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=1000",
-  },
-  {
-    id: 6,
-    name: "Spice Garden",
-    cuisine: "Indiana",
-    price: 2,
-    rating: 4.5,
-    location: "São Paulo - Pinheiros",
-    description: "Especialidades do norte da Índia com pratos do forno tandoor e receitas autênticas de curry.",
-    image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&q=80&w=1000",
-  },
-  {
-    id: 7,
-    name: "Bangkok Street",
-    cuisine: "Tailandesa",
-    price: 2,
-    rating: 4.6,
-    location: "Rio de Janeiro - Ipanema",
-    description: "Pratos inspirados na comida de rua com sabores intensos e ingredientes frescos.",
-    image: "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&q=80&w=1000",
-  },
-  {
-    id: 8,
-    name: "Mediterrâneo",
-    cuisine: "Mediterrânea",
-    price: 3,
-    rating: 4.7,
-    location: "Belo Horizonte - Savassi",
-    description: "Frutos do mar frescos e mezze com vista para o mar e azeite importado da Grécia.",
-    image: "https://images.unsplash.com/photo-1533777857889-4be7c70b33f8?auto=format&fit=crop&q=80&w=1000",
-  },
-  {
-    id: 9,
-    name: "Mesa Moderna",
-    cuisine: "Contemporânea",
-    price: 4,
-    rating: 4.9,
-    location: "São Paulo - Itaim Bibi",
-    description: "Menu degustação de vanguarda com gastronomia molecular e ingredientes locais.",
-    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=1000",
-  },
-  {
-    id: 10,
-    name: "Osteria del Mare",
-    cuisine: "Italiana",
-    price: 3,
-    rating: 4.7,
-    location: "Curitiba - Batel",
-    description: "Especialidades italianas costeiras com frutos do mar frescos e limoncello artesanal.",
-    image: "https://images.unsplash.com/photo-1534080564607-4e37cc66810c?auto=format&fit=crop&q=80&w=1000",
-  },
-  {
-    id: 11,
-    name: "Feijoada da Vovó",
-    cuisine: "Brasileira",
-    price: 1,
-    rating: 4.8,
-    location: "Rio de Janeiro - Centro",
-    description: "Feijoada tradicional servida todo sábado com samba ao vivo e caipirinhas.",
-    image: "https://images.unsplash.com/photo-1625938140722-234d967189c7?auto=format&fit=crop&q=80&w=1000",
-  },
-  {
-    id: 12,
-    name: "Fusion Lab",
-    cuisine: "Contemporânea",
-    price: 4,
-    rating: 4.8,
-    location: "Brasília - Lago Sul",
-    description: "Cozinha experimental que mistura sabores asiáticos e latino-americanos de formas surpreendentes.",
-    image: "https://images.unsplash.com/photo-1551218808-94e220e0349b?auto=format&fit=crop&q=80&w=1000",
-  },
-];
+interface City {
+  id: string;
+  name: string;
+  state: string;
+  active: boolean;
+}
 
 const Icons = {
+  // ... (keeping existing icons)
   search: (
     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
       <path strokeLinecap="square" strokeLinejoin="miter" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -187,16 +71,46 @@ const Icons = {
 };
 
 export default function Restaurants() {
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCuisine, setSelectedCuisine] = useState("Todas");
-  const [selectedCity, setSelectedCity] = useState(CITIES[0]);
+  const [selectedCity, setSelectedCity] = useState("Todas");
 
-  const filteredRestaurants = RESTAURANTS.filter((r) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [resRes, cityRes] = await Promise.all([
+          fetch("/api/restaurants"),
+          fetch("/api/cities")
+        ]);
+        const resData = await resRes.json();
+        const cityData = await cityRes.json();
+
+        // Ensure we only show active ones
+        setRestaurants(Array.isArray(resData) ? resData.filter((r: any) => r.active) : []);
+        setCities(Array.isArray(cityData) ? cityData.filter((c: any) => c.active) : []);
+      } catch (error) {
+        console.error("Erro ao carregar dados:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const cuisines = ["Todas", ...new Set(restaurants.map(r => r.cuisine))];
+
+  const filteredRestaurants = restaurants.filter((r) => {
     const queryMatch = r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      r.location.toLowerCase().includes(searchQuery.toLowerCase());
+      r.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      r.address.toLowerCase().includes(searchQuery.toLowerCase());
     const cuisineMatch = selectedCuisine === "Todas" || r.cuisine === selectedCuisine;
-    return queryMatch && cuisineMatch;
+    const cityMatch = selectedCity === "Todas" || r.city_slug === selectedCity;
+    return queryMatch && cuisineMatch && cityMatch;
   });
+
 
   return (
     <div className="bg-[#0a0a0a] min-h-screen text-white selection:bg-[#c9a961] selection:text-[#0a0a0a]">
@@ -225,11 +139,11 @@ export default function Restaurants() {
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 gap-8 border-l border-[#c9a961]/20 pl-12 h-fit">
               <div>
-                <div className="text-4xl font-mono font-black text-white">500+</div>
+                <div className="text-4xl font-mono font-black text-white">{restaurants.length}+</div>
                 <div className="text-[#c9a961] text-[10px] tracking-[0.3em] uppercase font-bold mt-1">Acordos Ativos</div>
               </div>
               <div>
-                <div className="text-4xl font-mono font-black text-white">22</div>
+                <div className="text-4xl font-mono font-black text-white">{cities.length}</div>
                 <div className="text-[#c9a961] text-[10px] tracking-[0.3em] uppercase font-bold mt-1">Cidades</div>
               </div>
             </div>
@@ -262,7 +176,7 @@ export default function Restaurants() {
                 onChange={(e) => setSelectedCuisine(e.target.value)}
                 className="w-full bg-white/5 border border-transparent focus:border-[#c9a961]/30 px-8 py-5 outline-none transition-all text-sm font-medium appearance-none cursor-pointer text-[#d4c5a0]/80"
               >
-                {CUISINES.map((c) => (
+                {cuisines.map((c: string) => (
                   <option key={c} value={c} className="bg-[#111]">{c}</option>
                 ))}
               </select>
@@ -276,8 +190,9 @@ export default function Restaurants() {
                 onChange={(e) => setSelectedCity(e.target.value)}
                 className="w-full bg-white/5 border border-transparent focus:border-[#c9a961]/30 px-8 py-5 outline-none transition-all text-sm font-medium appearance-none cursor-pointer text-[#d4c5a0]"
               >
-                {CITIES.map((city) => (
-                  <option key={city} value={city} className="bg-[#111]">{city}</option>
+                <option value="Todas" className="bg-[#111]">Todas as Cidades</option>
+                {cities.map((city: City) => (
+                  <option key={city.id} value={city.id} className="bg-[#111]">{city.name}</option>
                 ))}
               </select>
               <span className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-[#c9a961]/40 text-[10px]">▼</span>
@@ -287,9 +202,14 @@ export default function Restaurants() {
       </section>
 
       {/* Results Grid */}
-      <section className="pb-32 px-6 lg:px-8">
+      <section className="pb-32 px-6 lg:px-8 min-h-[400px]">
         <div className="max-w-7xl mx-auto">
-          {filteredRestaurants.length > 0 ? (
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-40 gap-6">
+              <div className="w-12 h-12 border-2 border-[#c9a961]/20 border-t-[#c9a961] rounded-full animate-spin" />
+              <p className="font-mono text-[10px] tracking-[0.5em] uppercase text-[#c9a961] animate-pulse">Sincronizando Ecossistema...</p>
+            </div>
+          ) : filteredRestaurants.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
               {filteredRestaurants.map((res, i) => (
                 <div
@@ -300,7 +220,7 @@ export default function Restaurants() {
                   {/* Image Container */}
                   <div className="relative aspect-[4/5] overflow-hidden">
                     <img
-                      src={res.image}
+                      src={res.image || "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1000"}
                       alt={res.name}
                       className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000"
                     />
@@ -309,7 +229,7 @@ export default function Restaurants() {
                     {/* Floating Info */}
                     <div className="absolute top-6 right-6 bg-[#0a0a0a]/80 backdrop-blur-md border border-[#c9a961]/20 px-3 py-1 flex items-center gap-2">
                       <span className="text-[#c9a961]">{Icons.star}</span>
-                      <span className="text-white font-mono text-xs font-black">{res.rating}</span>
+                      <span className="text-white font-mono text-xs font-black">{res.rating || 4.9}</span>
                     </div>
 
                     <div className="absolute bottom-6 left-6 right-6">
@@ -325,16 +245,16 @@ export default function Restaurants() {
                   {/* Details Container */}
                   <div className="p-8 space-y-6">
                     <div className="flex items-center justify-between text-[#d4c5a0]/40 font-mono text-[10px] tracking-[0.2em] uppercase">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 truncate pr-4">
                         {Icons.location}
-                        {res.location}
+                        {res.city_name}
                       </div>
-                      <div className="text-[#c9a961]">
-                        {"$".repeat(res.price)}
+                      <div className="text-[#c9a961] flex-shrink-0">
+                        {"$".repeat(res.price_level || 3)}
                       </div>
                     </div>
 
-                    <p className="text-[#d4c5a0]/60 text-sm font-light leading-relaxed italic line-clamp-2">
+                    <p className="text-[#d4c5a0]/60 text-sm font-light leading-relaxed italic line-clamp-2 min-h-[40px]">
                       "{res.description}"
                     </p>
 
@@ -343,7 +263,7 @@ export default function Restaurants() {
                     </button>
                   </div>
 
-                  {/* Corner Brégnights */}
+                  {/* Corner Brackets */}
                   <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-[#c9a961]/0 group-hover:border-[#c9a961]/100 transition-all duration-700" />
                   <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-[#c9a961]/0 group-hover:border-[#c9a961]/100 transition-all duration-700" />
                 </div>
@@ -358,6 +278,7 @@ export default function Restaurants() {
                 onClick={() => {
                   setSearchQuery("");
                   setSelectedCuisine("Todas");
+                  setSelectedCity("Todas");
                 }}
                 className="px-12 py-4 border border-[#c9a961]/40 text-[#c9a961] font-black text-xs tracking-widest uppercase hover:bg-[#c9a961] hover:text-[#0a0a0a] transition-all"
               >
@@ -386,3 +307,4 @@ export default function Restaurants() {
     </div>
   );
 }
+

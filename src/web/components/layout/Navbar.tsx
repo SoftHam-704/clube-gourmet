@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
+import { authClient } from "../../lib/auth";
 
 const NAV_LINKS = [
   { label: "Restaurantes", href: "/restaurants", isPage: true },
@@ -26,10 +27,17 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [location] = useLocation();
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
+
+    // Check session
+    authClient.getSession().then(session => {
+      if (session && session.data) setUser(session.data.user);
+    });
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -72,6 +80,24 @@ export function Navbar() {
             ))}
           </div>
 
+          <div className="hidden md:flex items-center gap-6">
+            {!user ? (
+              <Link
+                href="/sign-in"
+                className="bg-white/5 border border-[#c9a961]/20 text-[#d4c5a0] px-8 py-3 font-black text-[10px] tracking-widest uppercase hover:bg-[#c9a961] hover:text-[#0a0a0a] transition-all"
+              >
+                Login
+              </Link>
+            ) : (
+              <Link
+                href="/dashboard"
+                className="bg-[#c9a961] text-[#0a0a0a] px-8 py-3 font-black text-[10px] tracking-widest uppercase hover:glow-gold transition-all"
+              >
+                Dashboard
+              </Link>
+            )}
+          </div>
+
           <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-[#c9a961]" aria-label="Abrir menu">
             {isOpen ? Icons.close : Icons.menu}
           </button>
@@ -92,6 +118,15 @@ export function Navbar() {
               </a>
             )
           ))}
+          {user ? (
+            <Link href="/dashboard" onClick={() => setIsOpen(false)} className="block text-[#c9a961] hover:text-white transition-colors font-black py-4 text-xs tracking-[0.3em] uppercase border-t border-[#c9a961]/20 mt-4 pt-6">
+              Dashboard
+            </Link>
+          ) : (
+            <Link href="/sign-in" onClick={() => setIsOpen(false)} className="block text-[#c9a961] hover:text-white transition-colors font-black py-4 text-xs tracking-[0.3em] uppercase border-t border-[#c9a961]/20 mt-4 pt-6">
+              Login Club
+            </Link>
+          )}
         </div>
       </div>
     </nav>

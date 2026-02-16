@@ -111,12 +111,14 @@ function PlanCard({ plan }: { plan: any }) {
         ))}
       </ul>
 
-      <button className={`w-full flex items-center justify-center gap-5 py-6 font-black text-xs tracking-[0.4em] uppercase transition-all duration-700 ${isPopular
-        ? "bg-[#c9a961] text-[#0a0a0a] hover:glow-green hover:-translate-y-2"
-        : "border-2 border-[#c9a961]/20 text-[#c9a961] hover:bg-[#c9a961] hover:text-[#0a0a0a]"
-        }`}>
-        Assinar Agora
-      </button>
+      <Link href={`/sign-up?plan=${plan.id}`}>
+        <button className={`w-full flex items-center justify-center gap-5 py-6 font-black text-xs tracking-[0.4em] uppercase transition-all duration-700 ${isPopular
+          ? "bg-[#c9a961] text-[#0a0a0a] hover:glow-green hover:-translate-y-2"
+          : "border-2 border-[#c9a961]/20 text-[#c9a961] hover:bg-[#c9a961] hover:text-[#0a0a0a]"
+          }`}>
+          Assinar Agora
+        </button>
+      </Link>
       <div className="absolute inset-0 scanlines opacity-[0.03] pointer-events-none" />
     </div>
   );
@@ -194,7 +196,7 @@ export default function Plans() {
         </div>
       </section>
 
-      <section className="py-32 bg-[#1a4d2e] relative overflow-hidden">
+      <section id="selection-section" className="py-32 bg-[#1a4d2e] relative overflow-hidden">
         <div className="absolute inset-0 grid-bg opacity-20" />
         <div className="max-w-[1440px] mx-auto px-6 lg:px-8 relative">
           <div className="flex flex-col items-center mb-28">
@@ -251,7 +253,12 @@ export default function Plans() {
             <span className="text-gradient-gold animate-gradient">Pronta.</span>
           </h2>
           <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
-            <button className="px-16 py-7 bg-[#c9a961] text-[#0a0a0a] font-black text-sm tracking-[0.4em] uppercase hover:glow-green transition-all shadow-2xl">Assinar Agora</button>
+            <button
+              onClick={() => document.getElementById('selection-section')?.scrollIntoView({ behavior: 'smooth' })}
+              className="px-16 py-7 bg-[#c9a961] text-[#0a0a0a] font-black text-sm tracking-[0.4em] uppercase hover:glow-green transition-all shadow-2xl"
+            >
+              Assinar Agora
+            </button>
             <Link href="/" className="px-16 py-7 border-2 border-[#c9a961]/30 text-[#c9a961] font-black text-sm tracking-[0.4em] uppercase hover:bg-[#c9a961]/10 transition-all">Ver Destaques</Link>
           </div>
         </div>
