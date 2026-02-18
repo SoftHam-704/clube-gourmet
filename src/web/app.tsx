@@ -14,6 +14,7 @@ import Referral from "./pages/referral";
 import ClassicVision from "./pages/classic-vision";
 import Dashboard from "./pages/dashboard";
 import Profile from "./pages/profile";
+import Checkout from "./pages/checkout";
 
 // Admin Pages
 import AdminLogin from "./pages/admin/login";
@@ -53,6 +54,7 @@ function App() {
                                 {/* Auth Routes */}
                                 <Route path="/sign-in" component={SignIn} />
                                 <Route path="/sign-up" component={SignUp} />
+                                <Route path="/checkout" component={Checkout} />
 
                                 {/* Admin Routes */}
                                 <Route path="/admin/login" component={AdminLogin} />

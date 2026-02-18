@@ -17,6 +17,9 @@ export default function SignUp() {
     const { register, handleSubmit, formState: { isSubmitting } } = useForm<SignUpForm>();
 
     const onSubmit = async (data: SignUpForm) => {
+        const queryParams = new URLSearchParams(window.location.search);
+        const planId = queryParams.get('plan');
+
         setError(null);
         const { error: signUpError } = await authClient.signUp.email({
             name: data.name,
@@ -29,7 +32,11 @@ export default function SignUp() {
             return;
         }
 
-        setLocation('/plans'); // Redirect to plans after registration to choose a membership
+        if (planId) {
+            setLocation(`/checkout?plan=${planId}`);
+        } else {
+            setLocation('/plans');
+        }
     };
 
     return (

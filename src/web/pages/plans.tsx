@@ -50,7 +50,10 @@ const DEFAULT_BENEFITS = [
   "Benefícios exclusivos do clube"
 ];
 
+import { authClient } from "../lib/auth";
+
 function PlanCard({ plan }: { plan: any }) {
+  const { data: session } = authClient.useSession();
   const isFamily = plan.type === 'family' || plan.id?.includes('family');
   const priceDisplay = (Number(plan.price) / (isFamily ? 4 : 1)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
   const totalDisplay = Number(plan.price).toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' });
@@ -111,9 +114,9 @@ function PlanCard({ plan }: { plan: any }) {
         ))}
       </ul>
 
-      <Link href={`/sign-up?plan=${plan.id}`}>
+      <Link href={session ? `/checkout?plan=${plan.id}` : `/sign-up?plan=${plan.id}`}>
         <button className={`w-full flex items-center justify-center gap-5 py-6 font-black text-xs tracking-[0.4em] uppercase transition-all duration-700 ${isPopular
-          ? "bg-[#c9a961] text-[#0a0a0a] hover:glow-green hover:-translate-y-2"
+          ? "bg-[#c9a961] text-[#0a0a0a] hover:glow-gold hover:-translate-y-2"
           : "border-2 border-[#c9a961]/20 text-[#c9a961] hover:bg-[#c9a961] hover:text-[#0a0a0a]"
           }`}>
           Assinar Agora

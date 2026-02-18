@@ -82,4 +82,14 @@ export const verifications = emparclubSchema.table("verifications", {
     updatedAt: timestamp("updated_at"),
 });
 
-
+export const subscriptions = emparclubSchema.table("subscriptions", {
+    id: serial("id").primaryKey(),
+    userId: text("user_id").notNull().references(() => users.id),
+    planId: varchar("plan_id", { length: 50 }).notNull().references(() => plans.id),
+    status: varchar("status", { length: 20 }).notNull(), // active, expired, cancelled, pending
+    startDate: timestamp("start_date").defaultNow(),
+    endDate: timestamp("end_date"),
+    mpPreferenceId: text("mp_preference_id"),
+    mpPaymentId: text("mp_payment_id"),
+    createdAt: timestamp("created_at").defaultNow(),
+});

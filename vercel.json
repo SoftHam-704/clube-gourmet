@@ -39,8 +39,20 @@
             "destination": "/api/profile.js"
         },
         {
+            "source": "/api/checkout/create-preference",
+            "destination": "/api/checkout.ts"
+        },
+        {
+            "source": "/api/webhooks/mercadopago",
+            "destination": "/api/webhooks/mercadopago.ts"
+        },
+        {
             "source": "/api/favorites",
             "destination": "/api/favorites.js"
+        },
+        {
+            "source": "/api/auth/:path*",
+            "destination": "/api/auth.ts"
         },
         {
             "source": "/api/:path*",
