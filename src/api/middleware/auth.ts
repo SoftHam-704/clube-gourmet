@@ -1,5 +1,5 @@
 import { createMiddleware } from "hono/factory";
-import { auth } from "../auth.ts";
+import { auth } from "../auth.js";
 
 // Attaches session and user if they are authenticated in the hono context.
 export const authMiddleware = createMiddleware(async (c, next) => {

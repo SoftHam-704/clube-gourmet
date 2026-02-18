@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { auth } from '../auth.ts';
+import { auth } from '../auth.js';
 
 export const authRoutes = new Hono();
 
