@@ -20,4 +20,13 @@ export const auth = betterAuth({
     },
     secret: process.env.BETTER_AUTH_SECRET,
     baseURL: process.env.BETTER_AUTH_URL,
+    // Permite que o auth aceite requisições vindas destas URLs
+    trustedOrigins: [
+        process.env.BETTER_AUTH_URL || "",
+        "http://localhost:5173",
+        "https://clube-gourmet.vercel.app" // Adicione o seu domínio oficial aqui
+    ],
+    advanced: {
+        useSecureCookies: process.env.NODE_ENV === "production"
+    }
 });
