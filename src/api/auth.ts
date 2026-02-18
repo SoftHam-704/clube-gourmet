@@ -24,7 +24,8 @@ export const auth = betterAuth({
     trustedOrigins: [
         process.env.BETTER_AUTH_URL || "",
         "http://localhost:5173",
-        "https://clube-gourmet.vercel.app" // Adicione o seu domínio oficial aqui
+        "https://clube-gourmet.vercel.app",
+        "https://clubempar.com.br"
     ],
     advanced: {
         useSecureCookies: process.env.NODE_ENV === "production"
