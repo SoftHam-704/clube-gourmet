@@ -21,6 +21,10 @@ export default function SignUp() {
         const planId = queryParams.get('plan');
 
         setError(null);
+
+        // Ensure no previous session interferes
+        await authClient.signOut();
+
         const { error: signUpError } = await authClient.signUp.email({
             name: data.name,
             email: data.email,

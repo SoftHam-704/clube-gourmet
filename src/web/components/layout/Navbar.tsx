@@ -82,12 +82,20 @@ export function Navbar() {
 
           <div className="hidden md:flex items-center gap-6">
             {!user ? (
-              <Link
-                href="/sign-in"
-                className="bg-white/5 border border-[#c9a961]/20 text-[#d4c5a0] px-8 py-3 font-black text-[10px] tracking-widest uppercase hover:bg-[#c9a961] hover:text-[#0a0a0a] transition-all"
-              >
-                Login
-              </Link>
+              <>
+                <Link
+                  href="/sign-in"
+                  className="text-[#d4c5a0]/60 hover:text-[#c9a961] transition-colors font-bold text-[10px] tracking-widest uppercase"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/plans"
+                  className="bg-[#c9a961] text-[#0a0a0a] px-8 py-3 font-black text-[10px] tracking-widest uppercase hover:glow-gold transition-all"
+                >
+                  Seja Membro
+                </Link>
+              </>
             ) : (
               <Link
                 href="/dashboard"
@@ -119,13 +127,18 @@ export function Navbar() {
             )
           ))}
           {user ? (
-            <Link href="/dashboard" onClick={() => setIsOpen(false)} className="block text-[#c9a961] hover:text-white transition-colors font-black py-4 text-xs tracking-[0.3em] uppercase border-t border-[#c9a961]/20 mt-4 pt-6">
-              Dashboard
+            <Link href="/dashboard" onClick={() => setIsOpen(false)} className="block text-[#c9a961] hover:text-white transition-colors font-black py-4 text-xs tracking-[0.3em] uppercase border-t border-[#c9a961]/20 mt-4 pt-6 text-center">
+              Acessar Dashboard
             </Link>
           ) : (
-            <Link href="/sign-in" onClick={() => setIsOpen(false)} className="block text-[#c9a961] hover:text-white transition-colors font-black py-4 text-xs tracking-[0.3em] uppercase border-t border-[#c9a961]/20 mt-4 pt-6">
-              Login Club
-            </Link>
+            <div className="grid grid-cols-2 gap-4 border-t border-[#c9a961]/20 mt-4 pt-6">
+              <Link href="/sign-in" onClick={() => setIsOpen(false)} className="block text-[#d4c5a0] hover:text-[#c9a961] transition-colors font-black py-4 text-[10px] tracking-[0.3em] uppercase text-center border border-[#c9a961]/20">
+                Login
+              </Link>
+              <Link href="/plans" onClick={() => setIsOpen(false)} className="block bg-[#c9a961] text-[#0a0a0a] font-black py-4 text-[10px] tracking-[0.3em] uppercase text-center">
+                Seja Membro
+              </Link>
+            </div>
           )}
         </div>
       </div>
