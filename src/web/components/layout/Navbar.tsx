@@ -89,12 +89,6 @@ export function Navbar() {
                 >
                   Login
                 </Link>
-                <Link
-                  href="/plans"
-                  className="bg-[#c9a961] text-[#0a0a0a] px-8 py-3 font-black text-[10px] tracking-widest uppercase hover:glow-gold transition-all"
-                >
-                  Seja Membro
-                </Link>
               </>
             ) : (
               <Link
@@ -131,12 +125,9 @@ export function Navbar() {
               Acessar Dashboard
             </Link>
           ) : (
-            <div className="grid grid-cols-2 gap-4 border-t border-[#c9a961]/20 mt-4 pt-6">
-              <Link href="/sign-in" onClick={() => setIsOpen(false)} className="block text-[#d4c5a0] hover:text-[#c9a961] transition-colors font-black py-4 text-[10px] tracking-[0.3em] uppercase text-center border border-[#c9a961]/20">
+            <div className="border-t border-[#c9a961]/20 mt-4 pt-6 flex justify-center">
+              <Link href="/sign-in" onClick={() => setIsOpen(false)} className="block text-[#d4c5a0] hover:text-[#c9a961] transition-colors font-black py-4 text-[10px] tracking-[0.3em] uppercase text-center w-full border border-[#c9a961]/20">
                 Login
-              </Link>
-              <Link href="/plans" onClick={() => setIsOpen(false)} className="block bg-[#c9a961] text-[#0a0a0a] font-black py-4 text-[10px] tracking-[0.3em] uppercase text-center">
-                Seja Membro
               </Link>
             </div>
           )}
