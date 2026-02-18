@@ -1,1 +1,15 @@
-{"id":"7fmz0ovt4cf3zmeqbermkwhd7pxahhg8","name":"My Website","description":"A website built with Runable","url":"https://example.com","ogImage":"/og-image.png","favicon":"/vite.svg","twitter":{"card":"summary_large_image","site":"@runable"},"themeColor":"#000000","previewPort":8753,"previewUrl":"https://8753-imkavkuv6pbdrrli8f6xk.e2b.app"}
+{
+    "id": "7fmz0ovt4cf3zmeqbermkwhd7pxahhg8",
+    "name": "Club Empar",
+    "description": "Clube de benefícios gastronômicos de elite.",
+    "url": "https://clubempar.com.br",
+    "ogImage": "/og-image.png",
+    "favicon": "/favicon.png",
+    "twitter": {
+        "card": "summary_large_image",
+        "site": "@clubempar"
+    },
+    "themeColor": "#c9a961",
+    "previewPort": 8753,
+    "previewUrl": "https://8753-imkavkuv6pbdrrli8f6xk.e2b.app"
+}
