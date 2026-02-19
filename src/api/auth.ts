@@ -25,7 +25,8 @@ export const auth = betterAuth({
         process.env.BETTER_AUTH_URL || "",
         "http://localhost:5173",
         "https://clube-gourmet.vercel.app",
-        "https://clubempar.com.br"
+        "https://clubempar.com.br",
+        "https://www.clubempar.com.br"
     ],
     advanced: {
         useSecureCookies: process.env.NODE_ENV === "production"

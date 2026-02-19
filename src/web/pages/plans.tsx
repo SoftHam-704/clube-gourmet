@@ -80,7 +80,7 @@ function PlanCard({ plan }: { plan: any }) {
         <h3 className={`font-display text-2xl font-black tracking-tight ${isPopular ? "text-[#c9a961]" : "text-white"}`}>
           {plan.name}
         </h3>
-        <p className="text-[#d4c5a0]/40 text-sm leading-relaxed font-light italic mt-2">"{plan.description}"</p>
+
       </div>
 
       <div className="mb-10 lg:text-left">

@@ -22,7 +22,7 @@ const BENEFITS = [
   },
   {
     title: "Se Paga Rapidinho",
-    description: "Um jantar fora já cobre sua assinatura anual. Todo o resto é economia pura.",
+    description: "Uma única experiência já paga a sua assinatura. O resto é vantagem.",
     stat: "1x",
     statLabel: "visita",
   },
@@ -315,8 +315,10 @@ function HowItWorksSection() {
             Quatro Passos para<br />
             <span className="text-gradient-gold animate-gradient">Economizar</span>
           </h2>
-          <p className="text-[#d4c5a0]/70 text-xl font-light max-w-2xl mx-auto">
-            Da assinatura à primeira experiência gastronômica em poucos minutos. Simples, rápido e exclusivo.
+          <p className="text-[#d4c5a0]/70 text-lg font-light max-w-3xl mx-auto leading-relaxed">
+            O Club Empar foi criado para oferecer vantagens reais, exclusivas e acessíveis aos seus membros.
+            <br className="hidden sm:block" />
+            Ao fazer parte do clube, você passa a ter acesso a benefícios cuidadosamente selecionados, pensados para gerar economia, praticidade e experiências diferenciadas.
           </p>
         </div>
 
