@@ -26,12 +26,33 @@ const Icons = {
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [location] = useLocation();
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
+    let lastScroll = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      setScrolled(currentScrollY > 20);
+
+      // Smart Navbar logic: hide on scroll down, show on scroll up
+      if (currentScrollY > 150) {
+        if (currentScrollY > lastScroll && !isOpen) {
+          setHidden(true);
+        } else {
+          setHidden(false);
+        }
+      } else {
+        setHidden(false);
+      }
+
+      lastScroll = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     // Check session
     authClient.getSession().then(session => {
@@ -39,10 +60,10 @@ export function Navbar() {
     });
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isOpen]);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "glass border-b border-[#c9a961]/20 py-2" : "bg-transparent py-4"}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${hidden ? "-translate-y-full" : "translate-y-0"} ${scrolled ? "bg-[#0a0a0a] border-b border-[#c9a961]/20 py-2 shadow-2xl" : "bg-transparent py-4"}`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className={`flex items-center justify-between transition-all duration-500 ${scrolled ? "min-h-[140px]" : "min-h-[240px]"}`}>
           <Link href="/" className="flex items-center group py-2">
