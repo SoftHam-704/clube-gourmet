@@ -9,8 +9,8 @@ const BENEFITS = [
     statLabel: "economia",
   },
   {
-    title: "Restaurantes Top",
-    description: "Seleção curada dos melhores restaurantes da sua cidade. Só os melhores entram.",
+    title: "Restaurantes Selecionados",
+    description: "Acesso a restaurantes selecionados, oferecendo experiências gastronômicas onde qualidade e benefícios exclusivos se encontram.",
     stat: "500+",
     statLabel: "parceiros",
   },
