@@ -85,12 +85,12 @@ export default function Faq() {
             // SUPORTE AO MEMBRO
                     </span>
 
-                    <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-extrabold text-white leading-[0.85] tracking-tighter mb-12 uppercase">
+                    <h1 className="font-heading text-5xl sm:text-6xl lg:text-8xl font-black text-white leading-[0.85] tracking-tighter mb-12 uppercase">
                         Centro de<br />
                         <span className="text-gradient-gold animate-gradient">Respostas.</span>
                     </h1>
 
-                    <p className="text-[#d4c5a0]/70 text-2xl lg:text-3xl font-light leading-relaxed italic font-display">
+                    <p className="text-[#d4c5a0]/70 text-2xl lg:text-3xl font-light leading-relaxed italic font-heading">
                         Tudo o que você precisa entender para elevar sua experiência gastronômica ao próximo nível.
                     </p>
                 </div>
@@ -136,7 +136,7 @@ export default function Faq() {
 
                     <div className="flex-1 space-y-6">
                         <div className="mb-10">
-                            <h2 className="text-white font-display text-4xl font-black uppercase tracking-tight">
+                            <h2 className="text-white font-heading text-4xl font-black uppercase tracking-tight">
                                 Perguntas sobre {FAQ_CATEGORIES.find(c => c.id === activeCategory)?.name}
                             </h2>
                         </div>
@@ -176,7 +176,7 @@ export default function Faq() {
 
             <section className="py-24 bg-[#0a0a0a] border-y border-[#c9a961]/10 text-center">
                 <div className="max-w-4xl mx-auto px-6 lg:px-8">
-                    <h3 className="text-white font-display text-4xl font-black uppercase mb-8 tracking-tighter">Precisa de suporte agora?</h3>
+                    <h3 className="text-white font-heading text-4xl font-black uppercase mb-8 tracking-tighter">Precisa de suporte agora?</h3>
                     <a href="/contact" className="px-16 py-6 bg-[#c9a961] text-[#0a0a0a] font-black text-xs tracking-[0.4em] uppercase hover:glow-green transition-all shadow-2xl">
                         Falar com Suporte
                     </a>

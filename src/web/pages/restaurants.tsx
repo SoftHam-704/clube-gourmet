@@ -113,7 +113,7 @@ export default function Restaurants() {
 
 
   return (
-    <div className="bg-[#0a0a0a] min-h-screen text-white selection:bg-[#c9a961] selection:text-[#0a0a0a]">
+    <div className="bg-[#090d0b] min-h-screen text-white selection:bg-[#c9a961] selection:text-[#0a0a0a] font-body">
       <Navbar />
 
       {/* Hero Header */}
@@ -124,12 +124,12 @@ export default function Restaurants() {
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12">
             <div className="max-w-3xl">
-              <span className="text-[#c9a961] font-mono text-sm tracking-[0.6em] uppercase mb-10 block animate-pulse">
+              <span className="text-[#c9a961] font-mono text-xs tracking-[0.5em] uppercase mb-8 block">
                 // Onde a Experiência Começa
               </span>
-              <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-extrabold leading-[0.85] tracking-tighter mb-8 italic lg:not-italic">
+              <h1 className="font-display text-6xl sm:text-7xl lg:text-9xl font-light leading-[0.85] tracking-tight mb-8">
                 Curadoria de<br />
-                <span className="text-gradient-gold animate-gradient">Elite.</span>
+                <span className="italic text-[#c9a961]">Elite.</span>
               </h1>
               <p className="text-[#d4c5a0]/60 text-xl font-light max-w-xl leading-relaxed">
                 Navegue por um ecossistema seletivo de gastronomia. Onde cada parceiro é uma promessa de excelência.
@@ -224,7 +224,7 @@ export default function Restaurants() {
                       alt={res.name}
                       className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent opacity-60" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#090d0b] via-transparent to-transparent opacity-60" />
 
                     {/* Floating Info */}
                     <div className="absolute top-6 right-6 bg-[#0a0a0a]/80 backdrop-blur-md border border-[#c9a961]/20 px-3 py-1 flex items-center gap-2">
@@ -236,7 +236,7 @@ export default function Restaurants() {
                       <span className="inline-block bg-[#c9a961] text-[#0a0a0a] px-3 py-1 text-[9px] font-black tracking-widest uppercase mb-4">
                         {res.cuisine}
                       </span>
-                      <h3 className="text-white font-display text-3xl font-black uppercase tracking-tighter leading-none group-hover:text-gradient-gold transition-all">
+                      <h3 className="text-white font-display text-3xl leading-none group-hover:text-[#c9a961] transition-all">
                         {res.name}
                       </h3>
                     </div>
@@ -272,7 +272,7 @@ export default function Restaurants() {
           ) : (
             <div className="py-40 text-center space-y-8">
               <div className="text-[#c9a961] text-6xl animate-bounce">🍽️</div>
-              <h2 className="text-4xl font-display font-black uppercase tracking-widest text-[#d4c5a0]">Nenhum local encontrado</h2>
+              <h2 className="text-4xl font-display uppercase tracking-widest text-[#d4c5a0]">Nenhum local encontrado</h2>
               <p className="text-[#d4c5a0]/40 max-w-sm mx-auto italic">Refine sua curadoria para encontrar o extraordinário.</p>
               <button
                 onClick={() => {
@@ -290,14 +290,14 @@ export default function Restaurants() {
       </section>
 
       {/* Promotion Banner */}
-      <section className="py-24 bg-[#1a4d2e] relative overflow-hidden">
-        <div className="absolute inset-0 grid-bg opacity-10" />
+      <section className="py-32 bg-[#0a0a0a] border-t border-[#c9a961]/10 relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[#c9a961]/5 blur-[200px] pointer-events-none" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative text-center">
-          <h2 className="text-white font-display text-4xl lg:text-6xl font-black uppercase tracking-tighter mb-8 max-w-4xl mx-auto">
+          <h2 className="text-white font-display text-4xl lg:text-7xl font-light mb-8 max-w-4xl mx-auto">
             Não encontrou seu restaurante favorito?<br />
-            <span className="text-gradient-gold">Sugira um novo parceiro.</span>
+            <span className="italic text-[#c9a961]">Sugira um novo parceiro.</span>
           </h2>
-          <button className="px-12 py-6 bg-white text-[#0a0a0a] font-black text-xs tracking-[0.5em] uppercase hover:glow-green hover:-translate-y-2 transition-all">
+          <button className="px-12 py-6 bg-[#c9a961] text-[#090d0b] font-bold text-xs tracking-[0.3em] uppercase hover:bg-white hover:-translate-y-1 transition-all shadow-xl">
             Fazer Indicação
           </button>
         </div>

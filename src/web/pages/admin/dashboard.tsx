@@ -97,7 +97,7 @@ export default function AdminDashboard() {
                 {/* Recent Members */}
                 <div className="bg-[#0a0a0a]/60 backdrop-blur-2xl border border-[#c9a961]/10 overflow-hidden">
                     <div className="p-8 border-b border-[#c9a961]/10 flex justify-between items-center">
-                        <h3 className="font-display text-lg font-black tracking-tight uppercase">Membros Recentes</h3>
+                        <h3 className="font-heading text-lg font-black tracking-tight uppercase">Membros Recentes</h3>
                         <button className="text-[#c9a961] font-mono text-[9px] font-black tracking-widest uppercase hover:underline">Ver Todos</button>
                     </div>
                     <div className="p-0">
@@ -129,7 +129,7 @@ export default function AdminDashboard() {
 
                 {/* System Health / Logs */}
                 <div className="bg-[#0a0a0a]/60 backdrop-blur-2xl border border-[#c9a961]/10 p-8 relative overflow-hidden h-full">
-                    <h3 className="font-display text-lg font-black tracking-tight uppercase mb-8">Estado do Sistema</h3>
+                    <h3 className="font-heading text-lg font-black tracking-tight uppercase mb-8">Estado do Sistema</h3>
                     <div className="space-y-6">
                         <div className="flex flex-col gap-2">
                             <div className="flex justify-between items-center text-[10px] font-black tracking-widest uppercase">

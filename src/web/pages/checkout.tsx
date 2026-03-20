@@ -85,7 +85,7 @@ export default function Checkout() {
                             <span className="text-[#c9a961] font-mono text-[10px] tracking-[0.5em] uppercase mb-4 block">
                                 // Finalizar Assinatura
                             </span>
-                            <h1 className="font-display text-4xl font-black uppercase tracking-tighter">
+                            <h1 className="font-heading text-4xl font-black uppercase tracking-tighter">
                                 Resumo do <span className="text-gradient-gold">Pedido</span>
                             </h1>
                         </div>

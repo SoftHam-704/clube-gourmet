@@ -1,7 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
+import { motion, useScroll, useTransform } from "framer-motion";
+import heroImg from "../../assets/hero-bg.jpg"; // Using for the immersion effect
 import { Navbar } from "../components/layout/Navbar";
 import { Footer } from "../components/layout/Footer";
+import { 
+  FaCcVisa, 
+  FaCcMastercard, 
+  FaCcAmex, 
+  FaCreditCard 
+} from "react-icons/fa";
+import { 
+  SiApplepay, 
+  SiGooglepay, 
+  SiPix 
+} from "react-icons/si";
 
 const Icons = {
   check: (
@@ -11,7 +24,7 @@ const Icons = {
   ),
   chevronDown: (
     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="square" d="M19 9l-7 7-7-7" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
     </svg>
   ),
   shield: (
@@ -31,16 +44,25 @@ const Icons = {
   )
 };
 
-const FAQS = [
-  {
-    question: "Como funciona a oferta 2 por 1?",
-    answer: "Ao jantar em qualquer restaurante parceiro, peça dois pratos principais e pague apenas um. O prato de menor valor é cortesia.",
-  },
-  {
-    question: "Posso usar em qualquer restaurante parceiro?",
-    answer: "Sim! Sua assinatura funciona em todos os 500+ restaurantes parceiros brasileiros.",
-  }
-];
+const PaymentBrands = () => (
+  <div className="flex items-center gap-20 text-[#c9a961]/30 font-body text-xs tracking-[0.3em] uppercase font-bold">
+    <div className="flex items-center gap-5"><FaCcVisa className="w-8 h-8" /><span>VISA</span></div>
+    <span className="text-[#c9a961]/40 text-lg">◆</span>
+    <div className="flex items-center gap-5"><FaCcMastercard className="w-8 h-8" /><span>MASTERCARD</span></div>
+    <span className="text-[#c9a961]/40 text-lg">◆</span>
+    <div className="flex items-center gap-5"><SiPix className="w-7 h-7" /><span>PIX</span></div>
+    <span className="text-[#c9a961]/40 text-lg">◆</span>
+    <div className="flex items-center gap-5"><FaCcAmex className="w-8 h-8" /><span>AMEX</span></div>
+    <span className="text-[#c9a961]/40 text-lg">◆</span>
+    <div className="flex items-center gap-5"><SiApplepay className="w-10 h-10" /><span>APPLE PAY</span></div>
+    <span className="text-[#c9a961]/40 text-lg">◆</span>
+    <div className="flex items-center gap-5"><SiGooglepay className="w-10 h-10" /><span>GOOGLE PAY</span></div>
+    <span className="text-[#c9a961]/40 text-lg">◆</span>
+    <div className="flex items-center gap-3 border border-current px-3 py-1 rounded scale-90"><span>ELO</span></div>
+    <span className="text-[#c9a961]/40 text-lg">◆</span>
+    <div className="flex items-center gap-3 border border-current px-3 py-1 rounded scale-90"><span>HIPER</span></div>
+  </div>
+);
 
 const DEFAULT_BENEFITS = [
   "Experiência 2 por 1 ilimitada",
@@ -77,10 +99,12 @@ function PlanCard({ plan }: { plan: any }) {
       )}
 
       <div className="mb-10 lg:text-left">
-        <h3 className={`font-display text-2xl font-black tracking-tight ${isPopular ? "text-[#c9a961]" : "text-white"}`}>
+        <h3 className={`font-display text-3xl font-light tracking-tight ${isPopular ? "text-[#c9a961]" : "text-white"}`}>
           {plan.name}
         </h3>
-
+        {plan.description && (
+          <p className="text-[#d4c5a0]/40 text-sm mt-2 font-body italic">{plan.description}</p>
+        )}
       </div>
 
       <div className="mb-10 lg:text-left">
@@ -129,7 +153,19 @@ function PlanCard({ plan }: { plan: any }) {
 
 export default function Plans() {
   const [activeTab, setActiveTab] = useState<"individual" | "family">("individual");
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  // Hero Image Scale: 1 to 1.15
+  const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 1.15]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0.3]);
+  
+  // Parallax Text Animation: moves 150px to the left
+  const x = useTransform(scrollYProgress, [0, 1], [0, -250]);
 
   const fallbackPlans = [
     { id: "mensal", name: "Plano Mensal", description: "Experimente a elite", price: 49.90, type: "individual", active: true },
@@ -167,52 +203,98 @@ export default function Plans() {
   });
 
   return (
-    <div className="bg-[#1a4d2e] min-h-screen selection:bg-[#c9a961] selection:text-[#0a0a0a]">
+    <div ref={containerRef} className="bg-[#090d0b] min-h-screen selection:bg-[#c9a961] selection:text-[#0a0a0a] overflow-x-hidden">
       <Navbar />
 
-      <section className="pt-56 pb-24 bg-[#0a0a0a] relative overflow-hidden">
-        <div className="absolute inset-0 grid-bg opacity-10" />
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <span className="text-[#c9a961] font-mono text-sm tracking-[0.6em] uppercase mb-10 block animate-pulse">// INVISTA EM MOMENTOS MEMORÁVEIS</span>
-          <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-extrabold text-white leading-[0.85] tracking-tighter mb-12">
-            Escolha o Plano<br />
-            <span className="text-gradient-gold animate-gradient">Ideal para Você</span>
-          </h1>
-          <p className="text-[#d4c5a0]/70 text-2xl lg:text-3xl font-light max-w-3xl mx-auto italic mb-20 font-display">
-            Planos exclusivos para quem aprecia o extraordinário. Aproveite o melhor da gastronomia investindo de forma inteligente.
-          </p>
+      <section className="pt-64 pb-32 bg-[#090d0b] relative overflow-hidden min-h-[90svh] flex items-center">
+        {/* Immersive Background Image with Scroll Scale */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <motion.img 
+            src={heroImg} 
+            alt="Ambiente de restaurante sofisticado"
+            style={{ scale: heroScale, opacity: heroOpacity }}
+            className="w-full h-full object-cover transition-opacity duration-1000"
+          />
+          {/* Layered overlays to match landing page look */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#090d0b] via-[#090d0b]/80 to-[#090d0b] z-10" />
+          <div className="absolute inset-x-0 bottom-0 h-96 bg-gradient-to-t from-[#090d0b] to-transparent z-10" />
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 max-w-4xl mx-auto bg-[#0a0a0a]/60 backdrop-blur-3xl border border-[#c9a961]/20">
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 text-center z-20">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className="text-[#c9a961] font-body text-xs tracking-[0.6em] uppercase mb-10 block animate-pulse font-bold">// INVISTA EM MOMENTOS MEMORÁVEIS</span>
+            <h1 className="font-display text-7xl sm:text-8xl lg:text-[10rem] font-light text-white leading-[0.85] tracking-tight mb-12">
+              Escolha o Plano<br />
+              <span className="text-gradient-gold italic">Ideal para Você</span>
+            </h1>
+            <p className="text-[#d4c5a0]/70 text-2xl lg:text-3xl font-light max-w-3xl mx-auto italic mb-20 font-display">
+              Planos exclusivos para quem aprecia o extraordinário. Aproveite o melhor da gastronomia investindo de forma inteligente.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-3 gap-0 max-w-4xl mx-auto bg-[#0a0a0a]/60 backdrop-blur-3xl border border-[#c9a961]/20"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          >
             <div className="p-10 border-b md:border-b-0 md:border-r border-[#c9a961]/10">
-              <div className="font-mono text-5xl font-black text-[#c9a961] mb-2">15k<span className="text-white/10">+</span></div>
-              <p className="text-[#c9a961]/40 text-[10px] tracking-[0.4em] uppercase font-black">Membros De Elite</p>
+              <div className="font-display text-5xl font-light text-[#c9a961] mb-2 tracking-tighter">15k<span className="text-white/10">+</span></div>
+              <p className="text-[#c9a961]/40 text-[10px] tracking-[0.4em] uppercase font-bold">Membros De Elite</p>
             </div>
             <div className="p-10 border-b md:border-b-0 md:border-r border-[#c9a961]/10">
-              <div className="font-mono text-5xl font-black text-white mb-2">4.9<span className="text-[#c9a961]">★</span></div>
-              <p className="text-[#c9a961]/40 text-[10px] tracking-[0.4em] uppercase font-black">Satisfação Total</p>
+              <div className="font-display text-5xl font-light text-white mb-2 tracking-tighter">4.9<span className="text-[#c9a961]">★</span></div>
+              <p className="text-[#c9a961]/40 text-[10px] tracking-[0.4em] uppercase font-bold">Satisfação Total</p>
             </div>
             <div className="p-10">
-              <div className="font-mono text-5xl font-black text-white mb-2">500<span className="text-white/10">+</span></div>
-              <p className="text-[#c9a961]/40 text-[10px] tracking-[0.4em] uppercase font-black">Restaurantes Parceiros</p>
+              <div className="font-display text-5xl font-light text-white mb-2 tracking-tighter">500<span className="text-white/10">+</span></div>
+              <p className="text-[#c9a961]/40 text-[10px] tracking-[0.4em] uppercase font-bold">Restaurantes Parceiros</p>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      <section id="selection-section" className="py-32 bg-[#1a4d2e] relative overflow-hidden">
-        <div className="absolute inset-0 grid-bg opacity-20" />
+      <section id="selection-section" className="py-32 bg-[#090d0b] relative overflow-hidden">
+        {/* Floating Horizontal Parallax Text */}
+        <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[200%] pointer-events-none opacity-[0.015] whitespace-nowrap z-0 overflow-hidden">
+          <motion.span 
+            style={{ x }} 
+            className="text-[25rem] font-display font-bold text-white tracking-widest block"
+          >
+            EXCLUSIVIDADE • GASTRONOMIA • EXPERIÊNCIA • ELITE • MOMENTOS
+          </motion.span>
+        </div>
+
+        {/* Layered background visual */}
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a961]/20 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(201,169,97,0.05),transparent_50%)]" />
+
         <div className="max-w-[1440px] mx-auto px-6 lg:px-8 relative">
           <div className="flex flex-col items-center mb-28">
-            <span className="text-[#c9a961] font-mono text-[11px] tracking-[0.4em] uppercase mb-12 opacity-60 font-black">Seleção De Categoria</span>
-            <div className="flex p-3 bg-[#0a0a0a]/60 backdrop-blur-3xl border border-[#c9a961]/30">
-              <button onClick={() => setActiveTab("individual")} className={`px-12 py-4 font-black text-[10px] tracking-[0.4em] uppercase transition-all duration-700 ${activeTab === "individual" ? "bg-[#c9a961] text-[#0a0a0a]" : "text-white/30 hover:text-white"}`}>Individual</button>
-              <button onClick={() => setActiveTab("family")} className={`px-12 py-4 font-black text-[10px] tracking-[0.4em] uppercase transition-all duration-700 ${activeTab === "family" ? "bg-[#c9a961] text-[#0a0a0a]" : "text-white/30 hover:text-white"}`}>Plano Família</button>
+            <span className="text-[#c9a961] font-body text-[11px] tracking-[0.4em] uppercase mb-12 opacity-60 font-bold">Sua Categoria</span>
+            <div className="flex p-2 bg-[#0a0a0a]/80 backdrop-blur-3xl border border-[#c9a961]/30 rounded-full">
+              <button 
+                onClick={() => setActiveTab("individual")} 
+                className={`px-10 py-3 rounded-full font-bold text-[10px] tracking-[0.2em] uppercase transition-all duration-500 ${activeTab === "individual" ? "bg-[#c9a961] text-[#0a0a0a] shadow-lg shadow-[#c9a961]/20" : "text-white/40 hover:text-white"}`}
+              >
+                Individual
+              </button>
+              <button 
+                onClick={() => setActiveTab("family")} 
+                className={`px-10 py-3 rounded-full font-bold text-[10px] tracking-[0.2em] uppercase transition-all duration-500 ${activeTab === "family" ? "bg-[#c9a961] text-[#0a0a0a] shadow-lg shadow-[#c9a961]/20" : "text-white/40 hover:text-white"}`}
+              >
+                Plano Família
+              </button>
             </div>
             <div className="mt-20 text-center max-w-2xl">
-              <h2 className="font-display text-4xl lg:text-7xl font-black text-white tracking-tighter mb-6 uppercase">
+              <h2 className="font-display text-5xl lg:text-7xl font-light text-white tracking-tight mb-6">
                 {activeTab === "individual" ? "Experiência Singular" : "Privilégio Família"}
               </h2>
-              <p className="text-[#d4c5a0]/50 text-xl font-light italic leading-relaxed">
+              <p className="text-[#d4c5a0]/50 text-xl font-light italic leading-relaxed font-body">
                 {activeTab === "individual"
                   ? "Para o apreciador que valoriza a independência e o acesso às melhores mesas do país."
                   : "A sofisticação de jantar fora, agora como um privilégio compartilhado com quem você ama."}
@@ -230,39 +312,80 @@ export default function Plans() {
         </div>
       </section>
 
-      <section className="py-20 bg-[#0a0a0a] border-y border-[#c9a961]/10">
+      {/* Section 1: Trust & Security Guarantee */}
+      <section className="py-28 bg-[#0a0a0a] border-y border-[#c9a961]/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-12 items-center text-center font-mono">
+          <div className="grid md:grid-cols-3 gap-16 items-center text-center font-body">
             <div className="flex flex-col items-center gap-6 group">
-              <div className="w-16 h-16 border border-[#c9a961]/20 flex items-center justify-center">{Icons.shield}</div>
-              <p className="text-[10px] tracking-[0.3em] text-[#d4c5a0]/40 uppercase font-black">Pagamento Seguro</p>
+              <div className="w-16 h-16 border border-[#c9a961]/20 flex items-center justify-center transition-colors group-hover:border-[#c9a961] bg-[#c9a961]/5">
+                {Icons.shield}
+              </div>
+              <div>
+                <p className="text-[11px] tracking-[0.3em] text-white uppercase font-bold mb-2">Pagamento Seguro</p>
+                <p className="text-[10px] text-[#d4c5a0]/40 uppercase tracking-widest font-light">Criptografia de ponta a ponta</p>
+              </div>
             </div>
             <div className="flex flex-col items-center gap-6 group">
-              <div className="w-16 h-16 border border-[#c9a961]/20 flex items-center justify-center">{Icons.creditCard}</div>
-              <p className="text-[10px] tracking-[0.3em] text-[#d4c5a0]/40 uppercase font-black">Todas Bandeiras</p>
+              <div className="w-16 h-16 border border-[#c9a961]/20 flex items-center justify-center transition-colors group-hover:border-[#c9a961] bg-[#c9a961]/5">
+                {Icons.creditCard}
+              </div>
+              <div>
+                <p className="text-[11px] tracking-[0.3em] text-white uppercase font-bold mb-2">Todas Bandeiras</p>
+                <p className="text-[10px] text-[#d4c5a0]/40 uppercase tracking-widest font-light">Crédito, Débito e PIX</p>
+              </div>
             </div>
             <div className="flex flex-col items-center gap-6 group">
-              <div className="w-16 h-16 border border-[#c9a961]/20 flex items-center justify-center">{Icons.refresh}</div>
-              <p className="text-[10px] tracking-[0.3em] text-[#d4c5a0]/40 uppercase font-black">Cancelamento Simples</p>
+              <div className="w-16 h-16 border border-[#c9a961]/20 flex items-center justify-center transition-colors group-hover:border-[#c9a961] bg-[#c9a961]/5">
+                {Icons.refresh}
+              </div>
+              <div>
+                <p className="text-[11px] tracking-[0.3em] text-white uppercase font-bold mb-2">Cancelamento Simples</p>
+                <p className="text-[10px] text-[#d4c5a0]/40 uppercase tracking-widest font-light">Sem multas ou carência</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-32 bg-[#1a4d2e] relative overflow-hidden">
+      {/* Section 2: Payment Brands Infinite Scroller */}
+      <section className="py-20 bg-[#090d0b] border-y border-[#c9a961]/15 overflow-hidden">
+        <div className="relative flex w-full overflow-hidden">
+          <motion.div 
+            className="flex whitespace-nowrap"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ 
+              duration: 35, 
+              repeat: Infinity, 
+              ease: "linear" 
+            }}
+          >
+            <div className="flex items-center gap-20 px-10">
+              <PaymentBrands />
+              <span className="text-[#c9a961]/30 text-lg">◆</span>
+              <PaymentBrands />
+              <span className="text-[#c9a961]/30 text-lg">◆</span>
+            </div>
+          </motion.div>
+          {/* Faded edges - Matching the main background color #090d0b */}
+          <div className="absolute inset-y-0 left-0 w-64 bg-gradient-to-r from-[#090d0b] via-[#090d0b]/40 to-transparent z-10" />
+          <div className="absolute inset-y-0 right-0 w-64 bg-gradient-to-l from-[#090d0b] via-[#090d0b]/40 to-transparent z-10" />
+        </div>
+      </section>
+
+      <section className="py-32 bg-[#090d0b] relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 relative text-center">
-          <h2 className="font-display text-6xl lg:text-9xl font-black text-white leading-[0.8] tracking-tighter mb-12 uppercase">
+          <h2 className="font-display text-7xl lg:text-[10rem] font-light text-white leading-[0.8] tracking-tight mb-16">
             Sua Mesa Está<br />
-            <span className="text-gradient-gold animate-gradient">Pronta.</span>
+            <span className="text-gradient-gold italic">Pronta.</span>
           </h2>
           <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
             <button
               onClick={() => document.getElementById('selection-section')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-16 py-7 bg-[#c9a961] text-[#0a0a0a] font-black text-sm tracking-[0.4em] uppercase hover:glow-green transition-all shadow-2xl"
+              className="px-16 py-7 bg-[#c9a961] text-[#0a0a0a] font-bold text-sm tracking-[0.4em] uppercase hover:glow-gold transition-all shadow-2xl"
             >
               Assinar Agora
             </button>
-            <Link href="/" className="px-16 py-7 border-2 border-[#c9a961]/30 text-[#c9a961] font-black text-sm tracking-[0.4em] uppercase hover:bg-[#c9a961]/10 transition-all">Ver Destaques</Link>
+            <Link href="/" className="px-16 py-7 border border-[#c9a961]/30 text-[#c9a961] font-bold text-sm tracking-[0.4em] uppercase hover:bg-[#c9a961]/10 transition-all">Ver Destaques</Link>
           </div>
         </div>
       </section>

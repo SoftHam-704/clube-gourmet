@@ -43,7 +43,7 @@ export const AdminLayout = ({ children, title }: AdminLayoutProps) => {
                 <div className="p-10 border-b border-[#c9a961]/10 relative group">
                     <Link href="/">
                         <div className="flex flex-col gap-1 cursor-pointer">
-                            <span className="text-[#c9a961] font-display text-2xl font-black tracking-tighter">CLUB EMPAR</span>
+                            <span className="text-[#c9a961] font-heading text-2xl font-black tracking-tighter">CLUB EMPAR</span>
                             <span className="text-[#c9a961]/40 font-mono text-[8px] tracking-[0.5em] uppercase font-black">Admin Console</span>
                         </div>
                     </Link>
@@ -98,7 +98,7 @@ export const AdminLayout = ({ children, title }: AdminLayoutProps) => {
                 <header className="h-24 border-b border-[#c9a961]/10 bg-[#0a0a0a]/40 backdrop-blur-3xl flex items-center px-12 justify-between relative z-10">
                     <div className="flex flex-col">
                         <span className="text-[#c9a961] font-mono text-[8px] tracking-[0.5em] uppercase font-black mb-1">Navigation / {title}</span>
-                        <h1 className="font-display text-2xl font-black tracking-tighter uppercase">{title}</h1>
+                        <h1 className="font-heading text-2xl font-black tracking-tighter uppercase">{title}</h1>
                     </div>
 
                     <div className="flex items-center gap-8">

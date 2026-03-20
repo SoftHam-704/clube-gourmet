@@ -42,7 +42,7 @@ export default function AdminLogin() {
                     <div className="flex flex-col items-center mb-10 text-center">
                         <Link href="/">
                             <div className="cursor-pointer group mb-4">
-                                <h1 className="text-[#c9a961] font-display text-3xl font-black tracking-tighter transition-transform group-hover:scale-105">CLUB EMPAR</h1>
+                                <h1 className="text-[#c9a961] font-heading text-3xl font-black tracking-tighter transition-transform group-hover:scale-105">CLUB EMPAR</h1>
                                 <div className="h-[2px] w-0 bg-[#c9a961] group-hover:w-full transition-all duration-500 mx-auto" />
                             </div>
                         </Link>

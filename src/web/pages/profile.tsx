@@ -76,7 +76,7 @@ export default function Profile() {
                             <span className="text-[#c9a961] font-mono text-[10px] tracking-[0.5em] uppercase mb-4 block animate-pulse">
                                 // Identidade Gourmet
                             </span>
-                            <h1 className="font-display text-4xl font-black uppercase tracking-tighter">
+                            <h1 className="font-heading text-4xl font-black uppercase tracking-tighter">
                                 Meu <span className="text-gradient-gold">Perfil</span>
                             </h1>
                         </div>
@@ -93,7 +93,7 @@ export default function Profile() {
                                     {formData.image ? (
                                         <img src={formData.image} alt="Avatar" className="w-full h-full object-cover" />
                                     ) : (
-                                        <span className="text-4xl font-display font-black text-[#c9a961]">{formData.name[0]}</span>
+                                        <span className="text-4xl font-heading font-black text-[#c9a961]">{formData.name[0]}</span>
                                     )}
                                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/avatar:opacity-100 flex items-center justify-center transition-all cursor-pointer">
                                         <span className="text-[8px] font-mono uppercase tracking-widest text-white">Alterar</span>

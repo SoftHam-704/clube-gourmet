@@ -107,7 +107,7 @@ export default function Dashboard() {
                             <span className="text-[#c9a961] font-mono text-[10px] tracking-[0.5em] uppercase mb-4 block animate-pulse">
                                 // Bem-vindo ao Clube
                             </span>
-                            <h1 className="font-display text-5xl md:text-7xl font-black uppercase tracking-tighter mb-4">
+                            <h1 className="font-heading text-5xl md:text-7xl font-black uppercase tracking-tighter mb-4">
                                 {data.user.name.split(' ')[0]} <span className="text-gradient-gold">Gourmet.</span>
                             </h1>
                             <div className="flex items-center gap-4 text-[#d4c5a0]/40 font-mono text-[10px] uppercase tracking-widest">
@@ -147,7 +147,7 @@ export default function Dashboard() {
                         {/* QR Code Section */}
                         <div className="bg-[#111] border border-[#c9a961]/30 p-10 relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-24 h-24 bg-[#c9a961]/5 blur-3xl -translate-y-12 translate-x-12" />
-                            <h3 className="font-display text-xl font-black uppercase tracking-tighter text-[#c9a961] mb-8">
+                            <h3 className="font-heading text-xl font-black uppercase tracking-tighter text-[#c9a961] mb-8">
                                 Próximo Resgate
                             </h3>
 
@@ -190,7 +190,7 @@ export default function Dashboard() {
 
                         {/* Subscription Management */}
                         <div className="bg-[#111] border border-[#c9a961]/10 p-10">
-                            <h3 className="font-display text-lg font-black uppercase tracking-tighter text-white mb-6">Assinatura</h3>
+                            <h3 className="font-heading text-lg font-black uppercase tracking-tighter text-white mb-6">Assinatura</h3>
                             {data.user.subscription ? (
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center py-3 border-b border-white/5">
@@ -225,11 +225,11 @@ export default function Dashboard() {
                         {/* Quick Stats Grid */}
                         <div className="grid grid-cols-2 gap-8">
                             <div className="bg-[#111] border border-[#c9a961]/10 p-8">
-                                <div className="text-3xl font-display font-black text-[#c9a961] mb-1">{data.stats.totalResgates}</div>
+                                <div className="text-3xl font-heading font-black text-[#c9a961] mb-1">{data.stats.totalResgates}</div>
                                 <div className="text-[#d4c5a0]/40 font-mono text-[9px] uppercase tracking-[0.2em] font-black">Restaurantes Visitados</div>
                             </div>
                             <div className="bg-[#111] border border-[#c9a961]/10 p-8">
-                                <div className="text-3xl font-display font-black text-[#c9a961] mb-1">Top 5%</div>
+                                <div className="text-3xl font-heading font-black text-[#c9a961] mb-1">Top 5%</div>
                                 <div className="text-[#d4c5a0]/40 font-mono text-[9px] uppercase tracking-[0.2em] font-black">Elite Ranking</div>
                             </div>
                         </div>
@@ -237,7 +237,7 @@ export default function Dashboard() {
                         {/* Recent Activity */}
                         <div className="bg-[#111] border border-[#c9a961]/10 overflow-hidden">
                             <div className="p-8 border-b border-[#c9a961]/10 flex justify-between items-center">
-                                <h3 className="font-display text-xl font-black uppercase tracking-tighter text-white">Atividade Recente</h3>
+                                <h3 className="font-heading text-xl font-black uppercase tracking-tighter text-white">Atividade Recente</h3>
                             </div>
 
                             <div className="p-0">
@@ -272,7 +272,7 @@ export default function Dashboard() {
                         {/* Favorites */}
                         <div className="bg-[#111] border border-[#c9a961]/10 overflow-hidden mt-12">
                             <div className="p-8 border-b border-[#c9a961]/10 flex justify-between items-center">
-                                <h3 className="font-display text-xl font-black uppercase tracking-tighter text-white">Meus Favoritos</h3>
+                                <h3 className="font-heading text-xl font-black uppercase tracking-tighter text-white">Meus Favoritos</h3>
                             </div>
 
                             <div className="p-8">

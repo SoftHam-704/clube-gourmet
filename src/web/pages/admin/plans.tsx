@@ -196,7 +196,7 @@ export default function AdminPlans() {
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
                     <div className="absolute inset-0 bg-black/90 backdrop-blur-xl" onClick={() => setIsModalOpen(false)} />
                     <div className="relative bg-[#111] border border-[#c9a961]/30 p-12 max-w-2xl w-full shadow-[0_0_100px_rgba(0,0,0,0.8)]">
-                        <h2 className="font-display text-4xl font-black text-white tracking-tighter uppercase mb-8">
+                        <h2 className="font-heading text-4xl font-black text-white tracking-tighter uppercase mb-8">
                             {plans.find(p => p.id === editingPlan.id) ? "Editar Plano" : "Novo Plano"}
                         </h2>
 

@@ -37,7 +37,7 @@ export default function Terms() {
                     <span className="text-[#c9a961] font-mono text-sm tracking-[0.6em] uppercase mb-10 block animate-pulse">
                         // LEGAL & COMPLIANCE
                     </span>
-                    <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-extrabold text-white leading-[0.85] tracking-tighter mb-12 uppercase">
+                    <h1 className="font-heading text-5xl sm:text-6xl lg:text-8xl font-black text-white leading-[0.85] tracking-tighter mb-12 uppercase">
                         Termos de<br />
                         <span className="text-gradient-gold animate-gradient">Uso.</span>
                     </h1>
@@ -52,7 +52,7 @@ export default function Terms() {
 
                         {sections.map((section, i) => (
                             <div key={i} className="space-y-6 group">
-                                <h2 className="text-[#c9a961] font-display text-2xl lg:text-3xl font-black uppercase tracking-tight group-hover:text-white transition-colors">
+                                <h2 className="text-[#c9a961] font-heading text-2xl lg:text-3xl font-black uppercase tracking-tight group-hover:text-white transition-colors">
                                     {section.title}
                                 </h2>
                                 <p className="text-[#d4c5a0]/60 leading-relaxed text-lg lg:text-xl font-light italic">

@@ -45,11 +45,11 @@ export default function About() {
                         // NOSSO MANIFESTO
                         </span>
 
-                        <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-extrabold leading-[0.85] tracking-tighter mb-12">
+                        <h1 className="font-heading text-5xl sm:text-6xl lg:text-8xl font-black leading-[0.85] tracking-tighter mb-12">
                             A Arte de<br />
                             <span className="text-gradient-gold animate-gradient">Viver Bem.</span>
                         </h1>
-                        <p className="text-[#d4c5a0]/70 text-2xl lg:text-3xl font-light leading-relaxed italic font-display max-w-3xl">
+                        <p className="text-[#d4c5a0]/70 text-2xl lg:text-3xl font-light leading-relaxed italic font-heading max-w-3xl">
                             Nascemos da convicção de que experiências memoráveis são o verdadeiro luxo. O Club Empar não é apenas um guia, é o seu passe para o extraordinário.
                         </p>
                     </div>
@@ -80,7 +80,7 @@ export default function About() {
                     <div className="grid lg:grid-cols-2 gap-24 items-center">
                         <div className="space-y-10">
                             <span className="text-[#c9a961] font-mono text-xs tracking-[0.4em] uppercase">// O QUE NOS MOVE</span>
-                            <h2 className="font-display text-5xl lg:text-7xl font-black tracking-tighter leading-tight">
+                            <h2 className="font-heading text-5xl lg:text-7xl font-black tracking-tighter leading-tight">
                                 Mais que um Benefício,<br />
                                 <span className="text-gradient-gold animate-gradient">Uma Cultura.</span>
                             </h2>
@@ -114,7 +114,7 @@ export default function About() {
                                 <div className="absolute inset-10 border border-[#c9a961]/10 animate-spin-slow" />
                                 <div className="absolute inset-20 border border-[#c9a961]/5 rotate-45" />
 
-                                <span className="relative font-display text-9xl font-black text-gradient-gold opacity-40 animate-pulse">
+                                <span className="relative font-heading text-9xl font-black text-gradient-gold opacity-40 animate-pulse">
                                     CE
                                 </span>
 
@@ -140,7 +140,7 @@ export default function About() {
                 <div className="absolute inset-0 grid-bg opacity-10" />
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center mb-28">
                     <span className="text-[#c9a961] font-mono text-[11px] tracking-[0.5em] uppercase mb-10 block animate-pulse">// FUNDAMENTOS</span>
-                    <h2 className="font-display text-5xl lg:text-8xl font-black text-white tracking-tighter uppercase whitespace-pre-line">
+                    <h2 className="font-heading text-5xl lg:text-8xl font-black text-white tracking-tighter uppercase whitespace-pre-line">
                         O DNA do<br />
                         <span className="text-gradient-gold animate-gradient">Club Empar</span>
                     </h2>
@@ -154,7 +154,7 @@ export default function About() {
                             <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#c9a961]/20 group-hover:border-[#c9a961] transition-all" />
 
                             <div className="text-4xl mb-8 group-hover:scale-110 transition-transform duration-500 block">{item.icon}</div>
-                            <h3 className="text-2xl font-display font-black mb-6 tracking-widest text-[#c9a961] group-hover:text-white transition-colors">{item.title}</h3>
+                            <h3 className="text-2xl font-heading font-black mb-6 tracking-widest text-[#c9a961] group-hover:text-white transition-colors">{item.title}</h3>
                             <p className="text-[#d4c5a0]/50 text-lg leading-relaxed font-light italic">"{item.desc}"</p>
 
                             {/* Decorative scanline */}
@@ -167,7 +167,7 @@ export default function About() {
             {/* CTA Final */}
             <section className="py-40 bg-[#0a0a0a] relative overflow-hidden text-center">
                 <div className="max-w-4xl mx-auto px-6 lg:px-8">
-                    <h2 className="font-display text-5xl lg:text-7xl font-black text-white tracking-tighter mb-12 uppercase">
+                    <h2 className="font-heading text-5xl lg:text-7xl font-black text-white tracking-tighter mb-12 uppercase">
                         Faça Parte da<br />
                         <span className="text-gradient-gold animate-gradient">Nossa História.</span>
                     </h2>

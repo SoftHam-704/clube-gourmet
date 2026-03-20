@@ -44,7 +44,7 @@ export default function SignIn() {
                             <span className="text-[#c9a961] font-mono text-[10px] tracking-[0.5em] uppercase mb-4 block animate-pulse">
                 // Acesso Reservado
                             </span>
-                            <h1 className="font-display text-4xl font-black uppercase tracking-tighter">
+                            <h1 className="font-heading text-4xl font-black uppercase tracking-tighter">
                                 Fazer <span className="text-gradient-gold">Login</span>
                             </h1>
                             <p className="text-[#d4c5a0]/40 text-xs mt-4 font-light tracking-wide">
