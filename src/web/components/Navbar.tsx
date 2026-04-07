@@ -33,20 +33,14 @@ const Navbar = () => {
       }`}
     >
       <div className={`container mx-auto px-6 flex items-center justify-between transition-all duration-500 ${scrolled ? "py-3" : "py-6"}`}>
-        <a href="#" className="flex items-center gap-3 group">
+        <a href="#" className="flex items-center group">
           <img 
-            src="/src/assets/logo.png" 
-            alt="Club Empar Logo" 
-            className="w-12 h-12 object-contain transition-transform group-hover:scale-110"
+            src="/logo-icon.png" 
+            alt="Club Empar Icon" 
+            className={`w-auto object-contain transition-all duration-500 group-hover:scale-110 ${
+              scrolled ? "h-10" : "h-14"
+            }`}
           />
-          <div className="flex flex-col">
-            <span className="font-display text-2xl font-semibold text-gradient-gold tracking-wide leading-none">
-              CLUB EMPAR
-            </span>
-            <span className="text-muted-foreground text-[10px] font-body tracking-[0.4em] uppercase mt-1 leading-none">
-              Gourmet
-            </span>
-          </div>
         </a>
 
         {/* Desktop nav */}

@@ -47,6 +47,20 @@ const HeroSection = () => {
         
         {/* Left Column: Text & CTAs */}
         <div className="max-w-3xl">
+          {/* Full Brand Identity Logo */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-12 group inline-block"
+          >
+            <img 
+              src="/logo-club.png" 
+              alt="Club Empar Brand" 
+              className="h-28 md:h-36 w-auto object-contain drop-shadow-[0_0_20px_rgba(201,169,97,0.3)] group-hover:scale-105 group-hover:drop-shadow-[0_0_35px_rgba(201,169,97,0.5)] transition-all duration-700"
+            />
+          </motion.div>
+
           {/* Badge */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}

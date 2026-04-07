@@ -67,14 +67,11 @@ export function Navbar() {
         <div className={`flex items-center justify-between transition-all duration-500 ${scrolled ? "min-h-[70px]" : "min-h-[100px]"}`}>
           <Link href="/" className="flex items-center group py-2">
             <img
-              src="/logo-final-gold.png"
-              alt="Club Empar Gourmet"
+              src="/logo-icon.png"
+              alt="Club Empar Icon"
               className={`w-auto transition-all duration-700 
-                saturate-[2.2] brightness-[1.15] contrast-[1.25]
-                [filter:drop-shadow(0_0_15px_rgba(201,169,97,0.5))]
-                group-hover:scale-105 group-hover:brightness-[1.3] group-hover:saturate-[2.8]
-                group-hover:[filter:drop-shadow(0_0_25px_rgba(201,169,97,0.7))]
-                ${scrolled ? "h-12 md:h-16" : "h-20 md:h-28"}`}
+                group-hover:scale-110 
+                ${scrolled ? "h-10 md:h-12" : "h-14 md:h-20"}`}
             />
           </Link>
 
