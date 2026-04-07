@@ -77,17 +77,18 @@ import { authClient } from "../lib/auth";
 function PlanCard({ plan }: { plan: any }) {
   const { data: session } = authClient.useSession();
   const isFamily = plan.type === 'family' || plan.id?.includes('family') || plan.id?.includes('fam-');
+
+  // Big price is the TOTAL value
+  const totalDisplay = Number(plan.price);
+  const priceDisplay = totalDisplay.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
   
-  // Calculate months based on plan id/name
+  // Secondary display is the monthly equivalent
   const duration = plan.id?.toLowerCase().includes('trimestral') ? 3 
                  : plan.id?.toLowerCase().includes('semestral') ? 6 
                  : plan.id?.toLowerCase().includes('anual') ? 12 : 1;
+  const monthlyPrice = totalDisplay / duration;
+  const secondaryDisplay = (monthlyPrice / (isFamily ? 4 : 1)).toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' });
   
-  // Big price is the monthly value
-  const monthlyPrice = Number(plan.price) / duration;
-  const priceDisplay = (monthlyPrice / (isFamily ? 4 : 1)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-  
-  const totalDisplay = Number(plan.price).toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' });
   const isPopular = plan.id?.includes('semiannual') || plan.duration_months === 6 || plan.id?.includes('trimestral');
 
   return (
@@ -122,15 +123,17 @@ function PlanCard({ plan }: { plan: any }) {
           <span className={`font-mono text-6xl font-black tracking-tighter ${isPopular ? "text-gradient-gold animate-gradient" : "text-white"}`}>
             {priceDisplay}
           </span>
-          <span className="text-[#d4c5a0]/30 font-mono text-sm tracking-widest uppercase">
-            {isFamily ? "/pessoa" : "/mês"}
-          </span>
+          {isFamily && (
+            <span className="text-[#d4c5a0]/30 font-mono text-sm tracking-widest uppercase">
+              /pessoa
+            </span>
+          )}
         </div>
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/5">
           <span className="text-white/60 font-mono text-[11px] font-bold tracking-widest uppercase">
-            {isFamily ? "Lote p/ 4:" : duration === 1 ? "MENSAL:" : duration === 3 ? "TRIMESTRAL:" : duration === 6 ? "SEMESTRAL:" : "ANUAL:"}
+             EQUIVALENTE A:
           </span>
-          <span className="text-[#c9a961] font-mono text-xs font-black">{totalDisplay}</span>
+          <span className="text-[#c9a961] font-mono text-xs font-black">{secondaryDisplay}/mês</span>
         </div>
       </div>
 

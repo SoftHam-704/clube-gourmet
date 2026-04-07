@@ -5,8 +5,8 @@ const benefits = [
   {
     stat: "50%",
     statLabel: "Economia",
-    title: "Dois por Um Sempre",
-    description: "Peça dois pratos principais, pague apenas um. Sem restrições, sem letras miúdas.",
+    title: "Experiência em Dobro",
+    description: "Peça pratos e aproveite benefícios exclusivos do Club Empar, cada restaurante define a melhor forma de te surpreender.",
   },
   {
     stat: "500+",
