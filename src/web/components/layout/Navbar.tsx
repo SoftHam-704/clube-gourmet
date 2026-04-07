@@ -5,7 +5,6 @@ import { authClient } from "../../lib/auth";
 const NAV_LINKS = [
   { label: "Restaurantes", href: "/restaurants", isPage: true },
   { label: "Planos", href: "/plans", isPage: true },
-  { label: "Experiências", href: "/experiences", isPage: true },
   { label: "Benefícios", href: "/#benefits", isPage: false },
   { label: "Como Funciona", href: "/#how-it-works", isPage: false },
 ];
@@ -65,7 +64,7 @@ export function Navbar() {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${hidden ? "-translate-y-full" : "translate-y-0"} ${scrolled ? "bg-[#0a0a0a] border-b border-[#c9a961]/20 py-2 shadow-2xl" : "bg-transparent py-4"}`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className={`flex items-center justify-between transition-all duration-500 ${scrolled ? "min-h-[80px]" : "min-h-[140px]"}`}>
+        <div className={`flex items-center justify-between transition-all duration-500 ${scrolled ? "min-h-[70px]" : "min-h-[100px]"}`}>
           <Link href="/" className="flex items-center group py-2">
             <img
               src="/logo-final-gold.png"
@@ -75,7 +74,7 @@ export function Navbar() {
                 [filter:drop-shadow(0_0_15px_rgba(201,169,97,0.5))]
                 group-hover:scale-105 group-hover:brightness-[1.3] group-hover:saturate-[2.8]
                 group-hover:[filter:drop-shadow(0_0_25px_rgba(201,169,97,0.7))]
-                ${scrolled ? "h-16 md:h-24" : "h-28 md:h-40"}`}
+                ${scrolled ? "h-12 md:h-16" : "h-20 md:h-28"}`}
             />
           </Link>
 

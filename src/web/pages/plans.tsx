@@ -76,10 +76,19 @@ import { authClient } from "../lib/auth";
 
 function PlanCard({ plan }: { plan: any }) {
   const { data: session } = authClient.useSession();
-  const isFamily = plan.type === 'family' || plan.id?.includes('family');
-  const priceDisplay = (Number(plan.price) / (isFamily ? 4 : 1)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+  const isFamily = plan.type === 'family' || plan.id?.includes('family') || plan.id?.includes('fam-');
+  
+  // Calculate months based on plan id/name
+  const duration = plan.id?.toLowerCase().includes('trimestral') ? 3 
+                 : plan.id?.toLowerCase().includes('semestral') ? 6 
+                 : plan.id?.toLowerCase().includes('anual') ? 12 : 1;
+  
+  // Big price is the monthly value
+  const monthlyPrice = Number(plan.price) / duration;
+  const priceDisplay = (monthlyPrice / (isFamily ? 4 : 1)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+  
   const totalDisplay = Number(plan.price).toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' });
-  const isPopular = plan.id?.includes('semiannual') || plan.duration_months === 6;
+  const isPopular = plan.id?.includes('semiannual') || plan.duration_months === 6 || plan.id?.includes('trimestral');
 
   return (
     <div className={`group relative transition-all duration-700 ${isPopular
@@ -119,7 +128,7 @@ function PlanCard({ plan }: { plan: any }) {
         </div>
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/5">
           <span className="text-white/60 font-mono text-[11px] font-bold tracking-widest uppercase">
-            {isFamily ? "Lote p/ 4:" : "Total:"}
+            {isFamily ? "Lote p/ 4:" : duration === 1 ? "MENSAL:" : duration === 3 ? "TRIMESTRAL:" : duration === 6 ? "SEMESTRAL:" : "ANUAL:"}
           </span>
           <span className="text-[#c9a961] font-mono text-xs font-black">{totalDisplay}</span>
         </div>
@@ -227,7 +236,7 @@ export default function Plans() {
             transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
           >
             <span className="text-[#c9a961] font-body text-xs tracking-[0.6em] uppercase mb-10 block animate-pulse font-bold">// INVISTA EM MOMENTOS MEMORÁVEIS</span>
-            <h1 className="font-display text-7xl sm:text-8xl lg:text-[10rem] font-light text-white leading-[0.85] tracking-tight mb-12">
+            <h1 className="font-display text-5xl sm:text-7xl lg:text-[6.5rem] font-light text-white leading-[0.95] tracking-tight mb-12">
               Escolha o Plano<br />
               <span className="text-gradient-gold italic">Ideal para Você</span>
             </h1>

@@ -43,7 +43,7 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-[#090d0b] via-transparent to-[#090d0b]/40 z-10 pointer-events-none" />
       </div>
 
-      <div className="container mx-auto px-6 relative z-20 pt-24 grid lg:grid-cols-2 gap-12 items-center">
+      <div className="container mx-auto px-6 relative z-20 pt-40 grid lg:grid-cols-2 gap-12 items-center">
         
         {/* Left Column: Text & CTAs */}
         <div className="max-w-3xl">
@@ -62,7 +62,7 @@ const HeroSection = () => {
           </motion.div>
 
           {/* Theatrical Headline Reveal */}
-          <h1 className="text-6xl md:text-8xl lg:text-[7.5rem] font-display font-light leading-[0.9] mb-8 tracking-tight">
+          <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-display font-light leading-[1.1] mb-8 tracking-tight">
             <span className="overflow-hidden inline-block align-bottom pb-4 -mb-4">
               <motion.span 
                 initial={{ y: "110%" }} 
@@ -148,21 +148,6 @@ const HeroSection = () => {
                 <span className="text-sm font-display text-white">Membro Elite</span>
                 <span className="text-[10px] font-body text-primary uppercase tracking-widest">Verificada</span>
               </div>
-            </div>
-          </motion.div>
-
-          {/* Floating Card 2: Massive Value Metric */}
-          <motion.div 
-            animate={{ y: [0, 15, 0] }} 
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute right-0 bottom-32 bg-gradient-to-br from-primary/30 to-transparent backdrop-blur-xl border border-primary/40 p-1 rounded-full shadow-[0_0_50px_rgba(201,169,97,0.2)]"
-          >
-            <div className="bg-[#090d0b] rounded-full px-10 py-5 flex items-center gap-6">
-              <span className="text-5xl font-display font-light text-gradient-gold">2 por 1</span>
-              <div className="h-10 w-px bg-white/10" />
-              <span className="text-xs font-body uppercase tracking-[0.2em] text-white/70 leading-relaxed">
-                Em todos os<br/>Restaurantes
-              </span>
             </div>
           </motion.div>
 

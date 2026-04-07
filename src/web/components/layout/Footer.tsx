@@ -16,10 +16,6 @@ export function Footer() {
                                 alt="Club Empar Gourmet"
                                 className="w-24 h-auto transition-all duration-500 saturate-[2.2] brightness-[1.1] [filter:drop-shadow(0_0_15px_rgba(201,169,97,0.3))] group-hover:scale-110 group-hover:brightness-[1.3]"
                             />
-                            <div className="flex flex-col">
-                                <span className="font-heading text-3xl font-black text-white tracking-tighter leading-none">Club Empar</span>
-                                <span className="font-mono text-[10px] tracking-[0.5em] text-[#c9a961] uppercase mt-2 opacity-60">Gourmet Edition</span>
-                            </div>
                         </Link>
                         <p className="text-[#d4c5a0]/70 text-lg leading-relaxed max-w-sm font-light italic">
                             Redefinindo a experiência gastronômica brasileira através de conexões exclusivas e vantagens inigualáveis.

@@ -12,7 +12,7 @@ const benefits = [
     stat: "500+",
     statLabel: "Parceiros",
     title: "Restaurantes Selecionados",
-    description: "Acesso a restaurantes selecionados, oferecendo experiências gastronômicas onde qualidade e benefícios exclusivos se encontram.",
+    description: "Acesso a restaurantes exclusivos, oferecendo experiências gastronômicas onde qualidade e benefícios exclusivos se encontram.",
   },
   {
     stat: "∞",
@@ -23,7 +23,7 @@ const benefits = [
   {
     stat: "1x",
     statLabel: "Visita",
-    title: "Se Paga Rapidinho",
+    title: "Você economiza desde o início",
     description: "Uma única experiência já paga a sua assinatura. O resto é vantagem.",
   },
 ];

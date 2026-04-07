@@ -34,9 +34,6 @@ const TestimonialsSection = () => {
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="text-sm font-body tracking-[0.4em] uppercase text-primary mb-6 block font-medium">
-            // CLUBE DE ELITE
-          </span>
           <h2 className="text-5xl md:text-7xl lg:text-8xl font-display font-light leading-[1] text-foreground tracking-tight pb-2">
             Membros Reais,<br />
             <span className="text-gradient-gold italic">Economias Reais</span>
