@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -13,6 +14,7 @@ const navLinks = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [location] = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,8 +40,8 @@ const Navbar = () => {
             src="/logo-icon.png" 
             alt="Club Empar Icon" 
             className={`w-auto object-contain transition-all duration-500 group-hover:scale-110 ${
-              scrolled ? "h-10" : "h-14"
-            }`}
+              scrolled ? "h-10 opacity-100" : "h-14"
+            } ${!scrolled && location === "/" ? "opacity-0 scale-95 pointer-events-none" : "opacity-100 scale-100"}`}
           />
         </a>
 

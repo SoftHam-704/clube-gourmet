@@ -71,7 +71,8 @@ export function Navbar() {
               alt="Club Empar Icon"
               className={`w-auto transition-all duration-700 
                 group-hover:scale-110 
-                ${scrolled ? "h-10 md:h-12" : "h-14 md:h-20"}`}
+                ${scrolled ? "h-10 md:h-12 opacity-100" : "h-14 md:h-20"}
+                ${!scrolled && location === "/" ? "opacity-0 scale-95 pointer-events-none" : "opacity-100 scale-100"}`}
             />
           </Link>
 
