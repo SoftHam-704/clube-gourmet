@@ -7,14 +7,14 @@ import { Footer } from "../components/layout/Footer";
 import { 
   FaCcVisa, 
   FaCcMastercard, 
-  FaCcAmex, 
-  FaCreditCard 
+  FaCcAmex
 } from "react-icons/fa";
 import { 
   SiApplepay, 
   SiGooglepay, 
   SiPix 
 } from "react-icons/si";
+import { CheckCircle2, Info, Users } from "lucide-react";
 
 const Icons = {
   check: (
@@ -127,7 +127,7 @@ function PlanCard({ plan }: { plan: any }) {
             {priceDisplay}
           </span>
           {isFamily && (
-            <span className="text-[#d4c5a0]/30 font-mono text-sm tracking-widest uppercase">
+            <span className="text-[#d4c5a0]/30 font-mono text-[10px] tracking-[0.2em] uppercase whitespace-nowrap ml-1 self-end mb-2">
               /pessoa
             </span>
           )}
@@ -288,8 +288,8 @@ export default function Plans() {
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a961]/20 to-transparent" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(201,169,97,0.05),transparent_50%)]" />
 
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-8 relative">
-          <div className="flex flex-col items-center mb-28">
+    <div className="max-w-[1440px] mx-auto px-6 lg:px-8 relative">
+          <div className="flex flex-col items-center mb-28 relative">
             <span className="text-[#c9a961] font-body text-[11px] tracking-[0.4em] uppercase mb-12 opacity-60 font-bold">Sua Categoria</span>
             <div className="flex p-2 bg-[#0a0a0a]/80 backdrop-blur-3xl border border-[#c9a961]/30 rounded-full">
               <button 
@@ -316,6 +316,73 @@ export default function Plans() {
               </p>
             </div>
           </div>
+
+          {activeTab === "family" && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+              className="mt-12 mb-16 flex flex-col items-center gap-6"
+            >
+              {/* Header Badge for the Ribbon */}
+              <div className="flex items-center gap-3 px-4 py-1.5 rounded-full bg-[#c9a961]/10 border border-[#c9a961]/20 backdrop-blur-md">
+                <Users size={14} className="text-[#c9a961]" />
+                <span className="text-[#c9a961] text-[10px] font-black tracking-[0.3em] uppercase">Vantagem Progressiva Elite</span>
+              </div>
+
+              {/* The Horizontal Ribbon with Bouncing Effect */}
+              <motion.div 
+                animate={{ y: [0, -8, 0] }}
+                transition={{ 
+                  duration: 4, 
+                  repeat: Infinity, 
+                  ease: "easeInOut" 
+                }}
+                className="relative w-full max-w-5xl py-6 px-12 rounded-[2rem] bg-gradient-to-br from-[#0c120e]/80 to-[#050806]/90 backdrop-blur-2xl border border-[#c9a961]/15 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.05)] overflow-hidden group"
+              >
+                
+                {/* Visual Accent Glows & "Dripping" Light Effect */}
+                <motion.div 
+                  animate={{ x: ["-100%", "200%"] }}
+                  transition={{ 
+                    duration: 3, 
+                    repeat: Infinity, 
+                    ease: "linear",
+                    repeatDelay: 2
+                  }}
+                  className="absolute top-0 w-32 h-full bg-gradient-to-r from-transparent via-[#c9a961]/10 to-transparent skew-x-[-20deg] blur-xl opacity-50" 
+                />
+                
+                <div className="flex flex-wrap justify-center items-center gap-x-16 gap-y-6 relative z-10">
+                  {[
+                    { label: "2ª Pessoa", discount: "10% OFF" },
+                    { label: "3ª Pessoa", discount: "20% OFF" },
+                    { label: "4ª Pessoa", discount: "30% OFF" }
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-6 group/item">
+                      <div className="flex flex-col items-start">
+                        <span className="text-white/40 text-[9px] font-black tracking-[0.4em] uppercase mb-1">{item.label}</span>
+                        <div className="flex items-center gap-3">
+                          <CheckCircle2 size={16} className="text-[#c9a961] opacity-70 group-hover/item:opacity-100 transition-opacity" />
+                          <span className="text-white text-2xl font-display font-black tracking-tighter tabular-nums drop-shadow-[0_0_15px_rgba(201,169,97,0.4)]">{item.discount}</span>
+                        </div>
+                      </div>
+                      
+                      {idx < 2 && (
+                        <div className="hidden lg:block h-12 w-[1px] bg-gradient-to-b from-transparent via-[#c9a961]/20 to-transparent ml-8" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Subtle description banner at bottom of ribbon */}
+                <div className="mt-6 flex items-center justify-center gap-3 pt-4 border-t border-white/5 opacity-60">
+                   <Info size={12} className="text-[#c9a961]" />
+                   <p className="text-[9px] text-[#d4c5a0] uppercase tracking-[0.4em] font-bold">Descontos aplicados automaticamente sobre o valor total do grupo</p>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
 
           <div key={activeTab} className="grid sm:grid-cols-2 xl:grid-cols-4 gap-8 items-stretch animate-fade-in">
             {filteredPlans.map((plan) => (
