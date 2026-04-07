@@ -57,11 +57,15 @@
 - [x] Sistema de favoritos (Integrado ao Dashboard)
 - [x] Catálogo de Restaurantes dinâmico (conectado ao DB)
 
-### Fase 3 - Integração de Pagamentos
-- [ ] Integração Stripe ou Mercado Pago
-- [ ] Checkout de assinatura
-- [ ] Gestão de renovação
-- [ ] Cancelamento de plano
+### Fase 3 - Integração de Pagamentos (Mercado Pago 🚀)
+- [/] Gateway Escolhido: **Mercado Pago** (Checkout Pro)
+- [x] Endpoint de Checkout criado (`api/checkout.ts`)
+- [x] Rota de Webhook estruturada (`api/webhooks/mercadopago.ts`)
+- [ ] Configurar credenciais reais no `.env` (Pendente: Usuário fornecer chaves)
+- [ ] Migrar lógica do Webhook para Drizzle ORM
+- [ ] Testar fluxo de pagamento ponta-a-ponta (Ngrok)
+- [ ] Checkout de assinatura no frontend
+- [ ] Gestão de renovação e cancelamento
 
 ### Fase 4 - Sistema de Benefícios
 - [ ] Geração de código QR

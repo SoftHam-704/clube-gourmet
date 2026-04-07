@@ -88,10 +88,12 @@
 
 ## 💳 FASE 4 - Sistema de Pagamentos (2-3 semanas)
 
-### Integração Gateway
-- [ ] Escolher gateway (Stripe, Mercado Pago, PagSeguro)
-- [ ] Configurar ambiente de teste
-- [ ] Implementar checkout
+### Integração Gateway (Mercado Pago 🚀)
+- [x] Gateway Escolhido: **Mercado Pago**
+- [ ] Configurar credenciais reais (Aguardando usuário)
+- [x] Endpoint de Checkout Preference (`api/checkout.ts`)
+- [x] Webhook estruturado (`api/webhooks/mercadopago.ts`)
+- [ ] Implementar checkout completo no frontend
 - [ ] Webhooks de confirmação
 - [ ] Ambiente de produção
 
