@@ -78,14 +78,17 @@ function PlanCard({ plan }: { plan: any }) {
   const { data: session } = authClient.useSession();
   const isFamily = plan.type === 'family' || plan.id?.includes('family') || plan.id?.includes('fam-');
 
+  // Calculate months based on plan id or name (robust check)
+  const planInfo = ((plan.id || '') + (plan.name || '')).toLowerCase();
+  const duration = planInfo.includes('trimestral') ? 3 
+                 : planInfo.includes('semestral') ? 6 
+                 : planInfo.includes('anual') ? 12 : 1;
+  
   // Big price is the TOTAL value
   const totalDisplay = Number(plan.price);
   const priceDisplay = totalDisplay.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
   
   // Secondary display is the monthly equivalent
-  const duration = plan.id?.toLowerCase().includes('trimestral') ? 3 
-                 : plan.id?.toLowerCase().includes('semestral') ? 6 
-                 : plan.id?.toLowerCase().includes('anual') ? 12 : 1;
   const monthlyPrice = totalDisplay / duration;
   const secondaryDisplay = (monthlyPrice / (isFamily ? 4 : 1)).toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' });
   
