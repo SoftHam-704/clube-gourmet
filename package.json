@@ -60,7 +60,8 @@
     "preview": "bun run build && vite preview",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "wrangler d1 migrations apply DB --local",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "dev:api": "wrangler dev --port 3000"
   },
   "type": "module"
 }

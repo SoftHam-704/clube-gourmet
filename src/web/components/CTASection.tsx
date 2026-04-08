@@ -80,24 +80,19 @@ const CTASection = () => {
             className="flex flex-col sm:flex-row gap-6 justify-center items-center"
           >
             <Link href="/plans">
-              <Button 
-                variant="gold" 
-                size="lg" 
-                asChild
-                className="relative overflow-hidden group gap-3 px-14 h-16 shadow-[0_0_40px_rgba(201,169,97,0.3)] hover:shadow-[0_0_60px_rgba(201,169,97,0.5)] transition-all duration-500"
+              <Button
+                variant="gold"
+                size="lg"
+                className="relative overflow-hidden group gap-3 px-14 h-16 shadow-[0_0_40px_rgba(201,169,97,0.3)] hover:shadow-[0_0_60px_rgba(201,169,97,0.5)] transition-all duration-500 font-display text-lg tracking-widest"
               >
-                <a className="relative z-10 flex items-center gap-3 font-display text-lg tracking-widest">
-                  ASSOCIAR-SE AGORA
-                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[150%] skew-x-12 group-hover:duration-1000 group-hover:translate-x-[150%] transition-transform ease-out" />
-                </a>
+                ASSOCIAR-SE AGORA
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-[150%] skew-x-12 group-hover:duration-1000 group-hover:translate-x-[150%] transition-transform ease-out" />
               </Button>
             </Link>
-            
-            <Link href="/restaurants">
-              <a className="group flex items-center gap-3 text-sm font-body tracking-[0.2em] uppercase text-white/60 hover:text-[#c9a961] transition-colors py-4">
-                <span className="border-b border-[#c9a961]/30 group-hover:border-[#c9a961] pb-1 transition-colors">Ver Restaurantes</span>
-              </a>
+
+            <Link href="/restaurants" className="group flex items-center gap-3 text-sm font-body tracking-[0.2em] uppercase text-white/60 hover:text-[#c9a961] transition-colors py-4">
+              <span className="border-b border-[#c9a961]/30 group-hover:border-[#c9a961] pb-1 transition-colors">Ver Restaurantes</span>
             </Link>
           </motion.div>
 

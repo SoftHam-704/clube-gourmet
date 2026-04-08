@@ -1,9 +1,10 @@
 import { createMiddleware } from "hono/factory";
-import { auth } from "../auth.js";
+import { getAuth } from "../auth.js";
 
-// Attaches session and user if they are authenticated in the hono context.
+// Injeta user e session no contexto Hono em todas as rotas
 export const authMiddleware = createMiddleware(async (c, next) => {
     try {
+        const auth = getAuth();
         const session = await auth.api.getSession({ headers: c.req.raw.headers });
         if (!session) {
             c.set("user", null);
@@ -12,26 +13,27 @@ export const authMiddleware = createMiddleware(async (c, next) => {
             c.set("user", session.user);
             c.set("session", session.session);
         }
-    } catch (e) {
+    } catch {
         c.set("user", null);
         c.set("session", null);
     }
     return next();
 });
 
-// Use this middleware to protect routes such as only authenticated users can access them.
-export const authenticatedOnly = createMiddleware(
-    async (c, next) => {
-        const session = c.get("session");
-        if (!session) {
-            return c.json(
-                {
-                    message: "Você não está autenticado",
-                },
-                401
-            );
-        } else {
-            return next();
-        }
+// Protege rotas que exigem login
+export const authenticatedOnly = createMiddleware(async (c, next) => {
+    const session = c.get("session");
+    if (!session) {
+        return c.json({ message: "Você não está autenticado" }, 401);
     }
-);
+    return next();
+});
+
+// Protege rotas que exigem role admin
+export const adminOnly = createMiddleware(async (c, next) => {
+    const user = c.get("user") as any;
+    if (!user || user.role !== "admin") {
+        return c.json({ message: "Acesso restrito a administradores" }, 403);
+    }
+    return next();
+});

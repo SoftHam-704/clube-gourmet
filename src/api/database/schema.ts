@@ -1,4 +1,4 @@
-import { pgSchema, varchar, text, integer, boolean, timestamp, serial } from "drizzle-orm/pg-core";
+import { pgSchema, varchar, text, integer, boolean, timestamp, serial, numeric } from "drizzle-orm/pg-core";
 
 export const emparclubSchema = pgSchema("emparclub");
 
@@ -6,10 +6,10 @@ export const plans = emparclubSchema.table("plans", {
     id: varchar("id", { length: 50 }).primaryKey(),
     name: varchar("name", { length: 255 }).notNull(),
     description: text("description"),
-    price: text("price").notNull(), // decimal as text to avoid precision issues
+    price: numeric("price").notNull(),
     duration_months: integer("duration_months").default(1),
     active: boolean("active").default(true),
-    type: varchar("type", { length: 20 }).default("individual"), // individual / family
+    type: varchar("type", { length: 20 }).default("individual"),
     createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -17,8 +17,9 @@ export const cities = emparclubSchema.table("cidades", {
     id: serial("id_cidade").primaryKey(),
     name: varchar("nome", { length: 255 }).notNull(),
     state: varchar("uf", { length: 2 }).notNull(),
-    slug: varchar("slug", { length: 255 }).unique().notNull(),
-    active: boolean("ativo").default(true),
+    ibge: integer("cod_ibge"),
+    slug: varchar("slug", { length: 255 }).unique(),
+    active: boolean("ativo").default(false),
     createdAt: timestamp("data_cadastro").defaultNow(),
 });
 
@@ -32,7 +33,7 @@ export const restaurants = emparclubSchema.table("restaurantes", {
     slug: varchar("slug", { length: 255 }).unique().notNull(),
     highlighted: boolean("destaque").default(false),
     active: boolean("ativo").default(true),
-    city_slug: varchar("cidade_slug", { length: 255 }).references(() => cities.slug),
+    city_slug: varchar("cidade_slug", { length: 255 }),
     createdAt: timestamp("data_cadastro").defaultNow(),
 });
 
@@ -42,6 +43,9 @@ export const users = emparclubSchema.table("users", {
     email: text("email").notNull().unique(),
     emailVerified: boolean("email_verified").notNull(),
     image: text("image"),
+    passwordHash: text("password_hash"),
+    role: varchar("role", { length: 20 }).default("user"),
+    cityId: integer("city_id"),
     createdAt: timestamp("created_at").notNull(),
     updatedAt: timestamp("updated_at").notNull(),
 });
@@ -83,13 +87,27 @@ export const verifications = emparclubSchema.table("verifications", {
 });
 
 export const subscriptions = emparclubSchema.table("subscriptions", {
-    id: serial("id").primaryKey(),
+    id: text("id").primaryKey(),
     userId: text("user_id").notNull().references(() => users.id),
     planId: varchar("plan_id", { length: 50 }).notNull().references(() => plans.id),
-    status: varchar("status", { length: 20 }).notNull(), // active, expired, cancelled, pending
+    status: varchar("status", { length: 20 }).notNull().default("pending"),
     startDate: timestamp("start_date").defaultNow(),
     endDate: timestamp("end_date"),
-    mpPreferenceId: text("mp_preference_id"),
-    mpPaymentId: text("mp_payment_id"),
+    externalCustomerId: text("external_customer_id"),
+    externalSubscriptionId: text("external_subscription_id"),
     createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const favorites = emparclubSchema.table("favoritos", {
+    id: serial("id").primaryKey(),
+    userId: text("user_id").notNull().references(() => users.id),
+    restaurantId: integer("restaurante_id").notNull().references(() => restaurants.id),
+    createdAt: timestamp("data_cadastro").defaultNow(),
+});
+
+export const redeemedBenefits = emparclubSchema.table("beneficios_resgatados", {
+    id: serial("id").primaryKey(),
+    userId: text("user_id").notNull().references(() => users.id),
+    restaurantId: integer("restaurante_id").notNull().references(() => restaurants.id),
+    redeemedAt: timestamp("data_resgate").defaultNow(),
 });

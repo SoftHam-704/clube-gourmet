@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useLocation } from "wouter";
+import { authClient } from "../../lib/auth";
 
 interface AdminLayoutProps {
     children: React.ReactNode;
@@ -24,14 +25,16 @@ const NavItem = ({ href, icon, label, active }: { href: string; icon: React.Reac
 
 export const AdminLayout = ({ children, title }: AdminLayoutProps) => {
     const [location, setLocation] = useLocation();
+    const { data: session, isPending } = authClient.useSession();
 
-    // Proteção de Rota: Verifica se o admin está logado
+    // Proteção de Rota: verifica sessão e role admin via Better Auth
     useEffect(() => {
-        const isAuthenticated = localStorage.getItem("clube_gourmet_admin") === "true";
-        if (!isAuthenticated) {
+        if (isPending) return;
+        const user = session?.user as any;
+        if (!user || user.role !== "admin") {
             setLocation("/admin/login");
         }
-    }, [location, setLocation]);
+    }, [session, isPending, setLocation]);
 
     return (
         <div className="flex min-h-screen bg-[#0a0a0a] text-white selection:bg-[#c9a961] selection:text-[#0a0a0a]">
@@ -79,14 +82,23 @@ export const AdminLayout = ({ children, title }: AdminLayoutProps) => {
                 </nav>
 
                 {/* User Footer */}
-                <div className="p-8 border-t border-[#c9a961]/10 flex items-center gap-4">
-                    <div className="w-10 h-10 bg-[#c9a961]/10 border border-[#c9a961]/30 flex items-center justify-center font-mono text-[#c9a961] font-black">
-                        W
+                <div className="p-8 border-t border-[#c9a961]/10 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-[#c9a961]/10 border border-[#c9a961]/30 flex items-center justify-center font-mono text-[#c9a961] font-black text-sm">
+                            {session?.user?.name?.[0]?.toUpperCase() ?? "A"}
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-[10px] font-black tracking-widest uppercase truncate max-w-[120px]">{session?.user?.name ?? "Admin"}</span>
+                            <span className="text-[#c9a961]/40 text-[8px] uppercase tracking-tighter">Administrador</span>
+                        </div>
                     </div>
-                    <div className="flex flex-col">
-                        <span className="text-[10px] font-black tracking-widest uppercase">Webadmin</span>
-                        <span className="text-[#c9a961]/40 text-[8px] uppercase tracking-tighter">Superuser</span>
-                    </div>
+                    <button
+                        onClick={() => authClient.signOut().then(() => setLocation("/admin/login"))}
+                        className="text-[#d4c5a0]/30 hover:text-red-400 transition-colors"
+                        title="Sair"
+                    >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                    </button>
                 </div>
             </aside>
 
