@@ -42,10 +42,25 @@ export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("/api/admin-stats")
+        fetch("/api/admin/stats")
             .then(res => res.json())
             .then(json => {
-                setData(json);
+                // Map backend response to frontend view
+                const mappedData: DashboardData = {
+                    stats: {
+                        totalMembers: json.stats?.totalMembers || 0,
+                        activeCities: json.stats?.activeCities || 0,
+                        vouchersRedeemed: json.stats?.totalRestaurants || 0, // Using restaurants as proxy for redeemed for now
+                        monthlyRevenue: (json.stats?.activeSubscriptions || 0) * 49.90, // Estimated revenue
+                    },
+                    recentMembers: (json.recentUsers || []).map((u: any) => ({
+                        name: u.name,
+                        email: u.email,
+                        date: new Date(u.createdAt).toLocaleDateString(),
+                        plan: u.role === 'admin' ? 'ADMIN' : 'Membro'
+                    }))
+                };
+                setData(mappedData);
                 setLoading(false);
             })
             .catch(err => {
