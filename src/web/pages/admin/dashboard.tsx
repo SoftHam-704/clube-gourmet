@@ -8,14 +8,14 @@ const StatCard = ({ label, value, trend, icon, loading }: { label: string; value
                 {icon}
             </div>
             {trend && (
-                <span className="font-body text-[8px] font-black text-gold bg-gold/10 border border-gold/20 px-4 py-1.5 tracking-[0.3em] uppercase rounded-full">
+                <span className="font-body text-xs font-bold text-gold bg-gold/15 border border-gold/30 px-5 py-2 tracking-[0.2em] uppercase rounded-full">
                     {trend}
                 </span>
             )}
         </div>
         
         <div className="flex flex-col gap-2">
-            <span className="text-gold/40 font-body text-[10px] tracking-[0.4em] uppercase font-black">{label}</span>
+            <span className="text-gold/60 font-body text-xs tracking-[0.3em] uppercase font-bold">{label}</span>
             {loading ? (
                 <div className="h-12 w-40 bg-gold/5 animate-pulse rounded-lg mt-2 font-display" />
             ) : (
@@ -122,10 +122,10 @@ export default function AdminDashboard() {
                 <div className="lg:col-span-3 bg-card/40 backdrop-blur-3xl border border-gold/10 rounded-[40px] overflow-hidden flex flex-col h-[600px]">
                     <div className="p-10 border-b border-gold/5 flex justify-between items-center bg-gold/5">
                         <div className="flex flex-col">
-                            <h3 className="font-display text-2xl font-bold tracking-tight text-white uppercase italic">Membros Recentes</h3>
-                            <span className="text-gold/30 font-body text-[8px] tracking-[0.4em] uppercase font-black">Latest registrations</span>
+                            <h3 className="font-display text-3xl font-bold tracking-tight text-white uppercase italic">Membros Recentes</h3>
+                            <span className="text-gold/50 font-body text-xs tracking-[0.3em] uppercase font-bold">Últimos cadastros realizados</span>
                         </div>
-                        <button className="h-10 px-8 bg-card border border-gold/20 text-gold font-body text-[9px] font-black tracking-widest uppercase rounded-full hover:bg-gold hover:text-background transition-all">Ver Toda a Base</button>
+                        <button className="h-12 px-10 bg-card border border-gold/30 text-gold font-body text-xs font-bold tracking-[0.1em] uppercase rounded-full hover:bg-gold hover:text-background transition-all">Ver Toda a Base</button>
                     </div>
                     
                     <div className="flex-1 overflow-y-auto scrollbar-hide py-4 px-6 md:px-10">
@@ -146,13 +146,13 @@ export default function AdminDashboard() {
                                                 {user.name?.[0] || "?"}
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="text-base font-bold text-white mb-0.5">{user.name}</span>
-                                                <span className="text-gold/40 text-[9px] font-body font-black uppercase tracking-[0.2em]">{user.email}</span>
+                                                <span className="text-lg font-bold text-white mb-0.5">{user.name}</span>
+                                                <span className="text-gold/60 text-xs font-body font-medium tracking-wide">{user.email}</span>
                                             </div>
                                         </div>
                                         <div className="text-right flex flex-col items-end gap-1.5">
-                                            <span className="text-gold bg-gold/5 border border-gold/20 px-3 py-1 text-[8px] font-black tracking-[0.2em] uppercase rounded-lg group-hover:bg-gold group-hover:text-background transition-colors animate-fade-in">{user.plan}</span>
-                                            <span className="text-white/20 text-[9px] font-body tracking-wider">{user.date}</span>
+                                            <span className="text-gold bg-gold/10 border border-gold/30 px-4 py-1.5 text-[10px] font-bold tracking-[0.1em] uppercase rounded-lg group-hover:bg-gold group-hover:text-background transition-colors animate-fade-in">{user.plan}</span>
+                                            <span className="text-white/40 text-xs font-body tracking-wider">{user.date}</span>
                                         </div>
                                     </div>
                                 ))}
@@ -166,14 +166,14 @@ export default function AdminDashboard() {
                     <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
                     
                     <div className="mb-12">
-                        <h3 className="font-display text-2xl font-bold tracking-tight text-white uppercase italic">Estado do Sistema</h3>
-                        <span className="text-gold/30 font-body text-[8px] tracking-[0.4em] uppercase font-black">Live diagnostics</span>
+                        <h3 className="font-display text-3xl font-bold tracking-tight text-white uppercase italic">Estado do Sistema</h3>
+                        <span className="text-gold/50 font-body text-xs tracking-[0.3em] uppercase font-bold">Diagnóstico em tempo real</span>
                     </div>
                     
                     <div className="space-y-10 flex-1">
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-end text-[10px] font-black tracking-[0.3em] uppercase">
-                                <span className="text-gold/60">Latência do Banco</span>
+                        <div className="space-y-5">
+                            <div className="flex justify-between items-end text-xs font-bold tracking-[0.2em] uppercase">
+                                <span className="text-gold/80">Latência do Banco</span>
                                 <span className="text-gold">24 MS / ESTÁVEL</span>
                             </div>
                             <div className="h-2 bg-gold/5 rounded-full overflow-hidden border border-gold/10 p-0.5">
@@ -181,42 +181,41 @@ export default function AdminDashboard() {
                             </div>
                         </div>
 
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-end text-[10px] font-black tracking-[0.3em] uppercase">
-                                <span className="text-gold/60">Integridade de Dados</span>
+                        <div className="space-y-5">
+                            <div className="flex justify-between items-end text-xs font-bold tracking-[0.2em] uppercase">
+                                <span className="text-gold/80">Integridade de Dados</span>
                                 <span className="text-gold">100% VALIDADO</span>
                             </div>
-                            <div className="h-2 bg-gold/5 rounded-full overflow-hidden border border-gold/10 p-0.5">
+                            <div className="h-2.5 bg-gold/5 rounded-full overflow-hidden border border-gold/20 p-0.5">
                                 <div className="h-full bg-gold w-full opacity-60 rounded-full" />
                             </div>
                         </div>
 
                         {/* Recent Activity Log View */}
-                        <div className="relative mt-8 group flex-1">
-                            <div className="absolute inset-0 bg-background/60 rounded-3xl border border-gold/5" />
-                            <div className="relative p-6 font-body text-[10px] space-y-4 overflow-y-auto max-h-[220px] scrollbar-hide">
-                                <div className="flex items-start gap-4 animate-fade-in">
-                                    <span className="text-gold/30 shrink-0">12:30</span>
-                                    <span className="text-gold">Membro 'Rafael Henrique' realizou upgrade de plano.</span>
+                        <div className="relative mt-12 group flex-1">
+                            <div className="absolute inset-0 bg-background/80 rounded-[32px] border border-gold/10 shadow-inner" />
+                            <div className="relative p-10 font-body text-xs space-y-5 overflow-y-auto max-h-[250px] scrollbar-hide">
+                                <div className="p-2 border-b border-gold/5 mb-4">
+                                    <span className="text-gold/50 text-[10px] font-bold tracking-widest uppercase italic">Recent Logs</span>
                                 </div>
-                                <div className="flex items-start gap-4 opacity-60">
-                                    <span className="text-gold/30 shrink-0">12:28</span>
-                                    <span className="text-white/60">Nova requisição de checkout 'Pre-Auth' registrada.</span>
+                                <div className="flex items-start gap-5 animate-fade-in">
+                                    <span className="text-gold/40 shrink-0 font-bold">12:30</span>
+                                    <span className="text-gold/90 border-l border-gold/20 pl-4">Membro 'Rafael Henrique' realizou upgrade de plano.</span>
                                 </div>
-                                <div className="flex items-start gap-4 opacity-40">
-                                    <span className="text-gold/30 shrink-0">12:20</span>
-                                    <span className="text-white/40">Sincronização iniciada: 12 novos restaurantes mapeados.</span>
+                                <div className="flex items-start gap-5 opacity-70">
+                                    <span className="text-gold/30 shrink-0 font-bold">12:28</span>
+                                    <span className="text-white/70 border-l border-gold/10 pl-4">Nova requisição de checkout 'Pre-Auth' registrada.</span>
                                 </div>
-                                <div className="flex items-start gap-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-20 transition-all duration-700">
-                                    <span className="text-gold/30 shrink-0">12:15</span>
-                                    <span className="text-white/20">Backup incremental do banco de dados finalizado.</span>
+                                <div className="flex items-start gap-5 opacity-50">
+                                    <span className="text-gold/20 shrink-0 font-bold">12:20</span>
+                                    <span className="text-white/50 border-l border-gold/10 pl-4">Sincronização iniciada: 12 novos parceiros.</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div className="pt-8 mt-auto flex items-center justify-between border-t border-gold/10">
-                        <span className="text-[8px] font-black uppercase tracking-[0.4em] text-gold/20">Encryption: AES-256</span>
+                        <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold/30 italic">Encryption: SSL-AES256</span>
                         <div className="flex gap-2">
                             <div className="w-1.5 h-1.5 bg-gold/30 rounded-full animate-pulse" />
                             <div className="w-1.5 h-1.5 bg-gold/30 rounded-full animate-pulse delay-75" />

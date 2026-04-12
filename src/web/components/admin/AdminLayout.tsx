@@ -24,7 +24,7 @@ const NavItem = ({ href, icon, label, active }: { href: string; icon: React.Reac
             <span className={`relative z-10 transition-all duration-500 ${active ? 'scale-110 drop-shadow-[0_0_8px_rgba(201,169,97,0.4)]' : 'group-hover:scale-110'}`}>
                 {icon}
             </span>
-            <span className="relative z-10 font-body text-[10px] font-black tracking-[0.3em] uppercase">
+            <span className="relative z-10 font-body text-xs font-bold tracking-[0.2em] uppercase">
                 {label}
             </span>
 
@@ -70,8 +70,8 @@ export const AdminLayout = ({ children, title }: AdminLayoutProps) => {
                 <div className="p-10 border-b border-gold/5 relative group">
                     <Link href="/">
                         <div className="flex flex-col gap-1 cursor-pointer">
-                            <h1 className="text-gold font-display text-3xl font-bold tracking-tight">CLUB EMPAR</h1>
-                            <span className="text-gold/30 font-body text-[8px] tracking-[0.6em] uppercase font-black">Executive Mode</span>
+                            <h1 className="text-gold font-display text-4xl font-bold tracking-tight">CLUB EMPAR</h1>
+                            <span className="text-gold/40 font-body text-xs tracking-[0.4em] uppercase font-bold">Modo Executivo</span>
                         </div>
                     </Link>
                     
@@ -114,8 +114,8 @@ export const AdminLayout = ({ children, title }: AdminLayoutProps) => {
                             {session?.user?.name?.[0]?.toUpperCase() ?? "A"}
                         </div>
                         <div className="flex flex-col overflow-hidden">
-                            <span className="text-[11px] font-bold tracking-widest uppercase truncate">{session?.user?.name ?? "Admin"}</span>
-                            <span className="text-gold/40 text-[8px] uppercase font-black tracking-widest">{session?.user?.role}</span>
+                            <span className="text-sm font-bold tracking-tight truncate">{session?.user?.name ?? "Admin"}</span>
+                            <span className="text-gold/60 text-[10px] uppercase font-bold tracking-widest">Administrador</span>
                         </div>
                     </div>
                     <button
@@ -137,14 +137,14 @@ export const AdminLayout = ({ children, title }: AdminLayoutProps) => {
                 {/* Navbar */}
                 <header className="h-24 border-b border-gold/10 bg-card/40 backdrop-blur-xl flex items-center px-16 justify-between relative z-30">
                     <div className="flex flex-col">
-                        <span className="text-gold/40 font-body text-[9px] tracking-[0.5em] uppercase font-black mb-1">Architecture / {title}</span>
-                        <h2 className="font-display text-2xl font-bold tracking-tight text-white uppercase">{title}</h2>
+                        <span className="text-gold/60 font-body text-xs tracking-[0.3em] uppercase font-bold mb-1">{title}</span>
+                        <h2 className="font-display text-3xl font-bold tracking-tight text-white uppercase italic">{title}</h2>
                     </div>
 
                     <div className="flex items-center gap-8">
                         <div className="flex items-center gap-2 group cursor-pointer">
-                            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                            <span className="font-body text-[9px] font-black uppercase tracking-[0.2em] text-foreground/40 group-hover:text-foreground transition-colors">System Live</span>
+                            <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
+                            <span className="font-body text-[11px] font-bold uppercase tracking-[0.1em] text-foreground/60 group-hover:text-foreground transition-colors">Sistema Online</span>
                         </div>
 
                         <div className="h-4 w-[1px] bg-gold/20" />
