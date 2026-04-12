@@ -59,7 +59,7 @@ restaurantsRoutes.post("/", authenticatedOnly, adminOnly, async (c) => {
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const body = await c.req.json();
-        const { name, cuisine, description, address, image, slug, highlighted, city_slug } = body;
+        const { name, cuisine, description, address, image, image2, image3, slug, highlighted, city_slug } = body;
 
         if (!name || !cuisine || !slug) {
             return c.json({ error: "Campos obrigatórios: name, cuisine, slug" }, 400);
@@ -67,7 +67,7 @@ restaurantsRoutes.post("/", authenticatedOnly, adminOnly, async (c) => {
 
         const result = await db
             .insert(restaurants)
-            .values({ name, cuisine, description, address, image, slug, highlighted: highlighted ?? false, city_slug, active: true })
+            .values({ name, cuisine, description, address, image, image2, image3, slug, highlighted: highlighted ?? false, city_slug, active: true })
             .returning()
             .execute();
 
@@ -87,7 +87,7 @@ restaurantsRoutes.put("/:id", authenticatedOnly, adminOnly, async (c) => {
         const id = parseInt(c.req.param("id"));
         const body = await c.req.json();
 
-        const allowed = ["name", "cuisine", "description", "address", "image", "slug", "highlighted", "active", "city_slug"];
+        const allowed = ["name", "cuisine", "description", "address", "image", "image2", "image3", "slug", "highlighted", "active", "city_slug"];
         const update: Record<string, any> = {};
         for (const key of allowed) {
             if (key in body) update[key] = body[key];

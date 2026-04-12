@@ -30,6 +30,8 @@ export const restaurants = emparclubSchema.table("restaurantes", {
     description: text("descricao"),
     address: text("endereco"),
     image: text("imagem_url"),
+    image2: text("imagem_url_2"),
+    image3: text("imagem_url_3"),
     slug: varchar("slug", { length: 255 }).unique().notNull(),
     highlighted: boolean("destaque").default(false),
     active: boolean("ativo").default(true),
