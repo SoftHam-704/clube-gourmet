@@ -9,7 +9,7 @@ export const restaurantsRoutes = new Hono();
 // GET /api/restaurants — lista pública (apenas ativos)
 restaurantsRoutes.get("/", async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const city = c.req.query("cidade");
@@ -34,7 +34,7 @@ restaurantsRoutes.get("/", async (c) => {
 // GET /api/restaurants/:id — detalhe público
 restaurantsRoutes.get("/:id", async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const id = parseInt(c.req.param("id"));
@@ -55,7 +55,7 @@ restaurantsRoutes.get("/:id", async (c) => {
 // POST /api/restaurants — criar (admin)
 restaurantsRoutes.post("/", authenticatedOnly, adminOnly, async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const body = await c.req.json();
@@ -81,7 +81,7 @@ restaurantsRoutes.post("/", authenticatedOnly, adminOnly, async (c) => {
 // PUT /api/restaurants/:id — editar (admin)
 restaurantsRoutes.put("/:id", authenticatedOnly, adminOnly, async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const id = parseInt(c.req.param("id"));
@@ -112,7 +112,7 @@ restaurantsRoutes.put("/:id", authenticatedOnly, adminOnly, async (c) => {
 // DELETE /api/restaurants/:id — soft delete (admin)
 restaurantsRoutes.delete("/:id", authenticatedOnly, adminOnly, async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const id = parseInt(c.req.param("id"));

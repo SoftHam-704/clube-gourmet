@@ -9,7 +9,7 @@ export const adminRoutes = new Hono();
 // GET /api/admin/stats — painel administrativo
 adminRoutes.get("/stats", authenticatedOnly, adminOnly, async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const [
@@ -61,7 +61,7 @@ adminRoutes.get("/stats", authenticatedOnly, adminOnly, async (c) => {
 // GET /api/admin/users — lista todos os usuários (admin)
 adminRoutes.get("/users", authenticatedOnly, adminOnly, async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const result = await db
@@ -79,7 +79,7 @@ adminRoutes.get("/users", authenticatedOnly, adminOnly, async (c) => {
 // PUT /api/admin/users/:id/role — promover/rebaixar usuário (admin)
 adminRoutes.put("/users/:id/role", authenticatedOnly, adminOnly, async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const id = c.req.param("id");

@@ -9,7 +9,7 @@ export const userRoutes = new Hono();
 // GET /api/user/dashboard — dados completos do painel do usuário
 userRoutes.get("/dashboard", authenticatedOnly, async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const sessionUser = c.get("user") as any;
@@ -69,7 +69,7 @@ userRoutes.get("/dashboard", authenticatedOnly, async (c) => {
 // PUT /api/user/profile — atualizar perfil
 userRoutes.put("/profile", authenticatedOnly, async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const sessionUser = c.get("user") as any;

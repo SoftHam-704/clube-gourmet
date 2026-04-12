@@ -1,26 +1,31 @@
 import { createMiddleware } from "hono/factory";
 import { getAuth } from "../auth.js";
 
-// Injeta user e session no contexto Hono em todas as rotas
 export const authMiddleware = createMiddleware(async (c, next) => {
     try {
-        const auth = getAuth();
+        // Ignora rotas que não precisam de auth para poupar conexões
+        if (c.req.path.includes('/webhooks/mercadopago')) {
+            return next();
+        }
+
+        const auth = getAuth(c.env);
         const session = await auth.api.getSession({ headers: c.req.raw.headers });
-        if (!session) {
-            c.set("user", null);
-            c.set("session", null);
-        } else {
+        
+        if (session) {
             c.set("user", session.user);
             c.set("session", session.session);
+        } else {
+            c.set("user", null);
+            c.set("session", null);
         }
-    } catch {
+    } catch (e: any) {
+        console.warn("⚠️ [Auth Middleware] Sessão não recuperada:", e.message);
         c.set("user", null);
         c.set("session", null);
     }
     return next();
 });
 
-// Protege rotas que exigem login
 export const authenticatedOnly = createMiddleware(async (c, next) => {
     const session = c.get("session");
     if (!session) {
@@ -29,10 +34,10 @@ export const authenticatedOnly = createMiddleware(async (c, next) => {
     return next();
 });
 
-// Protege rotas que exigem role admin
 export const adminOnly = createMiddleware(async (c, next) => {
     const user = c.get("user") as any;
     if (!user || user.role !== "admin") {
+        console.log(`🚫 [Admin Guard] Bloqueado: ${user?.email || 'Anônimo'} tentou acessar rota admin.`);
         return c.json({ message: "Acesso restrito a administradores" }, 403);
     }
     return next();

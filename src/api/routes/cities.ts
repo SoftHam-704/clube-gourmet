@@ -9,7 +9,7 @@ export const citiesRoutes = new Hono();
 // GET /api/cities — lista todas as cidades ativas (com busca opcional)
 citiesRoutes.get("/", async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const search = c.req.query("q");
@@ -38,7 +38,7 @@ citiesRoutes.get("/", async (c) => {
 // GET /api/cities/all — todas as cidades (admin, sem limite)
 citiesRoutes.get("/all", authenticatedOnly, adminOnly, async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const search = c.req.query("q");
@@ -71,7 +71,7 @@ citiesRoutes.get("/all", authenticatedOnly, adminOnly, async (c) => {
 // PUT /api/cities/:id — ativar/desativar ou editar (admin)
 citiesRoutes.put("/:id", authenticatedOnly, adminOnly, async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const id = parseInt(c.req.param("id"));

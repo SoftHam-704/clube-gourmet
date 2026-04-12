@@ -3,15 +3,21 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { getDb } from '../db/index.js';
 import * as schema from './database/schema.js';
 
-let _auth: ReturnType<typeof betterAuth> | null = null;
+let _authInstance: any = null;
 
-export const getAuth = () => {
-    if (_auth) return _auth;
+export const getAuth = (env?: any) => {
+    // Se já está inicializado neste ciclo, retornamos
+    if (_authInstance) return _authInstance;
 
-    const db = getDb();
-    if (!db) throw new Error("DATABASE_URL não definida ou DB inacessível");
+    const authSecret = env?.BETTER_AUTH_SECRET || process.env.BETTER_AUTH_SECRET || "p0tato_secret_change_me_in_production";
+    const authUrl = env?.BETTER_AUTH_URL || process.env.BETTER_AUTH_URL || "http://localhost:5174";
 
-    _auth = betterAuth({
+    const db = getDb(env);
+    if (!db) {
+        throw new Error("Banco de dados indisponível.");
+    }
+
+    _authInstance = betterAuth({
         database: drizzleAdapter(db, {
             provider: 'pg',
             schema: {
@@ -27,37 +33,31 @@ export const getAuth = () => {
                     type: "string",
                     required: false,
                     defaultValue: "user",
-                    input: false, // Prevent user from setting their own role during sign-up
+                    input: false,
                 }
             }
         },
         emailAndPassword: {
             enabled: true,
         },
-        secret: process.env.BETTER_AUTH_SECRET,
-        baseURL: process.env.BETTER_AUTH_URL,
+        secret: authSecret,
+        baseURL: authUrl,
         trustedOrigins: [
-            process.env.BETTER_AUTH_URL || "",
+            authUrl,
             "http://localhost:5173",
             "http://localhost:5174",
             "http://localhost:3000",
-            "https://clubempar.com.br",
-            "https://www.clubempar.com.br"
+            "https://clubempar.com.br"
         ],
         advanced: {
-            useSecureCookies: process.env.NODE_ENV === "production"
+            // Em desenvolvimento local não usamos secure cookies para facilitar o login em localhost
+            useSecureCookies: (env?.NODE_ENV || process.env.NODE_ENV) === "production"
         }
     });
 
-    return _auth;
+    return _authInstance;
 };
 
-// Mantém compatibilidade com imports legados que usam `auth` diretamente
 export const auth = {
     handler: (req: Request) => getAuth().handler(req),
-    api: new Proxy({} as ReturnType<typeof betterAuth>['api'], {
-        get(_target, prop) {
-            return (getAuth().api as any)[prop as string];
-        }
-    })
 };

@@ -20,7 +20,7 @@ const FALLBACK_PLANS = [
 // GET /api/membership-plans — lista pública
 plansRoutes.get("/", async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json(FALLBACK_PLANS);
 
         const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000));
@@ -38,7 +38,7 @@ plansRoutes.get("/", async (c) => {
 // GET /api/membership-plans/all — todos incluindo inativos (admin)
 plansRoutes.get("/all", authenticatedOnly, adminOnly, async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
         const result = await db.select().from(plans).orderBy(plans.duration_months).execute();
         return c.json(result);
@@ -50,7 +50,7 @@ plansRoutes.get("/all", authenticatedOnly, adminOnly, async (c) => {
 // POST /api/membership-plans — criar plano (admin)
 plansRoutes.post("/", authenticatedOnly, adminOnly, async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const body = await c.req.json();
@@ -76,7 +76,7 @@ plansRoutes.post("/", authenticatedOnly, adminOnly, async (c) => {
 // PUT /api/membership-plans/:id — editar plano (admin)
 plansRoutes.put("/:id", authenticatedOnly, adminOnly, async (c) => {
     try {
-        const db = getDb();
+        const db = getDb(c.env);
         if (!db) return c.json({ error: "DB indisponível" }, 503);
 
         const id = c.req.param("id");

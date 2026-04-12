@@ -8,13 +8,23 @@ import { restaurantsRoutes } from './routes/restaurants.js';
 import { citiesRoutes } from './routes/cities.js';
 import { adminRoutes } from './routes/admin.js';
 import { userRoutes } from './routes/user.js';
+import { checkoutRoutes } from './routes/checkout.js';
+import { webhookRoutes } from './routes/webhooks.js';
 
 const app = new Hono();
 
-app.use(cors({ origin: "*" }));
-app.use(authMiddleware);
+// Middleware Global apenas para CORS (muito leve)
+app.use(cors({ 
+    origin: ["http://localhost:5174", "http://localhost:5173", "https://clubempar.com.br", "https://www.clubempar.com.br"],
+    credentials: true,
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+}));
 
+// Agrupamos as rotas de API
 const api = new Hono();
+
+// !!! O AuthMiddleware agora só roda para rotas de /api !!!
+api.use(authMiddleware);
 
 api.route('/', authRoutes);
 api.route('/membership-plans', plansRoutes);
@@ -22,14 +32,21 @@ api.route('/restaurants', restaurantsRoutes);
 api.route('/cities', citiesRoutes);
 api.route('/admin', adminRoutes);
 api.route('/user', userRoutes);
+api.route('/checkout', checkoutRoutes);
+api.route('/webhooks', webhookRoutes);
 
 api.get('/debug', (c) => c.json({ status: 'ok', message: "Club Empar API v2 — Online" }));
 
 app.onError((err, c) => {
-    console.error("🔥 API ERROR:", err.message);
-    return c.json({ error: "Internal Error", message: err.message }, 500);
+    console.error("🔥 [FATAL API ERROR]:", err);
+    return c.json({ 
+        error: "Internal Server Error", 
+        message: err.message, 
+        path: c.req.path
+    }, 500);
 });
 
+// Montamos a API no path /api
 app.route('/api', api);
 
 export default app;

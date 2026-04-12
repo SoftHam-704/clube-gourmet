@@ -5,7 +5,7 @@ export const authRoutes = new Hono();
 
 authRoutes.all('/auth/*', async (c) => {
     try {
-        const auth = getAuth();
+        const auth = getAuth(c.env);
         return auth.handler(c.req.raw);
     } catch (e: any) {
         console.error('❌ Auth handler error:', e.message);
