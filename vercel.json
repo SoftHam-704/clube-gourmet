@@ -1,66 +1,14 @@
 {
-    "version": 2,
-    "outputDirectory": "dist",
-    "rewrites": [
-        {
-            "source": "/api/membership-plans/:id",
-            "destination": "/api/membership-plans.js?id=:id"
-        },
-        {
-            "source": "/api/membership-plans",
-            "destination": "/api/membership-plans.js"
-        },
-        {
-            "source": "/api/cities/:id",
-            "destination": "/api/cities.js?id=:id"
-        },
-        {
-            "source": "/api/cities",
-            "destination": "/api/cities.js"
-        },
-        {
-            "source": "/api/restaurants/:id",
-            "destination": "/api/restaurants.js?id=:id"
-        },
-        {
-            "source": "/api/restaurants",
-            "destination": "/api/restaurants.js"
-        },
-        {
-            "source": "/api/admin-stats",
-            "destination": "/api/admin-stats.js"
-        },
-        {
-            "source": "/api/user-dashboard",
-            "destination": "/api/user-dashboard.js"
-        },
-        {
-            "source": "/api/profile",
-            "destination": "/api/profile.js"
-        },
-        {
-            "source": "/api/checkout/create-preference",
-            "destination": "/api/checkout.ts"
-        },
-        {
-            "source": "/api/webhooks/mercadopago",
-            "destination": "/api/webhooks/mercadopago.ts"
-        },
-        {
-            "source": "/api/favorites",
-            "destination": "/api/favorites.js"
-        },
-        {
-            "source": "/api/auth/:path*",
-            "destination": "/api/auth.ts"
-        },
-        {
-            "source": "/api/:path*",
-            "destination": "/api/:path*.js"
-        },
-        {
-            "source": "/((?!api/).*)",
-            "destination": "/index.html"
-        }
-    ]
+  "version": 2,
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.ts"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
 }
