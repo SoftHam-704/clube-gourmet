@@ -14,11 +14,10 @@ export const getAuth = (env?: any, request?: Request) => {
     let authUrl = env?.BETTER_AUTH_URL || process.env.BETTER_AUTH_URL;
     
     // Se não houver variável, mas houver uma requisição, detectamos o host atual
-    // Isso é vital para funcionar tanto em www.clubempar.com.br quanto em clubempar.com.br
     if (!authUrl && request) {
-        const host = request.headers.get("host");
-        const protocol = host?.includes("localhost") ? "http" : "https";
-        if (host) authUrl = `${protocol}://${host}`;
+        const host = request.headers.get("x-forwarded-host") || request.headers.get("host");
+        const proto = request.headers.get("x-forwarded-proto") || (host?.includes("localhost") ? "http" : "https");
+        if (host) authUrl = `${proto}://${host}`;
     }
 
     // Fallback final para produção
@@ -31,8 +30,10 @@ export const getAuth = (env?: any, request?: Request) => {
     // Normalização
     authUrl = authUrl.replace(/\/$/, "");
 
-    console.log("🚦 [Auth] Initializing with URL:", authUrl);
+    // Configuração de cookies para suportar www e raiz simultaneamente em produção
+    const cookieDomain = authUrl.includes("clubempar.com.br") ? ".clubempar.com.br" : undefined;
 
+    console.log("🚦 [Auth] Initializing with URL:", authUrl, "| Cookie Domain:", cookieDomain);
 
     const db = getDb(env);
     if (!db) {
@@ -68,18 +69,22 @@ export const getAuth = (env?: any, request?: Request) => {
         trustedOrigins: [
             "https://clubempar.com.br",
             "https://www.clubempar.com.br",
-            "https://clube-gourmet-five.vercel.app", // Adicionado fallback Vercel
+            "https://clube-gourmet-five.vercel.app",
             "http://localhost:5173",
             "http://localhost:5174"
         ],
         advanced: {
-            useSecureCookies: true, // Forçamos secure em produção/https
-            trustHost: true
+            useSecureCookies: true,
+            trustHost: true,
+            cookieOptions: {
+                domain: cookieDomain
+            }
         }
     });
 
     return authInstance;
 };
+
 
 export const auth = {
     handler: (req: Request) => getAuth().handler(req),
