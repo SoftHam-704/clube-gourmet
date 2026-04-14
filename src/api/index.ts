@@ -35,11 +35,44 @@ app.use(cors({
 // Agrupamos as rotas de API
 const api = new Hono();
 
+import { sql } from 'drizzle-orm';
+import { getDb } from '../db/index.js';
+
 // Rotas públicas (Sempre rodar ANTES do middleware)
 api.get('/health', (c) => c.json({ status: 'ok', domain: 'www.clubempar.com.br' }));
-api.get('/debug', (c) => c.json({ status: 'ok', message: "Club Empar API v2 — Online" }));
+
+api.get('/debug', async (c) => {
+    console.log("🔍 [Debug] Testando conexão com o DB...");
+    const db = getDb(c.env);
+    
+    if (!db) {
+        return c.json({ status: 'error', db: 'NOT_FOUND', env: !!c.env });
+    }
+
+    try {
+        // Tenta uma query ultra simples
+        const start = Date.now();
+        await db.execute(sql`SELECT 1`);
+        const duration = Date.now() - start;
+        
+        return c.json({ 
+            status: 'ok', 
+            db: 'CONNECTED', 
+            latency: `${duration}ms`,
+            message: "Club Empar API v2 — Online & Connected" 
+        });
+    } catch (e: any) {
+        console.error("❌ [Debug] DB Error:", e.message);
+        return c.json({ 
+            status: 'error', 
+            db: 'FAILED', 
+            error: e.message 
+        }, 500);
+    }
+});
 
 // !!! O AuthMiddleware agora só roda para rotas protegidas !!!
+
 api.use(authMiddleware);
 
 api.route('/', authRoutes);
@@ -52,7 +85,8 @@ api.route('/user', userRoutes);
 api.route('/checkout', checkoutRoutes);
 api.route('/webhooks', webhookRoutes);
 
-api.get('/debug', (c) => c.json({ status: 'ok', message: "Club Empar API v2 — Online" }));
+// Debug movido para o topo
+
 
 app.onError((err, c) => {
     console.error("🔥 [FATAL API ERROR]:", err);
