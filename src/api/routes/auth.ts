@@ -3,13 +3,25 @@ import { getAuth } from '../auth.js';
 
 export const authRoutes = new Hono();
 
-authRoutes.all('/auth/*', async (c) => {
+authRoutes.on(['GET', 'POST'], '/*', async (c) => {
     try {
+        console.log(`🔐 [Auth Server] Recebendo ${c.req.method} em ${c.req.url}`);
         const auth = getAuth(c.env, c.req.raw);
-        return auth.handler(c.req.raw);
+        
+        // Timer para ver se trava
+        const start = Date.now();
+        const response = await auth.handler(c.req.raw);
+        const duration = Date.now() - start;
+        
+        console.log(`✅ [Auth Server] Processado em ${duration}ms com status ${response.status}`);
+        return response;
     } catch (e: any) {
-        console.error('❌ Auth handler error:', e.message);
-        return c.json({ error: 'Auth service unavailable', detail: e.message }, 503);
+        console.error('❌ [Auth Server] ERRO CRÍTICO:', e.message);
+        return c.json({ 
+            error: 'Authentication Internal Error', 
+            message: e.message,
+            stack: e.stack?.split('\n')[0] 
+        }, 500);
     }
 });
 
