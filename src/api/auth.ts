@@ -3,15 +3,12 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { getDb } from '../db/index.js';
 import * as schema from './database/schema.js';
 
-let cachedAuth: any = null;
-
 export const getAuth = (env?: any, request?: Request) => {
-    if (cachedAuth) return cachedAuth;
-
     const authSecret = env?.BETTER_AUTH_SECRET || process.env.BETTER_AUTH_SECRET;
     
     // Forçamos a URL de produção para evitar qualquer erro de detecção
     let authUrl = "https://www.clubempar.com.br";
+
     
     // Se estiver em ambiente local, mudamos
     if (process.env.NODE_ENV === "development" || env?.NODE_ENV === "development") {
@@ -65,9 +62,9 @@ export const getAuth = (env?: any, request?: Request) => {
         }
     });
 
-    cachedAuth = authInstance;
     return authInstance;
 };
+
 
 
 
