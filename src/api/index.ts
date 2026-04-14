@@ -62,14 +62,18 @@ api.get('/debug', async (c) => {
             message: "Club Empar API v2 — Online & Connected" 
         });
     } catch (e: any) {
-        console.error("❌ [Debug] DB Error:", e.message);
+        console.error("❌ [Debug] DB Error Details:", e);
         return c.json({ 
             status: 'error', 
             db: 'FAILED', 
-            error: e.message 
+            error: e.message,
+            code: e.code,
+            hint: e.hint,
+            detail: e.detail
         }, 500);
     }
 });
+
 
 // !!! O AuthMiddleware agora só roda para rotas protegidas !!!
 
