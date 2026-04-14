@@ -13,26 +13,22 @@ export const getDb = (env?: any) => {
 
     try {
         if (!sqlClient) {
-            console.log("🔌 [DB] Criando novo cliente Postgres-JS...");
+            console.log("🔌 [DB] Iniciando nova conexão Postgres...");
             
-            // Forçamos o sslmode se não estiver na URL
-            const finalUrl = connectionString.includes('sslmode=') 
-                ? connectionString 
-                : `${connectionString}${connectionString.includes('?') ? '&' : '?'}sslmode=require`;
-
-            sqlClient = postgres(finalUrl, {
-                ssl: 'require', // Força SSL modo 'require'
+            sqlClient = postgres(connectionString, {
+                ssl: 'prefer', // Tenta com SSL, se o banco não aceitar, vai sem (mais compatível)
                 max: 10,
+                connect_timeout: 15,
                 idle_timeout: 20,
-                connect_timeout: 10,
             });
+            
+            // Teste rápido silencioso
+            sqlClient`SELECT 1`.then(() => console.log("✅ [DB] Conexão Teste OK")).catch(e => console.error("❌ [DB] Conexão Teste Falhou:", e.message));
         }
-
 
         return drizzle(sqlClient);
     } catch (e) {
-        console.error("❌ [DB] Falha na inicialização:", e);
+        console.error("❌ [DB] Erro Crítico:", e);
         return null;
     }
 };
-
