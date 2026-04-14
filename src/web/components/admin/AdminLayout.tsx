@@ -40,12 +40,48 @@ export const AdminLayout = ({ children, title }: AdminLayoutProps) => {
     const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
 
     useEffect(() => {
+        // Ignora enquanto está carregando
         if (isPending) return;
+
         const user = session?.user as any;
-        if (!user || user.role !== "admin") {
+        console.log("🛡️ [Admin Guard] State:", { 
+            hasSession: !!session, 
+            role: user?.role, 
+            path: location 
+        });
+        
+        if (!session) {
+            console.warn("🚫 [Admin Guard] No session. Redirecting to login...");
+            const timer = setTimeout(() => {
+                setLocation("/admin/login");
+            }, 500); // 500ms para estabilidade
+            return () => clearTimeout(timer);
+        }
+
+        if (user?.role !== "admin") {
+            console.warn("🚫 [Admin Guard] Role mismatch. Redirecting...");
             setLocation("/admin/login");
         }
-    }, [session, isPending, setLocation]);
+    }, [session, isPending, setLocation, location]);
+
+    // Enquanto está carregando ou se não temos usuário válido (e vamos ser redirecionados),
+    // mostramos um estado de carregamento elegante ao invés do layout vazio.
+    if (isPending) {
+        return (
+            <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-6">
+                <div className="w-12 h-12 border-4 border-gold/20 border-t-gold rounded-full animate-spin" />
+                <span className="text-gold/60 font-body text-xs tracking-[0.3em] uppercase font-bold animate-pulse">
+                    Verificando Protocolos...
+                </span>
+            </div>
+        );
+    }
+
+    // Se o carregamento terminou e não há usuário admin, não renderiza nada 
+    // enquanto o redirecionamento do useEffect acontece.
+    if (!session?.user || (session.user as any).role !== "admin") {
+        return null;
+    }
 
     const handleMouseMove = (e: React.MouseEvent) => {
         const rect = e.currentTarget.getBoundingClientRect();

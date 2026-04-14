@@ -2,7 +2,7 @@
 
 ## 📊 Status Atual: Fase 2 Concluída (Páginas Institucionais)
 
-**Última atualização:** 11 de Fevereiro de 2026
+**Última atualização:** 14 de Abril de 2026
 
 ---
 
@@ -56,6 +56,7 @@
 - [x] Página de perfil (Edição de nome e imagem)
 - [x] Sistema de favoritos (Integrado ao Dashboard)
 - [x] Catálogo de Restaurantes dinâmico (conectado ao DB)
+- [x] Correção do loop de redirecionamento no Admin (Otimização para Vercel/Produção)
 
 ### Fase 3 - Integração de Pagamentos (Mercado Pago 🚀)
 - [/] Gateway Escolhido: **Mercado Pago** (Checkout Pro)

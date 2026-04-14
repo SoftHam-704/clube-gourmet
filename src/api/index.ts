@@ -13,9 +13,20 @@ import { webhookRoutes } from './routes/webhooks.js';
 
 const app = new Hono();
 
-// Middleware Global apenas para CORS (muito leve)
+// Middleware Global para CORS
 app.use(cors({ 
-    origin: ["http://localhost:5174", "http://localhost:5173", "https://clubempar.com.br", "https://www.clubempar.com.br"],
+    origin: (origin) => {
+        const allowedOrigins = [
+            "http://localhost:5174", 
+            "http://localhost:5173", 
+            "https://clubempar.com.br", 
+            "https://www.clubempar.com.br"
+        ];
+        if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+            return origin;
+        }
+        return allowedOrigins[0];
+    },
     credentials: true,
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 }));
