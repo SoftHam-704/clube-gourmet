@@ -13,14 +13,14 @@ import { webhookRoutes } from './routes/webhooks.js';
 
 const app = new Hono();
 
-// Middleware Global para CORS
 app.use(cors({ 
-    origin: (origin) => origin, // Retorna o próprio origin para permitir credentials
+    origin: (origin) => origin || 'https://www.clubempar.com.br',
     credentials: true,
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
     exposeHeaders: ['Set-Cookie'],
 }));
+
 
 
 

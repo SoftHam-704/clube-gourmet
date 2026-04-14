@@ -3,44 +3,23 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { getDb } from '../db/index.js';
 import * as schema from './database/schema.js';
 
+let cachedAuth: any = null;
+
 export const getAuth = (env?: any, request?: Request) => {
+    if (cachedAuth) return cachedAuth;
+
     const authSecret = env?.BETTER_AUTH_SECRET || process.env.BETTER_AUTH_SECRET;
     
-    if (!authSecret) {
-        console.warn("⚠️ [Auth] BETTER_AUTH_SECRET não detectado.");
-    }
+    // Forçamos a URL de produção para evitar qualquer erro de detecção
+    let authUrl = "https://www.clubempar.com.br";
     
-    // Tenta pegar a URL base de variáveis de ambiente
-    let authUrl = env?.BETTER_AUTH_URL || process.env.BETTER_AUTH_URL;
-    
-    // Se não houver variável, mas houver uma requisição, detectamos o host atual
-    if (!authUrl && request) {
-        let host = request.headers.get("x-forwarded-host") || request.headers.get("host");
-        
-        // Vercel e outros proxies podem enviar múltiplos hosts separados por vírgula
-        if (host?.includes(",")) {
-            host = host.split(",")[0].trim();
-        }
-
-        const proto = request.headers.get("x-forwarded-proto") || (host?.includes("localhost") ? "http" : "https");
-        if (host) authUrl = `${proto}://${host}`;
+    // Se estiver em ambiente local, mudamos
+    if (process.env.NODE_ENV === "development" || env?.NODE_ENV === "development") {
+        authUrl = "http://localhost:5174";
     }
 
+    console.log("🚦 [Auth] Initializing with Fixed URL:", authUrl);
 
-    // Fallback final para produção
-    if (!authUrl) {
-        authUrl = (process.env.NODE_ENV === "production" || env?.NODE_ENV === "production") 
-            ? "https://clubempar.com.br" 
-            : "http://localhost:5174";
-    }
-
-    // Normalização
-    authUrl = authUrl.replace(/\/$/, "");
-
-    // Configuração de cookies para suportar www e raiz simultaneamente em produção
-    const cookieDomain = authUrl.includes("clubempar.com.br") ? ".clubempar.com.br" : undefined;
-
-    console.log("🚦 [Auth] Initializing with URL:", authUrl, "| Cookie Domain:", cookieDomain);
 
     const db = getDb(env);
     if (!db) {
@@ -83,14 +62,13 @@ export const getAuth = (env?: any, request?: Request) => {
         advanced: {
             useSecureCookies: true,
             trustHost: true,
-            cookieOptions: {
-                domain: cookieDomain
-            }
         }
     });
 
+    cachedAuth = authInstance;
     return authInstance;
 };
+
 
 
 export const auth = {
