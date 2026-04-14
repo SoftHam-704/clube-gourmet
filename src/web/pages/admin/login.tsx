@@ -15,13 +15,24 @@ export default function AdminLogin() {
         setError("");
 
         try {
+            console.log("🔐 [Login] Iniciando tentativa para:", email);
             const { data, error: authError } = await authClient.signIn.email({ email, password });
 
-            if (authError || !data) {
-                setError("Credenciais inválidas. Verifique os dados de acesso.");
+            if (authError) {
+                console.error("❌ [Login] Erro do Better Auth:", authError);
+                setError(`Erro: ${authError.message || "Credenciais inválidas"}`);
                 setIsLoading(false);
                 return;
             }
+
+            if (!data) {
+                console.warn("⚠️ [Login] Sem dados de retorno");
+                setError("O servidor não retornou dados. Tente novamente.");
+                setIsLoading(false);
+                return;
+            }
+
+            console.log("✅ [Login] Sucesso! Role:", (data.user as any)?.role);
 
             // Verifica se o usuário tem role admin
             const user = data.user as any;
@@ -33,10 +44,12 @@ export default function AdminLogin() {
             }
 
             setLocation("/admin");
-        } catch {
-            setError("Erro ao conectar. Tente novamente.");
+        } catch (err: any) {
+            console.error("🔥 [Login] Erro Crítico:", err);
+            setError(`Erro de conexão: ${err.message || "Verifique o console"}`);
             setIsLoading(false);
         }
+
     };
 
     return (

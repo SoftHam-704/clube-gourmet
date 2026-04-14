@@ -15,21 +15,14 @@ const app = new Hono();
 
 // Middleware Global para CORS
 app.use(cors({ 
-    origin: (origin) => {
-        const allowedOrigins = [
-            "http://localhost:5174", 
-            "http://localhost:5173", 
-            "https://clubempar.com.br", 
-            "https://www.clubempar.com.br"
-        ];
-        if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
-            return origin;
-        }
-        return allowedOrigins[0];
-    },
+    origin: (origin) => origin, // Retorna o próprio origin para permitir credentials
     credentials: true,
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    exposeHeaders: ['Set-Cookie'],
 }));
+
+
 
 // Agrupamos as rotas de API
 const api = new Hono();
