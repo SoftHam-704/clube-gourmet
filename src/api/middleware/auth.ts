@@ -8,7 +8,8 @@ export const authMiddleware = createMiddleware(async (c, next) => {
             return next();
         }
 
-        const auth = getAuth(c.env);
+        const auth = getAuth(c.env, c.req.raw);
+
         const session = await auth.api.getSession({ headers: c.req.raw.headers });
         
         if (session) {

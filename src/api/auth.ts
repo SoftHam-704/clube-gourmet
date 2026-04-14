@@ -3,29 +3,36 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { getDb } from '../db/index.js';
 import * as schema from './database/schema.js';
 
-export const getAuth = (env?: any) => {
+export const getAuth = (env?: any, request?: Request) => {
     const authSecret = env?.BETTER_AUTH_SECRET || process.env.BETTER_AUTH_SECRET;
     
     if (!authSecret) {
-        console.warn("⚠️ [Auth] BETTER_AUTH_SECRET não detectado. Usando valor de fallback para desenvolvimento.");
+        console.warn("⚠️ [Auth] BETTER_AUTH_SECRET não detectado.");
     }
     
-    // Detectamos a URL base dinamicamente com prioridades
+    // Tenta pegar a URL base de variáveis de ambiente
     let authUrl = env?.BETTER_AUTH_URL || process.env.BETTER_AUTH_URL;
     
-    if (!authUrl) {
-        if (process.env.NODE_ENV === "production" || env?.NODE_ENV === "production") {
-            // Em produção, tentamos usar o host da Vercel ou o domínio fixo
-            authUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://clubempar.com.br";
-        } else {
-            authUrl = "http://localhost:5174";
-        }
+    // Se não houver variável, mas houver uma requisição, detectamos o host atual
+    // Isso é vital para funcionar tanto em www.clubempar.com.br quanto em clubempar.com.br
+    if (!authUrl && request) {
+        const host = request.headers.get("host");
+        const protocol = host?.includes("localhost") ? "http" : "https";
+        if (host) authUrl = `${protocol}://${host}`;
     }
 
-    // Normalização: Remove barra final se existir
+    // Fallback final para produção
+    if (!authUrl) {
+        authUrl = (process.env.NODE_ENV === "production" || env?.NODE_ENV === "production") 
+            ? "https://clubempar.com.br" 
+            : "http://localhost:5174";
+    }
+
+    // Normalização
     authUrl = authUrl.replace(/\/$/, "");
 
     console.log("🚦 [Auth] Initializing with URL:", authUrl);
+
 
     const db = getDb(env);
     if (!db) {
