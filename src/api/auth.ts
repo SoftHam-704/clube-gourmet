@@ -15,10 +15,17 @@ export const getAuth = (env?: any, request?: Request) => {
     
     // Se não houver variável, mas houver uma requisição, detectamos o host atual
     if (!authUrl && request) {
-        const host = request.headers.get("x-forwarded-host") || request.headers.get("host");
+        let host = request.headers.get("x-forwarded-host") || request.headers.get("host");
+        
+        // Vercel e outros proxies podem enviar múltiplos hosts separados por vírgula
+        if (host?.includes(",")) {
+            host = host.split(",")[0].trim();
+        }
+
         const proto = request.headers.get("x-forwarded-proto") || (host?.includes("localhost") ? "http" : "https");
         if (host) authUrl = `${proto}://${host}`;
     }
+
 
     // Fallback final para produção
     if (!authUrl) {
