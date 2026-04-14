@@ -35,10 +35,15 @@ app.use(cors({
 // Agrupamos as rotas de API
 const api = new Hono();
 
-// !!! O AuthMiddleware agora só roda para rotas de /api !!!
+// Rotas públicas (Sempre rodar ANTES do middleware)
+api.get('/health', (c) => c.json({ status: 'ok', domain: 'www.clubempar.com.br' }));
+api.get('/debug', (c) => c.json({ status: 'ok', message: "Club Empar API v2 — Online" }));
+
+// !!! O AuthMiddleware agora só roda para rotas protegidas !!!
 api.use(authMiddleware);
 
 api.route('/', authRoutes);
+
 api.route('/membership-plans', plansRoutes);
 api.route('/restaurants', restaurantsRoutes);
 api.route('/cities', citiesRoutes);
