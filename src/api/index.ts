@@ -13,13 +13,21 @@ import { webhookRoutes } from './routes/webhooks.js';
 
 const app = new Hono();
 
+// Logger de Emergência para capturar o Firefox
+app.use('*', async (c, next) => {
+    console.log(`📡 [API REQ] ${c.req.method} ${c.req.url}`);
+    await next();
+    console.log(`✅ [API RES] ${c.req.method} ${c.req.url} -> Status: ${c.res.status}`);
+});
+
 app.use(cors({ 
     origin: (origin) => origin || 'https://www.clubempar.com.br',
     credentials: true,
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+    allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
     exposeHeaders: ['Set-Cookie'],
 }));
+
 
 
 

@@ -19,8 +19,9 @@ export const getDb = (env?: any) => {
             console.log("🔌 [DB] Criando novo Pool de conexões...");
             poolInstance = new pg.Pool({
                 connectionString,
-                ssl: false,
-                connectionTimeoutMillis: 10000,
+                ssl: { rejectUnauthorized: false },
+                connectionTimeoutMillis: 15000,
+                idleTimeoutMillis: 20000,
                 max: 5, // Reduzi o max para evitar sobrecarga no SaveInCloud
             });
 
