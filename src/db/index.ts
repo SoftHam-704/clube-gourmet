@@ -1,39 +1,31 @@
-import { drizzle } from 'drizzle-orm/node-postgres';
-import pg from 'pg';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 
-// Em Workers, cache global pode causar "hangs" se a conexão cair.
-// Vamos usar uma abordagem mais segura.
-let poolInstance: pg.Pool | null = null;
+let sqlClient: postgres.Sql | null = null;
 
 export const getDb = (env?: any) => {
     const connectionString = env?.DATABASE_URL || process.env.DATABASE_URL;
     
     if (!connectionString) {
-        console.error("❌ [DB] Erro: DATABASE_URL não encontrada no context ou process.env");
+        console.error("❌ [DB] DATABASE_URL não encontrada.");
         return null;
     }
 
     try {
-        // Se o pool já existe, verificamos se ele ainda é válido
-        if (!poolInstance) {
-            console.log("🔌 [DB] Criando novo Pool de conexões...");
-            poolInstance = new pg.Pool({
-                connectionString,
+        if (!sqlClient) {
+            console.log("🔌 [DB] Criando novo cliente Postgres-JS...");
+            sqlClient = postgres(connectionString, {
                 ssl: { rejectUnauthorized: false },
-                connectionTimeoutMillis: 15000,
-                idleTimeoutMillis: 20000,
-                max: 5, // Reduzi o max para evitar sobrecarga no SaveInCloud
-            });
-
-            poolInstance.on('error', (err) => {
-                console.error('❌ [Pool Error]:', err.message);
-                poolInstance = null; // Reseta para tentar criar um novo no próximo request
+                max: 1, // Importante para Serverless (Vercel)
+                idle_timeout: 20,
+                connect_timeout: 15,
             });
         }
 
-        return drizzle(poolInstance);
+        return drizzle(sqlClient);
     } catch (e) {
-        console.error("❌ [DB] Falha crítica na inicialização:", e);
+        console.error("❌ [DB] Falha na inicialização:", e);
         return null;
     }
 };
+
