@@ -44,25 +44,33 @@ export const AdminLayout = ({ children, title }: AdminLayoutProps) => {
         if (isPending) return;
 
         const user = session?.user as any;
-        console.log("🛡️ [Admin Guard] State:", { 
+        console.log("🛡️ [Admin Guard] Status:", { 
             hasSession: !!session, 
             role: user?.role, 
+            email: user?.email,
             path: location 
         });
         
+        // Se após o carregamento não houver sessão, aguardamos um pouco antes de redirecionar
+        // Isso evita loops se houver latência na sincronização de cookies
         if (!session) {
-            console.warn("🚫 [Admin Guard] No session. Redirecting to login...");
+            console.warn("🚫 [Admin Guard] Session missing. Starting exit protocol...");
             const timer = setTimeout(() => {
-                setLocation("/admin/login");
-            }, 500); // 500ms para estabilidade
+                // Verificação dupla antes do redirect final
+                if (!session) {
+                    console.log("↪️ [Admin Guard] Executing redirect to login.");
+                    setLocation("/admin/login");
+                }
+            }, 1000); // 1s para garantir estabilidade em redes lentas
             return () => clearTimeout(timer);
         }
 
         if (user?.role !== "admin") {
-            console.warn("🚫 [Admin Guard] Role mismatch. Redirecting...");
+            console.warn("🚫 [Admin Guard] Privilege violation. Role:", user?.role);
             setLocation("/admin/login");
         }
     }, [session, isPending, setLocation, location]);
+
 
     // Enquanto está carregando ou se não temos usuário válido (e vamos ser redirecionados),
     // mostramos um estado de carregamento elegante ao invés do layout vazio.
