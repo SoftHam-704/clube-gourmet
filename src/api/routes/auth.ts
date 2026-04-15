@@ -18,9 +18,10 @@ authRoutes.on(['GET', 'POST'], '/*', async (c) => {
         );
         
         try {
+            console.log(`⏱️ [Auth Server] Iniciando handler para ${c.req.url}...`);
             const response = await Promise.race([handlerPromise, timeoutPromise]);
             const duration = Date.now() - start;
-            console.log(`✅ [Auth Server] Processado em ${duration}ms com status ${response.status}`);
+            console.log(`✅ [Auth Server] FINALIZADO em ${duration}ms com status ${response.status}`);
             return response;
         } catch (timeoutErr: any) {
             const duration = Date.now() - start;

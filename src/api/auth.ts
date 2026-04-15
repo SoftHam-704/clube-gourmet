@@ -66,6 +66,10 @@ export const getAuth = (env?: any, request?: Request) => {
         advanced: {
             useSecureCookies: authUrl.startsWith("https"),
             trustHost: true,
+        },
+        logger: {
+            level: "debug",
+            disabled: false,
         }
     });
 
