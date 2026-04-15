@@ -54,6 +54,13 @@ export const getAuth = (env?: any, request?: Request) => {
         emailAndPassword: {
             enabled: true,
         },
+        password: {
+            hashOptions: {
+                scrypt: {
+                    cost: 1024, // Muito menor que o padrão (16384) para rodar rápido no serverless
+                }
+            }
+        },
         secret: authSecret,
         baseURL: authUrl,
         trustedOrigins: [
