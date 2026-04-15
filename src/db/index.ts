@@ -30,9 +30,9 @@ export const getDb = (env?: any) => {
             console.log("🔌 [DB] Nova conexão Postgres (SearchPath: emparclub)...");
             
             sqlClient = postgres(connectionString, {
-                ssl: 'require',          // Remote DBs EXIGEM SSL. 'false' faz a conexão travar.
-                max: 10,                 // Aumentado para evitar fila em requests paralelos
-                connect_timeout: 10,
+                ssl: false,              // SaveInCloud dropa conexões TLS silenciosamente
+                max: 10,
+                connect_timeout: 5,
                 idle_timeout: 30,
                 max_lifetime: 60 * 10,
                 fetch_types: false,
