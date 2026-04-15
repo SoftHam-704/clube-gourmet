@@ -32,10 +32,10 @@ export const getDb = (env?: any) => {
             const isProduction = !connectionString.includes('localhost');
             
             sqlClient = postgres(connectionString, {
-                ssl: 'prefer',           // SaveInCloud pode não suportar SSL estrito
+                ssl: false,              // Forçar sem SSL para máxima velocidade e evitar handshake overhead
                 max: 3,                  // Menos conexões para serverless
-                connect_timeout: 10,     // Timeout de conexão mais curto
-                idle_timeout: 20,
+                connect_timeout: 5,      // Timeout de conexão mais curto
+                idle_timeout: 15,
                 max_lifetime: 60 * 5,    // Conexões vivem no máximo 5 min
                 fetch_types: false,       // Evita query extra no startup (mais rápido)
             });

@@ -131,9 +131,27 @@ api.get('/auth-test', async (c) => {
         const start = Date.now();
         const result = await db.select({ id: users.id, email: users.email, role: users.role }).from(users).limit(5);
         const accs = await db.select({ id: accounts.id, userId: accounts.userId, provider: accounts.providerId }).from(accounts).limit(5);
+        const queryTime = Date.now() - start;
+
+        // Teste de criação de usuário temporário para medir hashing
+        const testEmail = `test-${Date.now()}@example.com`;
+        const auth = getAuth(c.env);
+        const hashStart = Date.now();
+        
+        let hashStatus = "Skipped";
+        try {
+            await auth.api.signUpEmail({
+                body: { email: testEmail, password: 'password123', name: 'Test Speed' }
+            });
+            hashStatus = `Success (${Date.now() - hashStart}ms)`;
+        } catch (e: any) {
+            hashStatus = `Error: ${e.message}`;
+        }
+
         return c.json({
             status: 'ok',
-            latency: `${Date.now() - start}ms`,
+            queryLatency: `${queryTime}ms`,
+            hashLatency: hashStatus,
             users: result,
             accounts: accs
         });
