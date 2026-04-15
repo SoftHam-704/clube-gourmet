@@ -3,20 +3,27 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { getDb } from '../db/index.js';
 import * as schema from './database/schema.js';
 
+// Cache da instância do Better Auth para evitar recriar a cada request
+let cachedAuth: ReturnType<typeof betterAuth> | null = null;
+let cachedAuthUrl: string | null = null;
+
 export const getAuth = (env?: any, request?: Request) => {
     const authSecret = env?.BETTER_AUTH_SECRET || process.env.BETTER_AUTH_SECRET;
     
     // Forçamos a URL de produção para evitar qualquer erro de detecção
     let authUrl = "https://www.clubempar.com.br";
 
-    
     // Se estiver em ambiente local, mudamos
     if (process.env.NODE_ENV === "development" || env?.NODE_ENV === "development") {
         authUrl = "http://localhost:5174";
     }
 
-    console.log("🚦 [Auth] Initializing with Fixed URL:", authUrl);
+    // Se já temos uma instância cacheada com a mesma URL, reutilizamos
+    if (cachedAuth && cachedAuthUrl === authUrl) {
+        return cachedAuth;
+    }
 
+    console.log("🚦 [Auth] Initializing with Fixed URL:", authUrl);
 
     const db = getDb(env);
     if (!db) {
@@ -57,15 +64,17 @@ export const getAuth = (env?: any, request?: Request) => {
             "http://localhost:5174"
         ],
         advanced: {
-            useSecureCookies: true,
+            useSecureCookies: authUrl.startsWith("https"),
             trustHost: true,
         }
     });
 
+    // Cache para próximos requests
+    cachedAuth = authInstance;
+    cachedAuthUrl = authUrl;
+
     return authInstance;
 };
-
-
 
 
 export const auth = {

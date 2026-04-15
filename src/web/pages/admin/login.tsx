@@ -16,11 +16,23 @@ export default function AdminLogin() {
 
         try {
             console.log("🔐 [Login] Iniciando tentativa para:", email);
+            
+            // Timeout no lado do cliente também (20s)
+            const controller = new AbortController();
+            const clientTimeout = setTimeout(() => controller.abort(), 20000);
+            
             const { data, error: authError } = await authClient.signIn.email({ email, password });
+            clearTimeout(clientTimeout);
 
             if (authError) {
                 console.error("❌ [Login] Erro do Better Auth:", authError);
-                setError(`Erro: ${authError.message || "Credenciais inválidas"}`);
+                const msg = (authError as any)?.message || "Credenciais inválidas";
+                // Detecta timeout do servidor
+                if (msg.includes("Timeout") || msg.includes("timeout")) {
+                    setError("Servidor demorou demais. A conexão pode estar instável. Tente novamente em 5s.");
+                } else {
+                    setError(`Erro: ${msg}`);
+                }
                 setIsLoading(false);
                 return;
             }
@@ -46,7 +58,11 @@ export default function AdminLogin() {
             setLocation("/admin");
         } catch (err: any) {
             console.error("🔥 [Login] Erro Crítico:", err);
-            setError(`Erro de conexão: ${err.message || "Verifique o console"}`);
+            if (err.name === "AbortError") {
+                setError("Timeout: O servidor não respondeu em 20 segundos. Tente novamente.");
+            } else {
+                setError(`Erro de conexão: ${err.message || "Verifique o console"}`);
+            }
             setIsLoading(false);
         }
 

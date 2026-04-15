@@ -10,12 +10,24 @@ export const authMiddleware = createMiddleware(async (c, next) => {
 
         const auth = getAuth(c.env, c.req.raw);
 
-        const session = await auth.api.getSession({ headers: c.req.raw.headers });
-        
-        if (session) {
-            c.set("user", session.user);
-            c.set("session", session.session);
-        } else {
+        // Timeout de segurança para evitar hang infinito em serverless
+        const sessionPromise = auth.api.getSession({ headers: c.req.raw.headers });
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error("Session check timeout (8s)")), 8000)
+        );
+
+        try {
+            const session = await Promise.race([sessionPromise, timeoutPromise]) as any;
+            
+            if (session) {
+                c.set("user", session.user);
+                c.set("session", session.session);
+            } else {
+                c.set("user", null);
+                c.set("session", null);
+            }
+        } catch (timeoutErr: any) {
+            console.warn("⏱️ [Auth Middleware] Timeout na verificação de sessão:", timeoutErr.message);
             c.set("user", null);
             c.set("session", null);
         }
