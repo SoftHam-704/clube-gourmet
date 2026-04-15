@@ -17,9 +17,9 @@ export default function AdminLogin() {
         try {
             console.log("🔐 [Login] Iniciando tentativa para:", email);
             
-            // Timeout no lado do cliente também (20s)
+            // Timeout no lado do cliente (35s)
             const controller = new AbortController();
-            const clientTimeout = setTimeout(() => controller.abort(), 20000);
+            const clientTimeout = setTimeout(() => controller.abort(), 35000);
             
             const { data, error: authError } = await authClient.signIn.email({ email, password });
             clearTimeout(clientTimeout);

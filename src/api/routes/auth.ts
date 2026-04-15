@@ -14,7 +14,7 @@ authRoutes.on(['GET', 'POST'], '/*', async (c) => {
         // Timeout de segurança: se o handler travar (DB morto), retornamos 504
         const handlerPromise = auth.handler(c.req.raw);
         const timeoutPromise = new Promise<Response>((_, reject) => 
-            setTimeout(() => reject(new Error("Auth handler timeout (15s) — possível conexão DB morta")), 15000)
+            setTimeout(() => reject(new Error("Auth handler timeout (28s) — conexão DB lenta")), 28000)
         );
         
         try {

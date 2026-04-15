@@ -160,11 +160,11 @@ api.get('/auth-test', async (c) => {
     }
 });
 
-// !!! O AuthMiddleware agora só roda para rotas protegidas !!!
-
-api.use(authMiddleware);
-
+// Rotas de Auth (NÃO usam o middleware de session check para economizar latência)
 api.route('/', authRoutes);
+
+// !!! O AuthMiddleware agora só roda para rotas protegidas !!!
+api.use(authMiddleware);
 
 api.route('/membership-plans', plansRoutes);
 api.route('/restaurants', restaurantsRoutes);
