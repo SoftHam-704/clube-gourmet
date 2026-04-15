@@ -68,7 +68,8 @@ export const getAuth = (env?: any, request?: Request) => {
             "https://www.clubempar.com.br",
             "https://clube-gourmet-five.vercel.app",
             "http://localhost:5173",
-            "http://localhost:5174"
+            "http://localhost:5174",
+            "http://localhost:3000"
         ],
         advanced: {
             useSecureCookies: authUrl.startsWith("https"),
