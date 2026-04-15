@@ -21,41 +21,29 @@ export const getDb = (env?: any) => {
         const isStale = sqlClient && (now - lastSuccessfulQuery > MAX_IDLE_MS);
         
         if (isStale) {
-            console.warn("⚠️ [DB] Conexão possivelmente stale. Recriando...");
-            try { sqlClient!.end({ timeout: 1 }); } catch (_) { /* ignore */ }
+            console.warn("⚠️ [DB] Resetando conexão stale...");
+            try { sqlClient!.end({ timeout: 1 }); } catch (_) {}
             sqlClient = null;
         }
 
         if (!sqlClient) {
-            console.log("🔌 [DB] Iniciando nova conexão Postgres...");
-            
-            const isProduction = !connectionString.includes('localhost');
+            console.log("🔌 [DB] Nova conexão Postgres (SearchPath: emparclub)...");
             
             sqlClient = postgres(connectionString, {
-                ssl: false,              // Forçar sem SSL para máxima velocidade e evitar handshake overhead
-                max: 3,                  // Menos conexões para serverless
-                connect_timeout: 5,      // Timeout de conexão mais curto
-                idle_timeout: 15,
-                max_lifetime: 60 * 5,    // Conexões vivem no máximo 5 min
-                fetch_types: false,       // Evita query extra no startup (mais rápido)
+                ssl: false,              // Sem SSL para evitar latência de handshake
+                max: 10,                 // Aumentado para evitar fila em requests paralelos
+                connect_timeout: 5,
+                idle_timeout: 30,
+                max_lifetime: 60 * 10,
+                fetch_types: false,
+                prepare: false,          // Desativa prepared statements para evitar problemas em serverless/poolers
+                parameters: {
+                    'search_path': 'emparclub,public'
+                }
             });
             
-            // Marca o timestamp para controle de stale
             lastSuccessfulQuery = now;
-            
-            // Teste rápido silencioso
-            sqlClient`SELECT 1`
-                .then(() => {
-                    lastSuccessfulQuery = Date.now();
-                    console.log("✅ [DB] Conexão Teste OK");
-                })
-                .catch(e => {
-                    console.error("❌ [DB] Conexão Teste Falhou:", e.message);
-                    // Se o teste falhou, marca como morta para recriar no próximo getDb()
-                    sqlClient = null;
-                });
         } else {
-            // Atualiza timestamp de uso
             lastSuccessfulQuery = now;
         }
 
