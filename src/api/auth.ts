@@ -10,12 +10,16 @@ let cachedAuthUrl: string | null = null;
 export const getAuth = (env?: any, request?: Request) => {
     const authSecret = env?.BETTER_AUTH_SECRET || process.env.BETTER_AUTH_SECRET;
     
-    // Forçamos a URL de produção para evitar qualquer erro de detecção
+    // Usamos a URL da request se existir, senão um fallback
     let authUrl = "https://www.clubempar.com.br";
-
-    // Se estiver em ambiente local, mudamos
-    if (process.env.NODE_ENV === "development" || env?.NODE_ENV === "development") {
-        authUrl = "http://localhost:5174";
+    if (request) {
+        try {
+            authUrl = new URL(request.url).origin;
+        } catch (e) {
+            // mantém fallback
+        }
+    } else if (process.env.NODE_ENV === "development" || env?.NODE_ENV === "development") {
+        authUrl = "http://localhost:8787";
     }
 
     // Se já temos uma instância cacheada com a mesma URL, reutilizamos
@@ -69,7 +73,8 @@ export const getAuth = (env?: any, request?: Request) => {
             "https://clube-gourmet-five.vercel.app",
             "http://localhost:5173",
             "http://localhost:5174",
-            "http://localhost:3000"
+            "http://localhost:3000",
+            "http://localhost:8787"
         ],
         advanced: {
             useSecureCookies: authUrl.startsWith("https"),
