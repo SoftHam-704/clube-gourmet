@@ -72,7 +72,75 @@ api.get('/debug', async (c) => {
     }
 });
 
+// Rota de setup do admin (ANTES do middleware de auth)
+import { getAuth } from './auth.js';
+import { users, accounts } from './database/schema.js';
+import { eq } from 'drizzle-orm';
 
+api.get('/setup-admin', async (c) => {
+    try {
+        const password = c.req.query('password') || 'admin123';
+        const email = 'admin@emparclub.com.br';
+        const auth = getAuth(c.env, c.req.raw);
+        const db = getDb(c.env);
+        if (!db) return c.json({ error: 'DB unavailable' }, 500);
+        
+        console.log('🛠️ [Setup Admin] Iniciando...');
+        
+        let userId: string | null = null;
+        
+        // Tenta criar via Better Auth (com timeout)
+        try {
+            const signUpPromise = auth.api.signUpEmail({
+                body: { email, password, name: 'Administrador Empar' }
+            });
+            const timeoutPromise = new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('signUp timeout 10s')), 10000)
+            );
+            const result = await Promise.race([signUpPromise, timeoutPromise]) as any;
+            userId = result?.user?.id;
+            console.log('✅ [Setup Admin] User criado:', userId);
+        } catch (e: any) {
+            console.log('ℹ️ [Setup Admin] signUp falhou:', e.message);
+        }
+        
+        // Buscar user existente
+        const existing = await db.select().from(users).where(eq(users.email, email));
+        if (existing.length > 0) {
+            userId = existing[0].id;
+            await db.update(users).set({ role: 'admin', updatedAt: new Date() }).where(eq(users.id, userId));
+            console.log('✅ [Setup Admin] Role atualizado para admin');
+        }
+        
+        return c.json({ 
+            success: true, userId, email, role: 'admin',
+            message: 'Admin configurado! Tente logar com: ' + email + ' / ' + password
+        });
+    } catch (e: any) {
+        console.error('❌ [Setup Admin]:', e.message);
+        return c.json({ error: e.message }, 500);
+    }
+});
+
+// Diagnóstico de auth (testa se o DB responde para queries do Better Auth)
+api.get('/auth-test', async (c) => {
+    const db = getDb(c.env);
+    if (!db) return c.json({ error: 'DB unavailable' }, 500);
+    
+    try {
+        const start = Date.now();
+        const result = await db.select({ id: users.id, email: users.email, role: users.role }).from(users).limit(5);
+        const accs = await db.select({ id: accounts.id, userId: accounts.userId, provider: accounts.providerId }).from(accounts).limit(5);
+        return c.json({
+            status: 'ok',
+            latency: `${Date.now() - start}ms`,
+            users: result,
+            accounts: accs
+        });
+    } catch (e: any) {
+        return c.json({ error: e.message }, 500);
+    }
+});
 
 // !!! O AuthMiddleware agora só roda para rotas protegidas !!!
 
