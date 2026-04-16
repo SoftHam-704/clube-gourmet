@@ -3,8 +3,16 @@ import { getAuth } from "../auth.js";
 
 export const authMiddleware = createMiddleware(async (c, next) => {
     try {
-        // Ignora rotas que não precisam de auth para poupar conexões
-        if (c.req.path.includes('/webhooks/mercadopago')) {
+        // Ignora rotas públicas (auth, webhooks, debug)
+        const path = c.req.path;
+        if (
+            path.includes('/webhooks/') ||
+            path.includes('/auth/') ||
+            path.startsWith('/auth') ||
+            path.includes('/debug') ||
+            path.includes('/health') ||
+            path.includes('/setup-admin')
+        ) {
             return next();
         }
 
