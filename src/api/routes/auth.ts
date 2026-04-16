@@ -1,133 +1,96 @@
 import { Hono } from 'hono';
-import { getDb } from '../../db/index.js';
-import { users, accounts, sessions } from '../database/schema.js';
-import { eq, and, gt } from 'drizzle-orm';
-import { scrypt, timingSafeEqual, randomBytes } from 'node:crypto';
+import { createHmac, timingSafeEqual } from 'node:crypto';
 
 export const authRoutes = new Hono();
 
-// Ping para confirmar que as rotas novas estão ativas
-authRoutes.get('/ping', (c) => c.json({ ok: true, version: 'native-auth-v1' }));
+const SECRET = () => process.env.BETTER_AUTH_SECRET || 'fallback-secret-change-me';
+const ADMIN_EMAIL = () => process.env.ADMIN_EMAIL || 'admin@emparclub.com.br';
+const ADMIN_PASSWORD = () => process.env.ADMIN_PASSWORD || 'admin123';
+const SESSION_MAX_AGE = 7 * 24 * 3600; // 7 dias em segundos
 
-// Verifica senha com node:crypto nativo
-// Formato do hash Better Auth: "saltHex:keyHex" (N=16384, r=16, p=1, dkLen=64)
-async function verifyPassword(password: string, storedHash: string): Promise<boolean> {
-    const [saltHex, keyHex] = storedHash.split(':');
-    if (!saltHex || !keyHex) return false;
-
-    const derivedKey = await new Promise<Buffer>((resolve, reject) => {
-        scrypt(
-            password.normalize('NFKC'),
-            saltHex,
-            64,
-            { N: 16384, r: 16, p: 1, maxmem: 128 * 16384 * 16 * 2 },
-            (err, key) => { if (err) reject(err); else resolve(key); }
-        );
-    });
-
-    const storedKey = Buffer.from(keyHex, 'hex');
-    return derivedKey.length === storedKey.length && timingSafeEqual(derivedKey, storedKey);
+function makeToken(email: string, role: string): string {
+    const payload = Buffer.from(JSON.stringify({
+        email, role, exp: Date.now() + SESSION_MAX_AGE * 1000
+    })).toString('base64url');
+    const sig = createHmac('sha256', SECRET()).update(payload).digest('base64url');
+    return `${payload}.${sig}`;
 }
 
-function sessionCookie(token: string, secure: boolean, maxAge: number): string {
+function verifyToken(token: string): { email: string; role: string } | null {
+    try {
+        const [payload, sig] = token.split('.');
+        if (!payload || !sig) return null;
+        const expected = createHmac('sha256', SECRET()).update(payload).digest('base64url');
+        const sigBuf = Buffer.from(sig, 'base64url');
+        const expBuf = Buffer.from(expected, 'base64url');
+        if (sigBuf.length !== expBuf.length || !timingSafeEqual(sigBuf, expBuf)) return null;
+        const data = JSON.parse(Buffer.from(payload, 'base64url').toString());
+        if (data.exp < Date.now()) return null;
+        return { email: data.email, role: data.role };
+    } catch {
+        return null;
+    }
+}
+
+function cookie(token: string, secure: boolean, maxAge: number): string {
     return `better-auth.session_token=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${secure ? '; Secure' : ''}`;
 }
 
-// ---------------------------------------------------------------------------
+authRoutes.get('/ping', (c) => c.json({ ok: true, version: 'hmac-auth-v1' }));
+
 // POST /sign-in/email
-// ---------------------------------------------------------------------------
 authRoutes.post('/sign-in/email', async (c) => {
     try {
-        const { email } = await c.req.json();
-        const db = getDb(c.env);
-        if (!db) return c.json({ found: false, error: 'db unavailable' });
-        const t = Date.now();
-        const rows = await db.select({ id: users.id, email: users.email })
-            .from(users).where(eq(users.email, email)).limit(1);
-        const ms = Date.now() - t;
-        const found = rows.length > 0;
-        console.log(`[sign-in-test] email=${email} found=${found} ms=${ms}`);
-        return c.json({ found, ms });
-    } catch (e: any) {
-        console.error('[sign-in-test] error:', e.message);
-        return c.json({ found: false, error: e.message });
-    }
-});
+        const { email, password } = await c.req.json();
 
-// ---------------------------------------------------------------------------
-// GET /get-session  (chamado pelo authClient.useSession())
-// ---------------------------------------------------------------------------
-authRoutes.get('/get-session', async (c) => {
-    try {
-        const cookieHeader = c.req.header('cookie') ?? null;
-        const token = cookieHeader
-            ? (() => {
-                for (const part of cookieHeader.split(';')) {
-                    const [k, v] = part.trim().split('=');
-                    if (k === 'better-auth.session_token' && v) return decodeURIComponent(v);
-                }
-                return null;
-            })()
-            : null;
+        const emailOk = email === ADMIN_EMAIL();
+        const passOk = password === ADMIN_PASSWORD();
 
-        if (!token) return c.json(null);
-
-        const db = getDb(c.env);
-        if (!db) return c.json(null);
-
-        const rows = await db
-            .select({
-                sessionId: sessions.id, sessionToken: sessions.token,
-                expiresAt: sessions.expiresAt, userId: sessions.userId,
-                userName: users.name, userEmail: users.email,
-                userRole: users.role, userEmailVerified: users.emailVerified,
-                userImage: users.image, userCreatedAt: users.createdAt,
-            })
-            .from(sessions)
-            .innerJoin(users, eq(sessions.userId, users.id))
-            .where(and(eq(sessions.token, token), gt(sessions.expiresAt, new Date())))
-            .limit(1);
-
-        if (rows.length === 0) return c.json(null);
-        const r = rows[0];
-
-        return c.json({
-            user: { id: r.userId, name: r.userName, email: r.userEmail,
-                    role: r.userRole, emailVerified: r.userEmailVerified,
-                    image: r.userImage, createdAt: r.userCreatedAt },
-            session: { id: r.sessionId, token: r.sessionToken,
-                       userId: r.userId, expiresAt: r.expiresAt },
-        });
-    } catch (e: any) {
-        console.error('❌ [get-session]', e.message);
-        return c.json(null);
-    }
-});
-
-// ---------------------------------------------------------------------------
-// POST /sign-out
-// ---------------------------------------------------------------------------
-authRoutes.post('/sign-out', async (c) => {
-    try {
-        const cookieHeader = c.req.header('cookie') ?? null;
-        let token: string | null = null;
-        if (cookieHeader) {
-            for (const part of cookieHeader.split(';')) {
-                const [k, v] = part.trim().split('=');
-                if (k === 'better-auth.session_token' && v) { token = decodeURIComponent(v); break; }
-            }
+        if (!emailOk || !passOk) {
+            return c.json({ error: 'Credenciais inválidas' }, 401);
         }
-        if (token) {
-            const db = getDb(c.env);
-            if (db) await db.delete(sessions).where(eq(sessions.token, token));
-        }
+
+        const token = makeToken(email, 'admin');
         const secure = c.req.url.startsWith('https');
+
         return c.json(
-            { success: true },
+            {
+                user: { id: 'admin', email, name: 'Administrador', role: 'admin',
+                         emailVerified: true, image: null,
+                         createdAt: new Date(), updatedAt: new Date() },
+                session: { id: 'admin-session', token, userId: 'admin',
+                            expiresAt: new Date(Date.now() + SESSION_MAX_AGE * 1000).toISOString() },
+            },
             200,
-            { 'Set-Cookie': sessionCookie('', secure, 0) }
+            { 'Set-Cookie': cookie(token, secure, SESSION_MAX_AGE) }
         );
     } catch (e: any) {
-        return c.json({ error: e.message }, 500);
+        return c.json({ error: 'Erro interno' }, 500);
     }
+});
+
+// GET /get-session
+authRoutes.get('/get-session', (c) => {
+    const cookieHeader = c.req.header('cookie') ?? '';
+    let token: string | null = null;
+    for (const part of cookieHeader.split(';')) {
+        const [k, v] = part.trim().split('=');
+        if (k === 'better-auth.session_token' && v) { token = decodeURIComponent(v); break; }
+    }
+
+    if (!token) return c.json(null);
+    const data = verifyToken(token);
+    if (!data) return c.json(null);
+
+    return c.json({
+        user: { id: 'admin', email: data.email, name: 'Administrador',
+                role: data.role, emailVerified: true, image: null },
+        session: { id: 'admin-session', token, userId: 'admin' },
+    });
+});
+
+// POST /sign-out
+authRoutes.post('/sign-out', (c) => {
+    const secure = c.req.url.startsWith('https');
+    return c.json({ success: true }, 200, { 'Set-Cookie': cookie('', secure, 0) });
 });
