@@ -16,40 +16,33 @@ export default function AdminLogin() {
 
         try {
             console.log("🔐 [Login] Iniciando tentativa para:", email);
-            
-            // Timeout no lado do cliente (35s)
+
             const controller = new AbortController();
-            const clientTimeout = setTimeout(() => controller.abort(), 35000);
-            
-            const { data, error: authError } = await authClient.signIn.email({ email, password });
+            const clientTimeout = setTimeout(() => controller.abort(), 15000);
+
+            const res = await fetch('/api/auth/sign-in/email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-email': email,
+                    'x-password': password,
+                },
+                credentials: 'include',
+                signal: controller.signal,
+            });
             clearTimeout(clientTimeout);
 
-            if (authError) {
-                console.error("❌ [Login] Erro do Better Auth:", authError);
-                const msg = (authError as any)?.message || "Credenciais inválidas";
-                // Detecta timeout do servidor
-                if (msg.includes("Timeout") || msg.includes("timeout")) {
-                    setError("Servidor demorou demais. A conexão pode estar instável. Tente novamente em 5s.");
-                } else {
-                    setError(`Erro: ${msg}`);
-                }
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({ error: 'Erro desconhecido' }));
+                setError(err.error || 'Credenciais inválidas');
                 setIsLoading(false);
                 return;
             }
 
-            if (!data) {
-                console.warn("⚠️ [Login] Sem dados de retorno");
-                setError("O servidor não retornou dados. Tente novamente.");
-                setIsLoading(false);
-                return;
-            }
+            const data = await res.json();
+            console.log("✅ [Login] Sucesso! Role:", data.user?.role);
 
-            console.log("✅ [Login] Sucesso! Role:", (data.user as any)?.role);
-
-            // Verifica se o usuário tem role admin
-            const user = data.user as any;
-            if (user?.role !== "admin") {
-                await authClient.signOut();
+            if (data.user?.role !== "admin") {
                 setError("Acesso restrito. Você não tem permissão de administrador.");
                 setIsLoading(false);
                 return;

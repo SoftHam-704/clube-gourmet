@@ -38,10 +38,13 @@ function cookie(token: string, secure: boolean, maxAge: number): string {
 
 authRoutes.get('/ping', (c) => c.json({ ok: true, version: 'hmac-auth-v1' }));
 
-// POST /sign-in/email
+// POST /sign-in/email — lê credenciais do header para evitar body-parsing hang
 authRoutes.post('/sign-in/email', async (c) => {
     try {
-        const { email, password } = await c.req.json();
+        // Tenta ler do header primeiro (frontend modificado)
+        // Fallback: tenta query params
+        const email = c.req.header('x-email') || c.req.query('email') || '';
+        const password = c.req.header('x-password') || c.req.query('password') || '';
 
         const emailOk = email === ADMIN_EMAIL();
         const passOk = password === ADMIN_PASSWORD();
