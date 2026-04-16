@@ -48,7 +48,7 @@ export default function AdminLogin() {
                 return;
             }
 
-            setLocation("/admin");
+            window.location.href = '/admin';
         } catch (err: any) {
             console.error("🔥 [Login] Erro Crítico:", err);
             if (err.name === "AbortError") {
