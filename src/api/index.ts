@@ -160,8 +160,8 @@ api.get('/auth-test', async (c) => {
     }
 });
 
-// Rotas de Auth (NÃO usam o middleware de session check para economizar latência)
-api.route('/', authRoutes);
+// Rotas de Auth montadas em /auth para não interceptar rotas de admin/plans/etc
+api.route('/auth', authRoutes);
 
 // !!! O AuthMiddleware agora só roda para rotas protegidas !!!
 api.use(authMiddleware);
