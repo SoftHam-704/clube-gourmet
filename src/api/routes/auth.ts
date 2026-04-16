@@ -6,6 +6,9 @@ import { scrypt, timingSafeEqual, randomBytes } from 'node:crypto';
 
 export const authRoutes = new Hono();
 
+// Ping para confirmar que as rotas novas estão ativas
+authRoutes.get('/ping', (c) => c.json({ ok: true, version: 'native-auth-v1' }));
+
 // Verifica senha com node:crypto nativo
 // Formato do hash Better Auth: "saltHex:keyHex" (N=16384, r=16, p=1, dkLen=64)
 async function verifyPassword(password: string, storedHash: string): Promise<boolean> {
@@ -34,24 +37,31 @@ function sessionCookie(token: string, secure: boolean, maxAge: number): string {
 // POST /sign-in/email
 // ---------------------------------------------------------------------------
 authRoutes.post('/sign-in/email', async (c) => {
+    const t0 = Date.now();
+    console.log('🔐 [sign-in] iniciado');
     try {
         const { email, password } = await c.req.json();
+        console.log(`🔐 [sign-in] body parsed (${Date.now()-t0}ms)`);
         if (!email || !password) return c.json({ error: 'Email e senha são obrigatórios' }, 400);
 
         const db = getDb(c.env);
+        console.log(`🔐 [sign-in] db obtido (${Date.now()-t0}ms)`);
         if (!db) return c.json({ error: 'Database unavailable' }, 500);
 
         const userRows = await db.select().from(users).where(eq(users.email, email)).limit(1);
+        console.log(`🔐 [sign-in] user query (${Date.now()-t0}ms) found=${userRows.length}`);
         if (userRows.length === 0) return c.json({ error: 'Credenciais inválidas' }, 401);
         const user = userRows[0];
 
         const accountRows = await db.select().from(accounts)
             .where(and(eq(accounts.userId, user.id), eq(accounts.providerId, 'credential')))
             .limit(1);
+        console.log(`🔐 [sign-in] account query (${Date.now()-t0}ms) found=${accountRows.length}`);
         if (accountRows.length === 0 || !accountRows[0].password)
             return c.json({ error: 'Credenciais inválidas' }, 401);
 
         const valid = await verifyPassword(password, accountRows[0].password);
+        console.log(`🔐 [sign-in] password verify (${Date.now()-t0}ms) valid=${valid}`);
         if (!valid) return c.json({ error: 'Credenciais inválidas' }, 401);
 
         const token = randomBytes(32).toString('hex');
@@ -65,6 +75,7 @@ authRoutes.post('/sign-in/email', async (c) => {
             ipAddress: c.req.header('x-forwarded-for') ?? null,
             userAgent: c.req.header('user-agent') ?? null,
         });
+        console.log(`🔐 [sign-in] session inserted (${Date.now()-t0}ms)`);
 
         const secure = c.req.url.startsWith('https');
         return c.json(
