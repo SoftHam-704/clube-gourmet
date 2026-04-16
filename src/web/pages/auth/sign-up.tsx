@@ -22,24 +22,24 @@ export default function SignUp() {
 
         setError(null);
 
-        // Ensure no previous session interferes
-        await authClient.signOut();
-
-        const { error: signUpError } = await authClient.signUp.email({
-            name: data.name,
-            email: data.email,
-            password: data.password,
-        });
-
-        if (signUpError) {
-            setError(signUpError.message || 'Erro ao criar conta. Tente novamente.');
+        try {
+            const res = await fetch('/api/auth/sign-up/email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json',
+                           'x-name': data.name, 'x-email': data.email, 'x-password': data.password },
+                credentials: 'include',
+            });
+            const json = await res.json();
+            if (!res.ok) { setError(json.error || 'Erro ao criar conta.'); return; }
+        } catch {
+            setError('Erro de conexão. Tente novamente.');
             return;
         }
 
         if (planId) {
-            setLocation(`/checkout?plan=${planId}`);
+            window.location.href = `/checkout?plan=${planId}`;
         } else {
-            setLocation('/plans');
+            window.location.href = '/plans';
         }
     };
 

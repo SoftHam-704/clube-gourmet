@@ -17,17 +17,18 @@ export default function SignIn() {
 
     const onSubmit = async (data: SignInForm) => {
         setError(null);
-        const { error: signInError } = await authClient.signIn.email({
-            email: data.email,
-            password: data.password,
-        });
-
-        if (signInError) {
-            setError(signInError.message || 'Credenciais inválidas. Verifique seus dados.');
-            return;
+        try {
+            const res = await fetch('/api/auth/sign-in/email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'x-email': data.email, 'x-password': data.password },
+                credentials: 'include',
+            });
+            const json = await res.json();
+            if (!res.ok) { setError(json.error || 'Credenciais inválidas.'); return; }
+            window.location.href = '/dashboard';
+        } catch {
+            setError('Erro de conexão. Tente novamente.');
         }
-
-        setLocation('/dashboard'); // Redirect to user dashboard after login
     };
 
     return (
