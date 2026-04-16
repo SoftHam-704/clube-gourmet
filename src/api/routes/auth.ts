@@ -37,6 +37,10 @@ function sessionCookie(token: string, secure: boolean, maxAge: number): string {
 // POST /sign-in/email
 // ---------------------------------------------------------------------------
 authRoutes.post('/sign-in/email', async (c) => {
+    // TESTE: retorna imediatamente para verificar se o handler é atingido
+    console.log('🔐 [sign-in] HANDLER ATINGIDO');
+    return c.json({ test: true, ts: Date.now() });
+
     const t0 = Date.now();
     console.log('🔐 [sign-in] iniciado');
     try {
