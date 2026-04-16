@@ -74,7 +74,7 @@ api.get('/debug', async (c) => {
 
 // Rota de setup do admin (ANTES do middleware de auth)
 import { getAuth } from './auth.js';
-import { users, accounts } from './database/schema.js';
+import { users, accounts, sessions } from './database/schema.js';
 import { eq } from 'drizzle-orm';
 
 api.get('/setup-admin', async (c) => {
@@ -213,6 +213,64 @@ api.get('/debug-login', async (c) => {
         results.step4_scrypt_N16384 = `${Date.now() - t4}ms`;
     } catch (e: any) {
         results.step4_error = e.message;
+    }
+
+    // Etapa 5: INSERT de sessão de teste (e depois DELETE)
+    try {
+        const { randomUUID } = await import('node:crypto');
+        const testId = randomUUID();
+        const testToken = randomUUID();
+        const now = new Date();
+        const expires = new Date(now.getTime() + 60000); // 1 min
+
+        const t5 = Date.now();
+        await db.insert(sessions).values({
+            id: testId,
+            token: testToken,
+            userId: 'debug-test-skip', // não existe, vai falhar com FK — isso é esperado
+            expiresAt: expires,
+            createdAt: now,
+            updatedAt: now,
+        });
+        results.step5_insert_session = `${Date.now() - t5}ms (sucesso inesperado)`;
+        // limpa se por algum motivo inseriu
+        await db.delete(sessions).where(eq(sessions.id, testId));
+    } catch (e: any) {
+        // FK violation é esperada — o que importa é o TEMPO até o erro
+        results.step5_insert_latency = `${Date.now() - (results._t5_start || Date.now())}ms`;
+        results.step5_insert_error = e.message.substring(0, 120);
+    }
+
+    // Etapa 6: INSERT de sessão real (com userId válido do admin)
+    try {
+        const { randomUUID } = await import('node:crypto');
+        const u2 = await db.select({ id: users.id }).from(users)
+            .where(eq(users.email, 'admin@emparclub.com.br')).limit(1);
+
+        if (u2.length > 0) {
+            const testId2 = randomUUID();
+            const testToken2 = randomUUID();
+            const now2 = new Date();
+            const expires2 = new Date(now2.getTime() + 60000);
+
+            const t6 = Date.now();
+            await db.insert(sessions).values({
+                id: testId2,
+                token: testToken2,
+                userId: u2[0].id,
+                expiresAt: expires2,
+                createdAt: now2,
+                updatedAt: now2,
+            });
+            results.step6_insert_real_session = `${Date.now() - t6}ms`;
+            // Remove o teste
+            await db.delete(sessions).where(eq(sessions.id, testId2));
+            results.step6_delete_session = 'ok';
+        } else {
+            results.step6_insert_real_session = 'skipped — admin user not found';
+        }
+    } catch (e: any) {
+        results.step6_insert_error = e.message.substring(0, 120);
     }
 
     return c.json(results);
