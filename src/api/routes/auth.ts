@@ -37,35 +37,36 @@ function sessionCookie(token: string, secure: boolean, maxAge: number): string {
 // POST /sign-in/email
 // ---------------------------------------------------------------------------
 authRoutes.post('/sign-in/email', async (c) => {
-    // TESTE: retorna imediatamente para verificar se o handler é atingido
-    console.log('🔐 [sign-in] HANDLER ATINGIDO');
-    return c.json({ test: true, ts: Date.now() });
-
     const t0 = Date.now();
-    console.log('🔐 [sign-in] iniciado');
+    const step = (name: string) => console.log(`🔐 [sign-in:${name}] ${Date.now()-t0}ms`);
+    const withTimeout = <T>(p: Promise<T>, ms: number, name: string): Promise<T> =>
+        Promise.race([p, new Promise<T>((_, rej) => setTimeout(() => rej(new Error(`TIMEOUT:${name}`)), ms))]);
+
     try {
-        const { email, password } = await c.req.json();
-        console.log(`🔐 [sign-in] body parsed (${Date.now()-t0}ms)`);
+        step('start');
+        const { email, password } = await withTimeout(c.req.json(), 5000, 'body');
+        step('body');
         if (!email || !password) return c.json({ error: 'Email e senha são obrigatórios' }, 400);
 
         const db = getDb(c.env);
-        console.log(`🔐 [sign-in] db obtido (${Date.now()-t0}ms)`);
         if (!db) return c.json({ error: 'Database unavailable' }, 500);
 
-        const userRows = await db.select().from(users).where(eq(users.email, email)).limit(1);
-        console.log(`🔐 [sign-in] user query (${Date.now()-t0}ms) found=${userRows.length}`);
+        const userRows = await withTimeout(
+            db.select().from(users).where(eq(users.email, email)).limit(1), 10000, 'users-query');
+        step('users-query');
         if (userRows.length === 0) return c.json({ error: 'Credenciais inválidas' }, 401);
         const user = userRows[0];
 
-        const accountRows = await db.select().from(accounts)
-            .where(and(eq(accounts.userId, user.id), eq(accounts.providerId, 'credential')))
-            .limit(1);
-        console.log(`🔐 [sign-in] account query (${Date.now()-t0}ms) found=${accountRows.length}`);
+        const accountRows = await withTimeout(
+            db.select().from(accounts)
+                .where(and(eq(accounts.userId, user.id), eq(accounts.providerId, 'credential')))
+                .limit(1), 10000, 'accounts-query');
+        step('accounts-query');
         if (accountRows.length === 0 || !accountRows[0].password)
             return c.json({ error: 'Credenciais inválidas' }, 401);
 
-        const valid = await verifyPassword(password, accountRows[0].password);
-        console.log(`🔐 [sign-in] password verify (${Date.now()-t0}ms) valid=${valid}`);
+        const valid = await withTimeout(verifyPassword(password, accountRows[0].password), 10000, 'scrypt');
+        step('scrypt');
         if (!valid) return c.json({ error: 'Credenciais inválidas' }, 401);
 
         const token = randomBytes(32).toString('hex');
@@ -73,15 +74,16 @@ authRoutes.post('/sign-in/email', async (c) => {
         const now = new Date();
         const expiresAt = new Date(now.getTime() + 7 * 24 * 3600 * 1000);
 
-        await db.insert(sessions).values({
+        await withTimeout(db.insert(sessions).values({
             id: sessionId, token, userId: user.id,
             expiresAt, createdAt: now, updatedAt: now,
             ipAddress: c.req.header('x-forwarded-for') ?? null,
             userAgent: c.req.header('user-agent') ?? null,
-        });
-        console.log(`🔐 [sign-in] session inserted (${Date.now()-t0}ms)`);
+        }), 10000, 'insert-session');
+        step('insert-session');
 
         const secure = c.req.url.startsWith('https');
+        step('done');
         return c.json(
             {
                 user: { id: user.id, email: user.email, name: user.name, role: (user as any).role,
@@ -93,8 +95,8 @@ authRoutes.post('/sign-in/email', async (c) => {
             { 'Set-Cookie': sessionCookie(token, secure, 7 * 24 * 3600) }
         );
     } catch (e: any) {
-        console.error('❌ [sign-in]', e.message);
-        return c.json({ error: 'Erro interno' }, 500);
+        console.error(`❌ [sign-in] ${e.message} (${Date.now()-t0}ms)`);
+        return c.json({ error: e.message }, 500);
     }
 });
 
