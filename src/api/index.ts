@@ -160,6 +160,64 @@ api.get('/auth-test', async (c) => {
     }
 });
 
+// Diagnóstico granular do login — testa cada etapa separadamente
+api.get('/debug-login', async (c) => {
+    const results: Record<string, any> = {};
+    const db = getDb(c.env);
+    if (!db) return c.json({ error: 'DB unavailable' }, 500);
+
+    // Etapa 1: Query na tabela users
+    try {
+        const t = Date.now();
+        const u = await db.select({ id: users.id, email: users.email, role: users.role })
+            .from(users).where(eq(users.email, 'admin@emparclub.com.br')).limit(1);
+        results.step1_users_query = `${Date.now() - t}ms`;
+        results.step1_user_found = u.length > 0;
+        if (u.length > 0) {
+            // Etapa 2: Query na tabela accounts
+            const t2 = Date.now();
+            const a = await db.select({ id: accounts.id, providerId: accounts.providerId })
+                .from(accounts).where(eq(accounts.userId, u[0].id)).limit(5);
+            results.step2_accounts_query = `${Date.now() - t2}ms`;
+            results.step2_accounts = a.map(x => x.providerId);
+        }
+    } catch (e: any) {
+        results.db_error = e.message;
+    }
+
+    // Etapa 3: scrypt nativo do Node.js (N=1024)
+    try {
+        const { scrypt, randomBytes } = await import('node:crypto');
+        const t3 = Date.now();
+        const salt = randomBytes(16);
+        await new Promise<void>((resolve, reject) => {
+            scrypt('testpassword', salt, 32, { N: 1024, r: 8, p: 1 }, (err) => {
+                if (err) reject(err); else resolve();
+            });
+        });
+        results.step3_scrypt_N1024 = `${Date.now() - t3}ms`;
+    } catch (e: any) {
+        results.step3_error = e.message;
+    }
+
+    // Etapa 4: scrypt nativo N=16384 (padrão se cost não for aplicado)
+    try {
+        const { scrypt, randomBytes } = await import('node:crypto');
+        const t4 = Date.now();
+        const salt = randomBytes(16);
+        await new Promise<void>((resolve, reject) => {
+            scrypt('testpassword', salt, 32, { N: 16384, r: 8, p: 1 }, (err) => {
+                if (err) reject(err); else resolve();
+            });
+        });
+        results.step4_scrypt_N16384 = `${Date.now() - t4}ms`;
+    } catch (e: any) {
+        results.step4_error = e.message;
+    }
+
+    return c.json(results);
+});
+
 // Rotas de Auth montadas em /auth para não interceptar rotas de admin/plans/etc
 api.route('/auth', authRoutes);
 
