@@ -3,124 +3,97 @@ import { getAuth } from '../auth.js';
 
 export const authRoutes = new Hono();
 
+// -----------------------------------------------------------------------
+// POST /sign-in/email — usa a API programática do Better Auth
+// O auth.handler() trava em serverless pois faz chamadas HTTP internas.
+// auth.api.signInEmail() executa diretamente sem sair pela rede.
+// -----------------------------------------------------------------------
+authRoutes.post('/sign-in/email', async (c) => {
+    try {
+        console.log(`🔐 [Auth] sign-in/email (programático) iniciado`);
+        const start = Date.now();
+        const auth = getAuth(c.env, c.req.raw);
+
+        const body = await c.req.json();
+
+        const result = await auth.api.signInEmail({
+            body,
+            headers: c.req.raw.headers,
+            asResponse: true,
+        });
+
+        const duration = Date.now() - start;
+        console.log(`✅ [Auth] sign-in concluído em ${duration}ms — status ${result.status}`);
+        return result;
+    } catch (e: any) {
+        console.error('❌ [Auth] sign-in/email erro:', e.message);
+        // Better Auth lança APIError com statusCode quando as credenciais são inválidas
+        const status = (e as any).statusCode ?? 401;
+        return c.json({ error: e.message || 'Credenciais inválidas' }, status);
+    }
+});
+
+// -----------------------------------------------------------------------
+// POST /sign-up/email — idem
+// -----------------------------------------------------------------------
+authRoutes.post('/sign-up/email', async (c) => {
+    try {
+        const auth = getAuth(c.env, c.req.raw);
+        const body = await c.req.json();
+
+        const result = await auth.api.signUpEmail({
+            body,
+            headers: c.req.raw.headers,
+            asResponse: true,
+        });
+
+        return result;
+    } catch (e: any) {
+        const status = (e as any).statusCode ?? 400;
+        return c.json({ error: e.message }, status);
+    }
+});
+
+// -----------------------------------------------------------------------
+// POST /sign-out — idem
+// -----------------------------------------------------------------------
+authRoutes.post('/sign-out', async (c) => {
+    try {
+        const auth = getAuth(c.env, c.req.raw);
+
+        const result = await auth.api.signOut({
+            headers: c.req.raw.headers,
+            asResponse: true,
+        });
+
+        return result;
+    } catch (e: any) {
+        const status = (e as any).statusCode ?? 500;
+        return c.json({ error: e.message }, status);
+    }
+});
+
+// -----------------------------------------------------------------------
+// Todas as outras rotas (get-session, verify-email, etc.) via handler HTTP
+// Essas já funcionam rapidamente (get-session: ~200ms)
+// -----------------------------------------------------------------------
 authRoutes.on(['GET', 'POST'], '/*', async (c) => {
     try {
-        console.log(`🔐 [Auth Server] Recebendo ${c.req.method} em ${c.req.url}`);
+        console.log(`🔐 [Auth Handler] ${c.req.method} ${c.req.url}`);
         const auth = getAuth(c.env, c.req.raw);
-        
-        // Timer para ver se trava
-        const start = Date.now();
-        
-        // Timeout de segurança: se o handler travar (DB morto), retornamos 504
+
         const handlerPromise = auth.handler(c.req.raw);
-        const timeoutPromise = new Promise<Response>((_, reject) => 
-            setTimeout(() => reject(new Error("Auth handler timeout (28s) — conexão DB lenta")), 28000)
+        const timeoutPromise = new Promise<Response>((_, reject) =>
+            setTimeout(() => reject(new Error('Auth handler timeout (15s)')), 15000)
         );
-        
-        try {
-            console.log(`⏱️ [Auth Server] Iniciando handler para ${c.req.url}...`);
-            const response = await Promise.race([handlerPromise, timeoutPromise]);
-            const duration = Date.now() - start;
-            console.log(`✅ [Auth Server] FINALIZADO em ${duration}ms com status ${response.status}`);
-            return response;
-        } catch (timeoutErr: any) {
-            const duration = Date.now() - start;
-            console.error(`⏱️ [Auth Server] TIMEOUT após ${duration}ms:`, timeoutErr.message);
-            return c.json({ 
-                error: 'Authentication Timeout', 
-                message: 'O servidor demorou demais para processar. Tente novamente.',
-                duration: `${duration}ms`
-            }, 504);
-        }
+
+        const response = await Promise.race([handlerPromise, timeoutPromise]);
+        return response;
     } catch (e: any) {
-        console.error('❌ [Auth Server] ERRO CRÍTICO:', e.message);
-        return c.json({ 
-            error: 'Authentication Internal Error', 
-            message: e.message,
-            stack: e.stack?.split('\n')[0] 
-        }, 500);
+        console.error('❌ [Auth Handler] erro:', e.message);
+        if (e.message.includes('timeout')) {
+            return c.json({ error: 'Authentication Timeout', message: e.message }, 504);
+        }
+        return c.json({ error: e.message }, 500);
     }
 });
-
-// Rota de Emergência para configurar o Admin
-authRoutes.get('/setup-admin', async (c) => {
-    try {
-        const password = c.req.query('password') || 'admin123';
-        const auth = getAuth(c.env, c.req.raw);
-        const email = 'admin@emparclub.com.br';
-        
-        console.log("🛠️ [Setup Admin] Iniciando criação/reparo do admin...");
-        
-        let userId: string | null = null;
-
-        // Passo 1: Tenta criar via Better Auth (gera hash de senha correto)
-        try {
-            const result = await auth.api.signUpEmail({
-                body: {
-                    email,
-                    password,
-                    name: 'Administrador Empar',
-                }
-            });
-            userId = (result as any)?.user?.id;
-            console.log("✅ [Setup Admin] Usuário criado via signUp:", userId);
-        } catch (signUpErr: any) {
-            console.log("ℹ️ [Setup Admin] signUp falhou (provavelmente já existe):", signUpErr.message);
-        }
-
-        // Passo 2: Se já existe, buscar o ID e forçar o update do role + password
-        const { getDb } = await import('../db/index.js');
-        const db = getDb(c.env);
-        
-        if (!db) {
-            return c.json({ error: "Database unavailable" }, 500);
-        }
-
-        // Importa a tabela de users e accounts
-        const { users, accounts } = await import('../database/schema.js');
-        const { eq, sql } = await import('drizzle-orm');
-
-        // Busca o user pelo email
-        const existingUsers = await db.select().from(users).where(eq(users.email, email));
-        
-        if (existingUsers.length > 0) {
-            userId = existingUsers[0].id;
-            
-            // Força role = admin
-            await db.update(users)
-                .set({ role: 'admin', updatedAt: new Date() })
-                .where(eq(users.id, userId));
-            
-            console.log("✅ [Setup Admin] Role atualizada para admin. User ID:", userId);
-        }
-
-        // Passo 3: Se o signUp criou o usuário mas sem role admin (default é 'user'),
-        // já atualizamos acima. Agora verificamos se a conta credential existe.
-        if (userId) {
-            const existingAccounts = await db.select()
-                .from(accounts)
-                .where(eq(accounts.userId, userId));
-            
-            const hasCredential = existingAccounts.some((a: any) => a.providerId === 'credential');
-            
-            if (!hasCredential) {
-                console.log("⚠️ [Setup Admin] Sem conta 'credential'. Criando via signUp novamente...");
-                // Se não tem conta credential, tenta o signUp de novo
-                // (caso tenha sido criado manualmente sem hash)
-            }
-        }
-
-        return c.json({ 
-            success: true,
-            message: "Admin configurado com sucesso!",
-            userId,
-            email,
-            role: "admin",
-            help: "Agora tente logar com: " + email + " / " + password
-        });
-    } catch (e: any) {
-        console.error("❌ [Setup Admin] Erro:", e);
-        return c.json({ error: e.message, stack: e.stack?.split('\n').slice(0, 3) }, 500);
-    }
-});
-
