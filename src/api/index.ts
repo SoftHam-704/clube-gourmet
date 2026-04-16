@@ -200,7 +200,7 @@ api.get('/debug-login', async (c) => {
         results.step3_error = e.message;
     }
 
-    // Etapa 4: scrypt nativo N=16384 (padrão se cost não for aplicado)
+    // Etapa 4: scrypt nativo N=16384 r=8 (nosso teste anterior)
     try {
         const { scrypt, randomBytes } = await import('node:crypto');
         const t4 = Date.now();
@@ -210,9 +210,24 @@ api.get('/debug-login', async (c) => {
                 if (err) reject(err); else resolve();
             });
         });
-        results.step4_scrypt_N16384 = `${Date.now() - t4}ms`;
+        results.step4_scrypt_N16384_r8 = `${Date.now() - t4}ms`;
     } catch (e: any) {
         results.step4_error = e.message;
+    }
+
+    // Etapa 4b: scrypt nativo N=16384 r=16 dkLen=64 — parâmetros EXATOS do Better Auth
+    try {
+        const { scrypt, randomBytes } = await import('node:crypto');
+        const t4b = Date.now();
+        const salt = randomBytes(16);
+        await new Promise<Buffer>((resolve, reject) => {
+            scrypt('testpassword', salt, 64, { N: 16384, r: 16, p: 1, maxmem: 128 * 16384 * 16 * 2 }, (err, key) => {
+                if (err) reject(err); else resolve(key);
+            });
+        });
+        results.step4b_scrypt_N16384_r16_dkLen64 = `${Date.now() - t4b}ms`;
+    } catch (e: any) {
+        results.step4b_error = e.message;
     }
 
     // Etapa 5: INSERT de sessão de teste (e depois DELETE)
@@ -274,6 +289,73 @@ api.get('/debug-login', async (c) => {
     }
 
     return c.json(results);
+});
+
+// Diagnóstico do sign-in passo a passo (POST com email/password do admin)
+api.post('/debug-signin', async (c) => {
+    const steps: Record<string, any> = {};
+    try {
+        const { email, password } = await c.req.json();
+        steps.received = { email, passwordLen: password?.length };
+
+        const db = getDb(c.env);
+        if (!db) return c.json({ error: 'DB unavailable' }, 500);
+
+        // Step 1: select user
+        const t1 = Date.now();
+        const userRows = await db.select().from(users).where(eq(users.email, email)).limit(1);
+        steps.step1_select_user = `${Date.now() - t1}ms — found: ${userRows.length}`;
+        if (userRows.length === 0) return c.json({ steps, error: 'user not found' });
+
+        // Step 2: select account
+        const t2 = Date.now();
+        const accountRows = await db.select().from(accounts)
+            .where(eq(accounts.userId, userRows[0].id)).limit(5);
+        steps.step2_select_accounts = `${Date.now() - t2}ms — found: ${accountRows.length}`;
+        const credAccount = accountRows.find((a: any) => a.providerId === 'credential');
+        if (!credAccount?.password) return c.json({ steps, error: 'no credential account' });
+
+        const storedHash = credAccount.password;
+        const [saltHex, keyHex] = storedHash.split(':');
+        steps.hash_format = `saltLen=${saltHex?.length}, keyLen=${keyHex?.length}`;
+
+        // Step 3: scrypt nativo com parâmetros exatos do Better Auth (r=16 dkLen=64)
+        const t3 = Date.now();
+        const { scrypt: _scrypt, timingSafeEqual: _tse } = await import('node:crypto');
+        const derivedKey = await new Promise<Buffer>((resolve, reject) => {
+            _scrypt(password.normalize('NFKC'), saltHex, 64,
+                { N: 16384, r: 16, p: 1, maxmem: 128 * 16384 * 16 * 2 },
+                (err, key) => { if (err) reject(err); else resolve(key); });
+        });
+        steps.step3_scrypt_r16 = `${Date.now() - t3}ms`;
+
+        // Step 4: comparação
+        const storedKey = Buffer.from(keyHex, 'hex');
+        const match = derivedKey.length === storedKey.length && _tse(derivedKey, storedKey);
+        steps.step4_password_match = match;
+
+        if (!match) return c.json({ steps, error: 'wrong password' });
+
+        // Step 5: insert session
+        const { randomBytes: _rb } = await import('node:crypto');
+        const sessionToken = _rb(32).toString('hex');
+        const sessionId = _rb(16).toString('hex');
+        const now = new Date();
+        const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+        const t5 = Date.now();
+        await db.insert(sessions).values({
+            id: sessionId, token: sessionToken, userId: userRows[0].id,
+            expiresAt, createdAt: now, updatedAt: now,
+        });
+        steps.step5_insert_session = `${Date.now() - t5}ms`;
+        await db.delete(sessions).where(eq(sessions.id, sessionId));
+        steps.step5_cleanup = 'ok';
+
+        return c.json({ steps, result: 'ALL STEPS OK — sign-in would succeed' });
+    } catch (e: any) {
+        return c.json({ steps, error: e.message }, 500);
+    }
 });
 
 // Rotas de Auth montadas em /auth para não interceptar rotas de admin/plans/etc
