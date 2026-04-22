@@ -28,14 +28,14 @@ app.use(cors({
     exposeHeaders: ['Set-Cookie'],
 }));
 
-// Rotas PÚBLICAS do Mercado Pago (não precisam de cookie de login)
+// Rotas que NÃO passam pelo authMiddleware
 app.route('/api/webhooks', webhookRoutes);
+app.route('/api/checkout', checkoutRoutes);
 
 // Demais rotas usam o middleware para identificar o usuário
 app.use('/api/*', authMiddleware);
 
 app.route('/api/auth', authRoutes);
-app.route('/api/checkout', checkoutRoutes);
 app.route('/api/membership-plans', plansRoutes);
 app.route('/api/restaurants', restaurantsRoutes);
 app.route('/api/cities', citiesRoutes);
