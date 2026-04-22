@@ -1,5 +1,4 @@
 import { Hono } from 'hono';
-import { MercadoPagoConfig, Preference } from 'mercadopago';
 import { getDb } from '../../db/index.js';
 import { plans as plansTable } from '../database/schema.js';
 import { eq } from 'drizzle-orm';
@@ -9,18 +8,16 @@ export const checkoutRoutes = new Hono();
 const PRODUCTION_URL = 'https://www.clubempar.com.br';
 
 checkoutRoutes.post('/create-preference', async (c) => {
-    console.log("🛠️ [Backend] Recebendo pedido de checkout...");
+    console.log("🛠️ [Backend] Iniciando requisição de checkout (Fetch Edition)...");
     
     try {
         const body = await c.req.json();
         const { planId, userId, email } = body;
 
-        console.log(`📋 [Backend] Dados recebidos: plan=${planId} user=${userId} email=${email}`);
+        console.log(`📋 [Backend] Dados: plan=${planId}, user=${userId}, email=${email}`);
 
-        // Validação básica de segurança
-        if (!userId || !email || email === 'undefined' || userId === 'undefined') {
-             console.error("❌ [Backend] Usuário não identificado no corpo da requisição");
-             return c.json({ error: "Você precisa estar logado para assinar." }, 401);
+        if (!userId || !email || email === 'undefined') {
+             return c.json({ error: "Sessão expirada. Faça login novamente." }, 401);
         }
 
         const env = c.env as any;
@@ -28,35 +25,32 @@ checkoutRoutes.post('/create-preference', async (c) => {
 
         if (!mpAccessToken) {
             console.error("❌ [Backend] MP_ACCESS_TOKEN ausente");
-            return c.json({ error: "Serviço de pagamento indisponível no momento." }, 500);
+            return c.json({ error: "Configuração do Mercado Pago ausente." }, 500);
         }
 
-        const client = new MercadoPagoConfig({ accessToken: mpAccessToken });
         const db = getDb(env);
-        
         if (!db) {
-            console.error("❌ [Backend] Banco de dados inacessível");
-            return c.json({ error: "Erro de conexão com o banco de dados." }, 500);
+            console.error("❌ [Backend] Falha ao conectar no banco");
+            return c.json({ error: "Erro de banco de dados" }, 500);
         }
 
         const planResult = await db.select().from(plansTable).where(eq(plansTable.id, planId)).limit(1);
         const plan = planResult[0];
 
         if (!plan) {
-            console.error(`❌ [Backend] Plano não encontrado: ${planId}`);
-            return c.json({ error: "Plano selecionado é inválido." }, 404);
+            console.error(`❌ [Backend] Plano inválido: ${planId}`);
+            return c.json({ error: "Plano inválido" }, 404);
         }
 
-        console.log(`💰 [Backend] Criando preferência MP: ${plan.name} - R$ ${plan.price}`);
+        console.log(`📡 [Backend] Chamando API REST do Mercado Pago...`);
 
-        const preference = new Preference(client);
-
-        // Detectar se é localhost para links de retorno
-        const isLocal = c.req.url.includes('localhost');
-        const siteUrl = isLocal ? new URL(c.req.url).origin : PRODUCTION_URL;
-
-        const result = await preference.create({
-            body: {
+        const mpResponse = await fetch('https://api.mercadopago.com/checkout/preferences', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${mpAccessToken}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
                 items: [
                     {
                         id: plan.id,
@@ -68,17 +62,24 @@ checkoutRoutes.post('/create-preference', async (c) => {
                 ],
                 payer: { email },
                 back_urls: {
-                    success: `${siteUrl}/dashboard?payment=success`,
-                    failure: `${siteUrl}/plans?payment=failure`,
-                    pending: `${siteUrl}/dashboard?payment=pending`,
+                    success: `${PRODUCTION_URL}/dashboard?payment=success`,
+                    failure: `${PRODUCTION_URL}/plans?payment=failure`,
+                    pending: `${PRODUCTION_URL}/dashboard?payment=pending`,
                 },
                 auto_return: 'approved',
                 external_reference: `${userId}:${planId}`,
                 notification_url: `${PRODUCTION_URL}/api/webhooks/mercadopago`,
-            }
+            })
         });
 
-        console.log(`✅ [Backend] Preferência criada: ${result.id}`);
+        if (!mpResponse.ok) {
+            const errorData = await mpResponse.json();
+            console.error("❌ [Backend] Erro no Mercado Pago:", errorData);
+            return c.json({ error: "Erro ao gerar pagamento no Mercado Pago", details: errorData }, 500);
+        }
+
+        const result = await mpResponse.json();
+        console.log(`✅ [Backend] Preferência gerada: ${result.id}`);
 
         return c.json({
             id: result.id,
@@ -87,7 +88,7 @@ checkoutRoutes.post('/create-preference', async (c) => {
         });
 
     } catch (e: any) {
-        console.error("🔥 [Backend] Erro fatal no checkout:", e.message);
-        return c.json({ error: "Erro interno ao processar checkout.", details: e.message }, 500);
+        console.error("🔥 [Backend] Erro fatal:", e.message);
+        return c.json({ error: "Erro interno", details: e.message }, 500);
     }
 });
