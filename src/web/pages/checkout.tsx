@@ -12,10 +12,10 @@ export default function Checkout() {
     const [loading, setLoading] = useState(true);
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const { data: session } = authClient.useSession();
+    const { data: session, isPending } = authClient.useSession();
 
     useEffect(() => {
-        if (!session && !authClient.useSession().isPending) {
+        if (!session && !isPending) {
             setLocation(`/sign-up?plan=${planId}`);
             return;
         }
