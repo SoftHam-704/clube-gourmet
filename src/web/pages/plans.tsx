@@ -212,10 +212,22 @@ export default function Plans() {
     return () => clearTimeout(timeoutId);
   }, []);
 
-  const filteredPlans = dbPlans.filter(p => {
-    const isFamilyPlan = p.type === 'family' || p.id?.toLowerCase().includes('family') || p.id?.toLowerCase().includes('fam-');
-    return activeTab === "individual" ? !isFamilyPlan : isFamilyPlan;
-  });
+  const durationOrder: Record<string, number> = { mensal: 1, trimestral: 2, semestral: 3, anual: 4 };
+  const getDurationOrder = (id: string) => {
+    const lower = (id || '').toLowerCase();
+    if (lower.includes('mensal')) return 1;
+    if (lower.includes('trimestral')) return 2;
+    if (lower.includes('semestral')) return 3;
+    if (lower.includes('anual')) return 4;
+    return 5;
+  };
+
+  const filteredPlans = dbPlans
+    .filter(p => {
+      const isFamilyPlan = p.type === 'family' || p.id?.toLowerCase().includes('family') || p.id?.toLowerCase().includes('fam-');
+      return activeTab === "individual" ? !isFamilyPlan : isFamilyPlan;
+    })
+    .sort((a, b) => getDurationOrder(a.id || a.name) - getDurationOrder(b.id || b.name));
 
   return (
     <div ref={containerRef} className="bg-[#090d0b] min-h-screen selection:bg-[#c9a961] selection:text-[#0a0a0a] overflow-x-hidden">
