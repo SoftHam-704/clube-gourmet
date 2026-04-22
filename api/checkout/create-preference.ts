@@ -70,6 +70,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             return res.status(500).json({ error: "MP token not configured" });
         }
 
+        // Max parcelas = duração do plano em meses (sem juros)
+        const maxInstallments = plan.duration_months || 1;
+        console.log(`[S2b] Max parcelas: ${maxInstallments}x`);
+
         const mpResponse = await fetch('https://api.mercadopago.com/checkout/preferences', {
             method: 'POST',
             headers: {
@@ -85,6 +89,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                     currency_id: 'BRL',
                 }],
                 payer: { email },
+                payment_methods: {
+                    installments: maxInstallments,
+                    default_installments: 1,
+                },
                 back_urls: {
                     success: `${PRODUCTION_URL}/dashboard?payment=success`,
                     failure: `${PRODUCTION_URL}/plans?payment=failure`,
