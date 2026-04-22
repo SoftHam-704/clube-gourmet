@@ -97,6 +97,7 @@ export const subscriptions = emparclubSchema.table("subscriptions", {
     endDate: timestamp("end_date"),
     externalCustomerId: text("external_customer_id"),
     externalSubscriptionId: text("external_subscription_id"),
+    mpPaymentId: text("mp_payment_id"),
     createdAt: timestamp("created_at").defaultNow(),
 });
 

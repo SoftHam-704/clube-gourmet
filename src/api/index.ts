@@ -361,6 +361,12 @@ api.post('/debug-signin', async (c) => {
 // Rotas de Auth montadas em /auth para não interceptar rotas de admin/plans/etc
 api.route('/auth', authRoutes);
 
+// ⚠️ Rotas PÚBLICAS do Mercado Pago — DEVEM ficar ANTES do authMiddleware!
+// O webhook é chamado pelo Mercado Pago sem autenticação.
+// O checkout usa authenticatedOnly internamente.
+api.route('/webhooks', webhookRoutes);
+api.route('/checkout', checkoutRoutes);
+
 // !!! O AuthMiddleware agora só roda para rotas protegidas !!!
 api.use(authMiddleware);
 
@@ -369,8 +375,6 @@ api.route('/restaurants', restaurantsRoutes);
 api.route('/cities', citiesRoutes);
 api.route('/admin', adminRoutes);
 api.route('/user', userRoutes);
-api.route('/checkout', checkoutRoutes);
-api.route('/webhooks', webhookRoutes);
 
 // Debug movido para o topo
 

@@ -98,6 +98,60 @@ export default function Dashboard() {
         <div className="bg-[#0a0a0a] min-h-screen text-white selection:bg-[#c9a961] selection:text-[#0a0a0a]">
             <Navbar />
 
+            {/* Payment Return Feedback */}
+            {(() => {
+                const params = new URLSearchParams(window.location.search);
+                const paymentStatus = params.get('payment');
+                if (!paymentStatus) return null;
+
+                const config: Record<string, { bg: string; border: string; text: string; icon: string; message: string }> = {
+                    success: {
+                        bg: 'bg-emerald-500/10',
+                        border: 'border-emerald-500/30',
+                        text: 'text-emerald-400',
+                        icon: '✅',
+                        message: 'Pagamento aprovado! Sua assinatura foi ativada com sucesso. Bem-vindo ao Club Empar!',
+                    },
+                    pending: {
+                        bg: 'bg-amber-500/10',
+                        border: 'border-amber-500/30',
+                        text: 'text-amber-400',
+                        icon: '⏳',
+                        message: 'Pagamento em processamento. Assim que for confirmado, sua assinatura será ativada automaticamente.',
+                    },
+                    failure: {
+                        bg: 'bg-red-500/10',
+                        border: 'border-red-500/30',
+                        text: 'text-red-400',
+                        icon: '❌',
+                        message: 'O pagamento não foi concluído. Tente novamente ou escolha outra forma de pagamento.',
+                    },
+                };
+
+                const status = config[paymentStatus];
+                if (!status) return null;
+
+                return (
+                    <div className={`fixed top-20 left-1/2 -translate-x-1/2 z-50 max-w-xl w-full mx-4 ${status.bg} ${status.border} border backdrop-blur-xl p-6 shadow-2xl animate-fade-in`}>
+                        <div className="flex items-start gap-4">
+                            <span className="text-2xl">{status.icon}</span>
+                            <div className="flex-1">
+                                <p className={`${status.text} font-mono text-[10px] uppercase tracking-[0.3em] font-black mb-2`}>
+                                    {paymentStatus === 'success' ? 'Pagamento Confirmado' : paymentStatus === 'pending' ? 'Aguardando Confirmação' : 'Pagamento Recusado'}
+                                </p>
+                                <p className="text-white/60 text-sm leading-relaxed">{status.message}</p>
+                            </div>
+                            <button
+                                onClick={() => { window.history.replaceState({}, '', '/dashboard'); window.location.reload(); }}
+                                className="text-white/20 hover:text-white text-xl transition-colors"
+                            >
+                                ×
+                            </button>
+                        </div>
+                    </div>
+                );
+            })()}
+
             {/* Header / Hero Section */}
             <section className="pt-40 pb-20 relative overflow-hidden">
                 <div className="absolute inset-x-0 top-0 h-96 bg-gradient-to-b from-[#c9a961]/10 to-transparent opacity-30" />

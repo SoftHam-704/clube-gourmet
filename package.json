@@ -20,9 +20,8 @@
     "mathjs": "^15.1.0",
     "mercadopago": "^2.12.0",
     "pg": "^8.18.0",
-    "postgres": "^3.4.4",
+    "postgres": "^3.4.9",
     "react": "19.2.3",
-
     "react-dom": "19.2.3",
     "react-hook-form": "^7.70.0",
     "react-icons": "^5.5.0",
@@ -63,7 +62,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "wrangler d1 migrations apply DB --local",
     "db:studio": "drizzle-kit studio",
-    "dev:api": "wrangler dev --port 3000"
+    "dev:api": "wrangler dev --port 8787"
   },
   "type": "module"
 }
