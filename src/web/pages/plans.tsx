@@ -84,13 +84,13 @@ function PlanCard({ plan }: { plan: any }) {
                  : planInfo.includes('semestral') ? 6 
                  : planInfo.includes('anual') ? 12 : 1;
   
-  // Big price is the TOTAL value
-  const totalDisplay = Number(plan.price);
-  const priceDisplay = totalDisplay.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+  // Monthly equivalent is the MAIN display (big)
+  const totalPrice = Number(plan.price);
+  const monthlyPrice = totalPrice / duration / (isFamily ? 4 : 1);
+  const monthlyDisplay = monthlyPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
   
-  // Secondary display is the monthly equivalent
-  const monthlyPrice = totalDisplay / duration;
-  const secondaryDisplay = (monthlyPrice / (isFamily ? 4 : 1)).toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' });
+  // Total price is the secondary display (small)
+  const totalFormatted = totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' });
   
   const isPopular = plan.id?.includes('semiannual') || plan.duration_months === 6 || plan.id?.includes('trimestral');
 
@@ -121,23 +121,23 @@ function PlanCard({ plan }: { plan: any }) {
       </div>
 
       <div className="mb-10 lg:text-left">
-        <div className="flex items-baseline gap-2 mb-3">
+        <div className="flex items-baseline gap-2 mb-1">
           <span className="text-[#c9a961] font-mono text-xl font-bold">R$</span>
           <span className={`font-mono text-6xl font-black tracking-tighter ${isPopular ? "text-gradient-gold animate-gradient" : "text-white"}`}>
-            {priceDisplay}
+            {monthlyDisplay}
           </span>
-          {isFamily && (
-            <span className="text-[#d4c5a0]/30 font-mono text-[10px] tracking-[0.2em] uppercase whitespace-nowrap ml-1 self-end mb-2">
-              /pessoa
+          <span className="text-[#d4c5a0]/30 font-mono text-[10px] tracking-[0.2em] uppercase whitespace-nowrap ml-1 self-end mb-2">
+            /mês{isFamily ? ' por pessoa' : ''}
+          </span>
+        </div>
+        {duration > 1 && (
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/5 mt-2">
+            <span className="text-white/60 font-mono text-[11px] font-bold tracking-widest uppercase">
+              TOTAL:
             </span>
-          )}
-        </div>
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/5">
-          <span className="text-white/60 font-mono text-[11px] font-bold tracking-widest uppercase">
-             EQUIVALENTE A:
-          </span>
-          <span className="text-[#c9a961] font-mono text-xs font-black">{secondaryDisplay}/mês</span>
-        </div>
+            <span className="text-[#c9a961] font-mono text-xs font-black">{totalFormatted}</span>
+          </div>
+        )}
       </div>
 
       <ul className="space-y-5 mb-12 flex-grow">
