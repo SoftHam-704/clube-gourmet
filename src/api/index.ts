@@ -358,18 +358,17 @@ api.post('/debug-signin', async (c) => {
     }
 });
 
-// Rotas de Auth montadas em /auth para não interceptar rotas de admin/plans/etc
+// !!! O AuthMiddleware deve rodar primeiro para identificar o usuário em todas as rotas !!!
+api.use(authMiddleware);
+
+// Rotas de Auth
 api.route('/auth', authRoutes);
 
-// ⚠️ Rotas PÚBLICAS do Mercado Pago — DEVEM ficar ANTES do authMiddleware!
-// O webhook é chamado pelo Mercado Pago sem autenticação.
-// O checkout usa authenticatedOnly internamente.
+// Rotas do Mercado Pago
 api.route('/webhooks', webhookRoutes);
 api.route('/checkout', checkoutRoutes);
 
-// !!! O AuthMiddleware agora só roda para rotas protegidas !!!
-api.use(authMiddleware);
-
+// Rotas protegidas (o middleware authMiddleware já rodou acima)
 api.route('/membership-plans', plansRoutes);
 api.route('/restaurants', restaurantsRoutes);
 api.route('/cities', citiesRoutes);
