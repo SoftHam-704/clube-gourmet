@@ -198,11 +198,11 @@ export default function Checkout() {
                             {isProcessing ? (
                                 <>
                                     <div className="w-5 h-5 border-2 border-[#0a0a0a]/20 border-t-[#0a0a0a] rounded-full animate-spin" />
-                                    Redirecionando ao Mercado Pago...
+                                    Redirecionando...
                                 </>
                             ) : (
                                 <>
-                                    Pagar com Mercado Pago
+                                    Ir para pagamento
                                     <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                     </svg>
