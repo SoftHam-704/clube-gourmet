@@ -1,35 +1,18 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { drizzle } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
-import { eq } from 'drizzle-orm';
-import { pgTable, text, numeric, integer, boolean, timestamp, pgSchema } from 'drizzle-orm/pg-core';
-
-// Schema inline para evitar problemas de importação
-const emparclub = pgSchema('emparclub');
-const plans = emparclub.table('plans', {
-    id: text('id').primaryKey(),
-    name: text('name').notNull(),
-    price: numeric('price', { precision: 10, scale: 2 }).notNull(),
-    duration_months: integer('duration_months').notNull(),
-    description: text('description'),
-    is_active: boolean('is_active').default(true),
-    created_at: timestamp('created_at').defaultNow(),
-});
+import pg from 'pg';
 
 const PRODUCTION_URL = 'https://www.clubempar.com.br';
 
-let pool: Pool | null = null;
+let pool: pg.Pool | null = null;
 
-function getPool(): Pool {
+function getPool(): pg.Pool {
     if (!pool) {
-        pool = new Pool({
+        pool = new pg.Pool({
             connectionString: process.env.DATABASE_URL,
             ssl: false,
             max: 2,
             connectionTimeoutMillis: 5000,
             idleTimeoutMillis: 10000,
-            statement_timeout: 5000,
-            query_timeout: 5000,
             options: '-c search_path=emparclub,public',
         });
         pool.on('error', (err) => {
@@ -51,13 +34,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
-
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method not allowed' });
-    }
+    if (req.method === 'OPTIONS') return res.status(200).end();
+    if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
     console.log("===== CHECKOUT (Native) START =====");
 
@@ -69,11 +47,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             return res.status(401).json({ error: "Login necessário" });
         }
 
-        // Get plan from DB
+        // Get plan from DB via raw SQL
         console.log("[S2] Querying plan...");
-        const db = drizzle(getPool());
-        const planResult = await db.select().from(plans).where(eq(plans.id, planId)).limit(1);
-        const plan = planResult[0];
+        const p = getPool();
+        const planResult = await p.query(
+            'SELECT id, name, price, duration_months FROM emparclub.plans WHERE id = $1 LIMIT 1',
+            [planId]
+        );
+        const plan = planResult.rows[0];
 
         if (!plan) {
             console.log("[S2] Plan not found");
