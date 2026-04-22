@@ -15,7 +15,10 @@ export default function Checkout() {
     const { data: session, isPending } = authClient.useSession();
 
     useEffect(() => {
-        if (!session && !isPending) {
+        console.log("🔄 [Checkout] Verificando sessão:", { session, isPending, planId });
+        
+        if (!isPending && !session) {
+            console.log("🚫 [Checkout] Sem sessão, redirecionando para sign-up");
             setLocation(`/sign-up?plan=${planId}`);
             return;
         }
@@ -32,14 +35,19 @@ export default function Checkout() {
                 setPlan(foundPlan);
                 setLoading(false);
             })
-            .catch(() => setLoading(false));
-    }, [planId, session]);
+            .catch((err) => {
+                console.error("❌ [Checkout] Erro ao carregar planos:", err);
+                setLoading(false);
+            });
+    }, [planId, session, isPending]);
 
     const handleCheckout = async () => {
+        console.log("🚀 [Checkout] Iniciando processo de pagamento...");
         setIsProcessing(true);
         setError(null);
 
         try {
+            console.log("📡 [Checkout] Chamando create-preference...");
             const response = await fetch('/api/checkout/create-preference', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -51,23 +59,25 @@ export default function Checkout() {
                 })
             });
 
+            console.log("📩 [Checkout] Resposta recebida status:", response.status);
             const data = await response.json();
 
             if (!response.ok) {
+                console.error("❌ [Checkout] Erro da API:", data);
                 setError(data.error || 'Erro ao processar pagamento.');
                 return;
             }
 
-            // Em desenvolvimento, usar sandbox_init_point; em produção, init_point
             const redirectUrl = data.init_point || data.sandbox_init_point;
+            console.log("🔗 [Checkout] Redirecionando para:", redirectUrl);
             
             if (redirectUrl) {
                 window.location.href = redirectUrl;
             } else {
                 setError('Não foi possível gerar o link de pagamento. Tente novamente.');
             }
-        } catch (err) {
-            console.error('Checkout error:', err);
+        } catch (err: any) {
+            console.error('🔥 [Checkout] Erro fatal:', err);
             setError('Erro de conexão. Verifique sua internet e tente novamente.');
         } finally {
             setIsProcessing(false);

@@ -7,44 +7,50 @@ import { authenticatedOnly } from '../middleware/auth.js';
 
 export const checkoutRoutes = new Hono();
 
-// URL pública para o Mercado Pago (webhook e redirecionamentos)
 const PRODUCTION_URL = 'https://www.clubempar.com.br';
 
 checkoutRoutes.post('/create-preference', authenticatedOnly, async (c) => {
+    console.log("🛠️ [Backend] Recebendo pedido de checkout...");
     try {
         const env = c.env as any;
         const mpAccessToken = env?.MP_ACCESS_TOKEN || process.env.MP_ACCESS_TOKEN;
 
         if (!mpAccessToken) {
+            console.error("❌ [Backend] MP_ACCESS_TOKEN ausente");
             return c.json({ error: "MP_ACCESS_TOKEN não configurado" }, 500);
         }
 
         const client = new MercadoPagoConfig({ accessToken: mpAccessToken });
         
-        const { planId, userId, email } = await c.req.json();
+        const body = await c.req.json();
+        const { planId, userId, email } = body;
+
+        console.log(`📋 [Backend] Dados: plan=${planId} user=${userId} email=${email}`);
 
         if (!planId || !userId || !email) {
             return c.json({ error: "Parâmetros faltando (planId, userId, email)" }, 400);
         }
 
         const db = getDb(env);
-        if (!db) return c.json({ error: "Database unreachable" }, 500);
+        if (!db) {
+            console.error("❌ [Backend] Banco de dados inacessível");
+            return c.json({ error: "Database unreachable" }, 500);
+        }
 
-        // Busca o plano no banco
         const planResult = await db.select().from(plansTable).where(eq(plansTable.id, planId)).limit(1);
         const plan = planResult[0];
 
         if (!plan) {
+            console.error(`❌ [Backend] Plano não encontrado: ${planId}`);
             return c.json({ error: "Plano não encontrado no banco de dados" }, 404);
         }
 
+        console.log(`💰 [Backend] Criando preferência para plano ${plan.name} (R$ ${plan.price})...`);
+
         const preference = new Preference(client);
 
-        // Usa a URL da request em dev, mas sempre produção para notification_url
         const isLocal = c.req.url.includes('localhost');
-        const siteUrl = isLocal 
-            ? new URL(c.req.url).origin 
-            : PRODUCTION_URL;
+        const siteUrl = isLocal ? new URL(c.req.url).origin : PRODUCTION_URL;
 
         const result = await preference.create({
             body: {
@@ -57,9 +63,7 @@ checkoutRoutes.post('/create-preference', authenticatedOnly, async (c) => {
                         currency_id: 'BRL',
                     }
                 ],
-                payer: {
-                    email: email,
-                },
+                payer: { email },
                 back_urls: {
                     success: `${siteUrl}/dashboard?payment=success`,
                     failure: `${siteUrl}/plans?payment=failure`,
@@ -67,13 +71,11 @@ checkoutRoutes.post('/create-preference', authenticatedOnly, async (c) => {
                 },
                 auto_return: 'approved',
                 external_reference: `${userId}:${planId}`,
-                // ⚠️ SEMPRE usa URL de produção para o webhook!
-                // O Mercado Pago precisa acessar via internet pública.
                 notification_url: `${PRODUCTION_URL}/api/webhooks/mercadopago`,
             }
         });
 
-        console.log(`✅ [Checkout] Preferência criada: ${result.id} para user=${userId} plan=${planId}`);
+        console.log(`✅ [Backend] Sucesso! Preference ID: ${result.id}`);
 
         return c.json({
             id: result.id,
@@ -82,7 +84,7 @@ checkoutRoutes.post('/create-preference', authenticatedOnly, async (c) => {
         });
 
     } catch (e: any) {
-        console.error("🔥 MP Preference Error:", e.message);
+        console.error("🔥 [Backend] Erro fatal no checkout:", e.message);
         return c.json({ error: "Erro ao criar preferência", details: e.message }, 500);
     }
 });
