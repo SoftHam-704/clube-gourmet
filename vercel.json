@@ -4,6 +4,14 @@
   "regions": ["gru1"],
   "rewrites": [
     {
+      "source": "/api/checkout/create-preference",
+      "destination": "/api/checkout/create-preference.ts"
+    },
+    {
+      "source": "/api/webhooks/mercadopago",
+      "destination": "/api/webhooks/mercadopago.ts"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/index.ts"
     },
