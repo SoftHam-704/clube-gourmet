@@ -192,7 +192,7 @@ export default function Checkout() {
                         {/* Botão de Pagamento */}
                         <button
                             onClick={handleCheckout}
-                            disabled={isProcessing}
+                            disabled={isProcessing || isPending || loading || !plan}
                             className="w-full bg-[#c9a961] text-[#0a0a0a] py-6 font-black text-[12px] tracking-[0.4em] uppercase hover:glow-gold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4 group"
                         >
                             {isProcessing ? (

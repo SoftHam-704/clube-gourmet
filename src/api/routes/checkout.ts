@@ -3,38 +3,40 @@ import { MercadoPagoConfig, Preference } from 'mercadopago';
 import { getDb } from '../../db/index.js';
 import { plans as plansTable } from '../database/schema.js';
 import { eq } from 'drizzle-orm';
-import { authenticatedOnly } from '../middleware/auth.js';
 
 export const checkoutRoutes = new Hono();
 
 const PRODUCTION_URL = 'https://www.clubempar.com.br';
 
-checkoutRoutes.post('/create-preference', authenticatedOnly, async (c) => {
+checkoutRoutes.post('/create-preference', async (c) => {
     console.log("🛠️ [Backend] Recebendo pedido de checkout...");
+    
     try {
+        const body = await c.req.json();
+        const { planId, userId, email } = body;
+
+        console.log(`📋 [Backend] Dados recebidos: plan=${planId} user=${userId} email=${email}`);
+
+        // Validação básica de segurança
+        if (!userId || !email || email === 'undefined' || userId === 'undefined') {
+             console.error("❌ [Backend] Usuário não identificado no corpo da requisição");
+             return c.json({ error: "Você precisa estar logado para assinar." }, 401);
+        }
+
         const env = c.env as any;
         const mpAccessToken = env?.MP_ACCESS_TOKEN || process.env.MP_ACCESS_TOKEN;
 
         if (!mpAccessToken) {
             console.error("❌ [Backend] MP_ACCESS_TOKEN ausente");
-            return c.json({ error: "MP_ACCESS_TOKEN não configurado" }, 500);
+            return c.json({ error: "Serviço de pagamento indisponível no momento." }, 500);
         }
 
         const client = new MercadoPagoConfig({ accessToken: mpAccessToken });
-        
-        const body = await c.req.json();
-        const { planId, userId, email } = body;
-
-        console.log(`📋 [Backend] Dados: plan=${planId} user=${userId} email=${email}`);
-
-        if (!planId || !userId || !email) {
-            return c.json({ error: "Parâmetros faltando (planId, userId, email)" }, 400);
-        }
-
         const db = getDb(env);
+        
         if (!db) {
             console.error("❌ [Backend] Banco de dados inacessível");
-            return c.json({ error: "Database unreachable" }, 500);
+            return c.json({ error: "Erro de conexão com o banco de dados." }, 500);
         }
 
         const planResult = await db.select().from(plansTable).where(eq(plansTable.id, planId)).limit(1);
@@ -42,13 +44,14 @@ checkoutRoutes.post('/create-preference', authenticatedOnly, async (c) => {
 
         if (!plan) {
             console.error(`❌ [Backend] Plano não encontrado: ${planId}`);
-            return c.json({ error: "Plano não encontrado no banco de dados" }, 404);
+            return c.json({ error: "Plano selecionado é inválido." }, 404);
         }
 
-        console.log(`💰 [Backend] Criando preferência para plano ${plan.name} (R$ ${plan.price})...`);
+        console.log(`💰 [Backend] Criando preferência MP: ${plan.name} - R$ ${plan.price}`);
 
         const preference = new Preference(client);
 
+        // Detectar se é localhost para links de retorno
         const isLocal = c.req.url.includes('localhost');
         const siteUrl = isLocal ? new URL(c.req.url).origin : PRODUCTION_URL;
 
@@ -75,7 +78,7 @@ checkoutRoutes.post('/create-preference', authenticatedOnly, async (c) => {
             }
         });
 
-        console.log(`✅ [Backend] Sucesso! Preference ID: ${result.id}`);
+        console.log(`✅ [Backend] Preferência criada: ${result.id}`);
 
         return c.json({
             id: result.id,
@@ -85,6 +88,6 @@ checkoutRoutes.post('/create-preference', authenticatedOnly, async (c) => {
 
     } catch (e: any) {
         console.error("🔥 [Backend] Erro fatal no checkout:", e.message);
-        return c.json({ error: "Erro ao criar preferência", details: e.message }, 500);
+        return c.json({ error: "Erro interno ao processar checkout.", details: e.message }, 500);
     }
 });
