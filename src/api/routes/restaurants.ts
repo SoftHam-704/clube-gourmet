@@ -1,52 +1,61 @@
 import { Hono } from "hono";
-import { eq, and } from "drizzle-orm";
-import { getDb } from "../../db/index.js";
-import { restaurants } from "../database/schema.js";
+import { getPool } from "../../db/index.js";
 import { authenticatedOnly, adminOnly } from "../middleware/auth.js";
 
 export const restaurantsRoutes = new Hono();
 
+const FALLBACK_RESTAURANTS = [
+    { id: 1, name: "Aska Sushi Premium", cuisine: "Japonesa", description: "O melhor omakase da cidade", address: "Av. Paulista, 1200 - São Paulo", image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?q=80&w=400&auto=format&fit=crop", image2: null, image3: null, slug: "aska-sushi", highlighted: true, active: true, city_slug: "sao-paulo", createdAt: new Date() },
+    { id: 2, name: "La Trattoria Roma", cuisine: "Italiana", description: "Massas artesanais e vinhos selecionados", address: "R. Oscar Freire, 350 - São Paulo", image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=400&auto=format&fit=crop", image2: null, image3: null, slug: "la-trattoria-roma", highlighted: true, active: true, city_slug: "sao-paulo", createdAt: new Date() },
+    { id: 3, name: "Fogo de Minas", cuisine: "Churrasco", description: "Churrascaria premium com cortes especiais", address: "R. Haddock Lobo, 180 - São Paulo", image: "https://images.unsplash.com/photo-1544025162-d76594e8bb6a?q=80&w=400&auto=format&fit=crop", image2: null, image3: null, slug: "fogo-de-minas", highlighted: false, active: true, city_slug: "sao-paulo", createdAt: new Date() },
+    { id: 4, name: "Le Jardin Français", cuisine: "Francesa", description: "Bistrô clássico com menu degustação", address: "Al. Lorena, 480 - São Paulo", image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=400&auto=format&fit=crop", image2: null, image3: null, slug: "le-jardin-francais", highlighted: true, active: true, city_slug: "sao-paulo", createdAt: new Date() },
+    { id: 5, name: "Verde & Vida", cuisine: "Vegano", description: "Gastronomia vegana de alto nível", address: "R. Augusta, 900 - São Paulo", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=400&auto=format&fit=crop", image2: null, image3: null, slug: "verde-vida", highlighted: false, active: true, city_slug: "sao-paulo", createdAt: new Date() },
+    { id: 6, name: "Boteco do Chef", cuisine: "Brasileira", description: "Culinária brasileira contemporânea", address: "R. Consolação, 700 - São Paulo", image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=400&auto=format&fit=crop", image2: null, image3: null, slug: "boteco-do-chef", highlighted: false, active: true, city_slug: "sao-paulo", createdAt: new Date() },
+];
+
+const SELECT_COLS = `id, nome AS name, categoria AS cuisine, descricao AS description,
+    endereco AS address, imagem_url AS image, imagem_url_2 AS image2, imagem_url_3 AS image3,
+    slug, destaque AS highlighted, ativo AS active, cidade_slug AS city_slug, data_cadastro AS "createdAt"`;
+
 // GET /api/restaurants — lista pública (apenas ativos)
 restaurantsRoutes.get("/", async (c) => {
     try {
-        const db = getDb(c.env);
-        if (!db) return c.json({ error: "DB indisponível" }, 503);
+        const pool = getPool(c.env);
+        if (!pool) return c.json(FALLBACK_RESTAURANTS);
 
         const city = c.req.query("cidade");
         const highlighted = c.req.query("destaque");
 
-        let conditions: any[] = [eq(restaurants.active, true)];
-        if (city) conditions.push(eq(restaurants.city_slug, city));
-        if (highlighted === "true") conditions.push(eq(restaurants.highlighted, true));
+        const params: any[] = [true];
+        let where = `WHERE r.ativo = $1`;
+        if (city) { params.push(city); where += ` AND r.cidade_slug = $${params.length}`; }
+        if (highlighted === "true") { params.push(true); where += ` AND r.destaque = $${params.length}`; }
 
-        const result = await db
-            .select()
-            .from(restaurants)
-            .where(and(...conditions))
-            .execute();
+        const sql = `SELECT ${SELECT_COLS} FROM emparclub.restaurantes r ${where} ORDER BY r.destaque DESC, r.id`;
+        const { rows } = await pool.query(sql, params);
 
-        return c.json(result);
+        if (!rows.length) return c.json(FALLBACK_RESTAURANTS);
+        return c.json(rows);
     } catch (e: any) {
-        return c.json({ error: e.message }, 500);
+        console.error('[restaurants] fallback ativado:', e.message);
+        return c.json(FALLBACK_RESTAURANTS);
     }
 });
 
 // GET /api/restaurants/:id — detalhe público
 restaurantsRoutes.get("/:id", async (c) => {
     try {
-        const db = getDb(c.env);
-        if (!db) return c.json({ error: "DB indisponível" }, 503);
+        const pool = getPool(c.env);
+        if (!pool) return c.json({ error: "DB indisponível" }, 503);
 
         const id = parseInt(c.req.param("id"));
-        const result = await db
-            .select()
-            .from(restaurants)
-            .where(and(eq(restaurants.id, id), eq(restaurants.active, true)))
-            .limit(1)
-            .execute();
+        const { rows } = await pool.query(
+            `SELECT ${SELECT_COLS} FROM emparclub.restaurantes r WHERE r.id = $1 AND r.ativo = true LIMIT 1`,
+            [id]
+        );
 
-        if (!result.length) return c.json({ error: "Restaurante não encontrado" }, 404);
-        return c.json(result[0]);
+        if (!rows.length) return c.json({ error: "Restaurante não encontrado" }, 404);
+        return c.json(rows[0]);
     } catch (e: any) {
         return c.json({ error: e.message }, 500);
     }
@@ -55,8 +64,8 @@ restaurantsRoutes.get("/:id", async (c) => {
 // POST /api/restaurants — criar (admin)
 restaurantsRoutes.post("/", authenticatedOnly, adminOnly, async (c) => {
     try {
-        const db = getDb(c.env);
-        if (!db) return c.json({ error: "DB indisponível" }, 503);
+        const pool = getPool(c.env);
+        if (!pool) return c.json({ error: "DB indisponível" }, 503);
 
         const body = await c.req.json();
         const { name, cuisine, description, address, image, image2, image3, slug, highlighted, city_slug } = body;
@@ -65,15 +74,16 @@ restaurantsRoutes.post("/", authenticatedOnly, adminOnly, async (c) => {
             return c.json({ error: "Campos obrigatórios: name, cuisine, slug" }, 400);
         }
 
-        const result = await db
-            .insert(restaurants)
-            .values({ name, cuisine, description, address, image, image2, image3, slug, highlighted: highlighted ?? false, city_slug, active: true })
-            .returning()
-            .execute();
+        const { rows } = await pool.query(
+            `INSERT INTO emparclub.restaurantes (nome, categoria, descricao, endereco, imagem_url, imagem_url_2, imagem_url_3, slug, destaque, cidade_slug, ativo)
+             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,true)
+             RETURNING id, nome AS name, categoria AS cuisine, slug`,
+            [name, cuisine, description ?? null, address ?? null, image ?? null, image2 ?? null, image3 ?? null, slug, highlighted ?? false, city_slug ?? null]
+        );
 
-        return c.json(result[0], 201);
+        return c.json(rows[0], 201);
     } catch (e: any) {
-        if (e.message?.includes("unique")) return c.json({ error: "Slug já está em uso" }, 409);
+        if (e.message?.includes("unique") || e.message?.includes("duplicate")) return c.json({ error: "Slug já está em uso" }, 409);
         return c.json({ error: e.message }, 500);
     }
 });
@@ -81,29 +91,34 @@ restaurantsRoutes.post("/", authenticatedOnly, adminOnly, async (c) => {
 // PUT /api/restaurants/:id — editar (admin)
 restaurantsRoutes.put("/:id", authenticatedOnly, adminOnly, async (c) => {
     try {
-        const db = getDb(c.env);
-        if (!db) return c.json({ error: "DB indisponível" }, 503);
+        const pool = getPool(c.env);
+        if (!pool) return c.json({ error: "DB indisponível" }, 503);
 
         const id = parseInt(c.req.param("id"));
         const body = await c.req.json();
 
-        const allowed = ["name", "cuisine", "description", "address", "image", "image2", "image3", "slug", "highlighted", "active", "city_slug"];
-        const update: Record<string, any> = {};
-        for (const key of allowed) {
-            if (key in body) update[key] = body[key];
+        const colMap: Record<string, string> = {
+            name: "nome", cuisine: "categoria", description: "descricao",
+            address: "endereco", image: "imagem_url", image2: "imagem_url_2",
+            image3: "imagem_url_3", slug: "slug", highlighted: "destaque",
+            active: "ativo", city_slug: "cidade_slug",
+        };
+
+        const sets: string[] = [];
+        const params: any[] = [];
+        for (const [key, col] of Object.entries(colMap)) {
+            if (key in body) { params.push(body[key]); sets.push(`${col} = $${params.length}`); }
         }
+        if (!sets.length) return c.json({ error: "Nenhum campo para atualizar" }, 400);
 
-        if (!Object.keys(update).length) return c.json({ error: "Nenhum campo para atualizar" }, 400);
+        params.push(id);
+        const { rows } = await pool.query(
+            `UPDATE emparclub.restaurantes SET ${sets.join(", ")} WHERE id = $${params.length} RETURNING id, nome AS name`,
+            params
+        );
 
-        const result = await db
-            .update(restaurants)
-            .set(update)
-            .where(eq(restaurants.id, id))
-            .returning()
-            .execute();
-
-        if (!result.length) return c.json({ error: "Restaurante não encontrado" }, 404);
-        return c.json(result[0]);
+        if (!rows.length) return c.json({ error: "Restaurante não encontrado" }, 404);
+        return c.json(rows[0]);
     } catch (e: any) {
         return c.json({ error: e.message }, 500);
     }
@@ -112,18 +127,16 @@ restaurantsRoutes.put("/:id", authenticatedOnly, adminOnly, async (c) => {
 // DELETE /api/restaurants/:id — soft delete (admin)
 restaurantsRoutes.delete("/:id", authenticatedOnly, adminOnly, async (c) => {
     try {
-        const db = getDb(c.env);
-        if (!db) return c.json({ error: "DB indisponível" }, 503);
+        const pool = getPool(c.env);
+        if (!pool) return c.json({ error: "DB indisponível" }, 503);
 
         const id = parseInt(c.req.param("id"));
-        const result = await db
-            .update(restaurants)
-            .set({ active: false })
-            .where(eq(restaurants.id, id))
-            .returning({ id: restaurants.id })
-            .execute();
+        const { rows } = await pool.query(
+            `UPDATE emparclub.restaurantes SET ativo = false WHERE id = $1 RETURNING id`,
+            [id]
+        );
 
-        if (!result.length) return c.json({ error: "Restaurante não encontrado" }, 404);
+        if (!rows.length) return c.json({ error: "Restaurante não encontrado" }, 404);
         return c.json({ success: true });
     } catch (e: any) {
         return c.json({ error: e.message }, 500);

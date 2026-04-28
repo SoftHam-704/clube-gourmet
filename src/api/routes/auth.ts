@@ -11,9 +11,9 @@ const ADMIN_EMAIL = () => process.env.ADMIN_EMAIL || 'admin@emparclub.com.br';
 const ADMIN_PASSWORD = () => process.env.ADMIN_PASSWORD || 'admin123';
 const SESSION_MAX_AGE = 7 * 24 * 3600; // 7 dias em segundos
 
-function makeToken(email: string, role: string): string {
+function makeToken(email: string, role: string, id?: string): string {
     const payload = Buffer.from(JSON.stringify({
-        email, role, exp: Date.now() + SESSION_MAX_AGE * 1000
+        email, role, id, exp: Date.now() + SESSION_MAX_AGE * 1000
     })).toString('base64url');
     const sig = createHmac('sha256', SECRET()).update(payload).digest('base64url');
     return `${payload}.${sig}`;
@@ -74,7 +74,7 @@ authRoutes.post('/sign-in/email', async (c) => {
 
         // Admin hardcoded (sem DB)
         if (email === ADMIN_EMAIL() && password === ADMIN_PASSWORD()) {
-            const token = makeToken(email, 'admin');
+            const token = makeToken(email, 'admin', 'admin');
             const secure = c.req.url.startsWith('https');
             return c.json(
                 { user: { id: 'admin', email, name: 'Administrador', role: 'admin',
@@ -103,7 +103,7 @@ authRoutes.post('/sign-in/email', async (c) => {
         if (!valid) return c.json({ error: 'Credenciais inválidas' }, 401);
 
         const role = (user as any).role || 'user';
-        const token = makeToken(email, role);
+        const token = makeToken(email, role, user.id);
         const secure = c.req.url.startsWith('https');
         return c.json(
             { user: { id: user.id, email: user.email, name: user.name, role,
@@ -146,7 +146,7 @@ authRoutes.post('/sign-up/email', async (c) => {
             createdAt: now, updatedAt: now,
         });
 
-        const token = makeToken(email, 'user');
+        const token = makeToken(email, 'user', userId);
         const secure = c.req.url.startsWith('https');
         return c.json(
             { user: { id: userId, email, name, role: 'user', emailVerified: false, image: null },

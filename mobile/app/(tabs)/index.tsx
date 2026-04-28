@@ -1,37 +1,72 @@
-import React from 'react';
-import { 
-  StyleSheet, 
-  ScrollView, 
-  Image, 
-  Pressable, 
+import React, { useState, useEffect } from 'react';
+import {
+  StyleSheet,
+  ScrollView,
+  Image,
+  Pressable,
   TextInput,
-  Platform
+  ActivityIndicator,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
-import { 
-  Search, 
-  User, 
-  MapPin, 
-  Star, 
-  LayoutGrid,
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
+import {
+  Search,
+  User,
+  Star,
   Heart,
   QrCode
 } from 'lucide-react-native';
 import { Text, View } from '@/components/Themed';
 import { Colors, Typography } from '@/constants/Colors';
+import { useAuth } from '@/contexts/AuthContext';
+import { API_URL } from '@/utils/api';
 
 const CATEGORIES = ['Tudo', 'Japonesa', 'Italiana', 'Churrasco', 'Vegano'];
 
 export default function DashboardScreen() {
+  const { user } = useAuth();
+  const [restaurants, setRestaurants] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/restaurants`)
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setRestaurants(data); })
+      .catch(err => console.error("Erro ao buscar restaurantes", err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleProfilePress = () => {
+    if (user) {
+      router.push('/(tabs)/two');
+    } else {
+      router.push('/login');
+    }
+  };
+
+  const handleQrPress = () => {
+    if (user) {
+      router.push('/qrcode');
+    } else {
+      router.push('/login');
+    }
+  };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerTop}>
           <Text style={styles.logo}>CLUB <Text style={{ color: Colors.dark.tint }}>EMPAR</Text></Text>
-          <Pressable style={styles.profileBtn}>
-            <User color={Colors.dark.text} size={20} />
+          <Pressable style={styles.profileBtn} onPress={handleProfilePress}>
+            {user ? (
+              <Text style={styles.profileInitial}>
+                {user.name?.[0]?.toUpperCase() ?? 'U'}
+              </Text>
+            ) : (
+              <User color={Colors.dark.text} size={20} />
+            )}
           </Pressable>
         </View>
         
@@ -44,6 +79,25 @@ export default function DashboardScreen() {
             style={styles.searchInput}
           />
         </BlurView>
+        
+        {/* Banner Assinatura */}
+        <Pressable 
+          style={styles.subscribeBanner}
+          onPress={() => router.push('/plans')}
+        >
+          <LinearGradient
+            colors={[Colors.dark.tint, '#00b360']}
+            style={styles.bannerGradient}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          >
+            <View style={{ backgroundColor: 'transparent' }}>
+              <Text style={styles.bannerTitle}>Seja Membro VIP</Text>
+              <Text style={styles.bannerSub}>Assine agora e tenha benefícios</Text>
+            </View>
+            <Text style={styles.bannerBtn}>Ver Planos</Text>
+          </LinearGradient>
+        </Pressable>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
@@ -70,67 +124,72 @@ export default function DashboardScreen() {
         <Text style={styles.sectionTitle}>Restaurantes Próximos</Text>
         
         {/* Horizontal Restaurant Cards */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalGrid}>
-          {[1, 2, 3].map((item) => (
-            <Pressable key={item} style={styles.card}>
-              <View style={styles.cardImageContainer}>
-                <Image 
-                  source={{ uri: `https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=400&auto=format&fit=crop` }} 
-                  style={styles.cardImage} 
-                />
-                <LinearGradient
-                  colors={['transparent', 'rgba(0,0,0,0.8)']}
-                  style={styles.imageOverlay}
-                />
-                <View style={styles.badge2x1}>
-                  <Text style={styles.badgeText}>2x1</Text>
-                </View>
-              </View>
-              
-              <View style={styles.cardInfo}>
-                <Text style={styles.cardName}>Oma Patissier</Text>
-                <View style={styles.cardSub}>
-                  <Text style={styles.cardType}>Japonesa • $$$</Text>
-                  <View style={styles.rating}>
-                    <Star size={12} color="#FFD700" fill="#FFD700" />
-                    <Text style={styles.ratingText}>4.9</Text>
+        {loading ? (
+          <ActivityIndicator size="large" color={Colors.dark.tint} style={{ marginVertical: 30 }} />
+        ) : (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalGrid}>
+            {restaurants.slice(0, 5).map((item) => (
+              <Pressable key={item.id} style={styles.card}>
+                <View style={styles.cardImageContainer}>
+                  <Image 
+                    source={{ uri: item.image || `https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=400&auto=format&fit=crop` }} 
+                    style={styles.cardImage} 
+                  />
+                  <LinearGradient
+                    colors={['transparent', 'rgba(0,0,0,0.8)']}
+                    style={styles.imageOverlay}
+                  />
+                  <View style={styles.badge2x1}>
+                    <Text style={styles.badgeText}>2x1</Text>
                   </View>
                 </View>
-              </View>
-            </Pressable>
-          ))}
-        </ScrollView>
+                
+                <View style={styles.cardInfo}>
+                  <Text style={styles.cardName} numberOfLines={1}>{item.name}</Text>
+                  <View style={styles.cardSub}>
+                    <Text style={styles.cardType}>{item.cuisine || 'Culinária'} • $$$</Text>
+                    <View style={styles.rating}>
+                      <Star size={12} color="#FFD700" fill="#FFD700" />
+                      <Text style={styles.ratingText}>4.9</Text>
+                    </View>
+                  </View>
+                </View>
+              </Pressable>
+            ))}
+          </ScrollView>
+        )}
 
         <Text style={styles.sectionTitle}>Novidades</Text>
         
         {/* Vertical Items */}
-        {[1, 2].map((item) => (
-          <View key={item} style={styles.listRow}>
-             <Image 
-              source={{ uri: `https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=200&auto=format&fit=crop` }} 
-              style={styles.listThumb} 
-            />
-            <View style={styles.listInfo}>
-              <Text style={styles.listName}>Bar Shisido</Text>
-              <Text style={styles.listDesc}>Coquetelaria Autoral</Text>
+        {loading ? (
+          <ActivityIndicator size="small" color={Colors.dark.tint} style={{ marginVertical: 20 }} />
+        ) : (
+          restaurants.slice(0, 3).map((item) => (
+            <View key={`list-${item.id}`} style={styles.listRow}>
+               <Image 
+                source={{ uri: item.image2 || item.image || `https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=200&auto=format&fit=crop` }} 
+                style={styles.listThumb} 
+              />
+              <View style={styles.listInfo}>
+                <Text style={styles.listName}>{item.name}</Text>
+                <Text style={styles.listDesc}>{item.cuisine || 'Gastronomia'}</Text>
+              </View>
+              <Heart size={20} color={Colors.dark.secondary} />
             </View>
-            <Heart size={20} color={Colors.dark.secondary} />
-          </View>
-        ))}
+          ))
+        )}
       </ScrollView>
 
       {/* Floating QR Button */}
       <View style={styles.fabContainer}>
-         <LinearGradient
-            colors={[Colors.dark.tint, '#00b360']}
-            style={styles.fab}
-          >
-            <Pressable style={styles.fabBtn}>
-              <QrCode color="#000" size={28} />
-            </Pressable>
-          </LinearGradient>
+        <LinearGradient colors={[Colors.dark.tint, '#00b360']} style={styles.fab}>
+          <Pressable style={styles.fabBtn} onPress={handleQrPress}>
+            <QrCode color="#000" size={28} />
+          </Pressable>
+        </LinearGradient>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -140,7 +199,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.background,
   },
   header: {
-    paddingTop: Platform.OS === 'ios' ? 60 : 40,
+    paddingTop: 10,
     paddingHorizontal: 20,
     paddingBottom: 20,
     backgroundColor: Colors.dark.background,
@@ -168,6 +227,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#333',
   },
+  profileInitial: {
+    fontFamily: Typography.header,
+    fontSize: 16,
+    color: Colors.dark.tint,
+  },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -185,6 +249,38 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: 120,
+  },
+  subscribeBanner: {
+    marginTop: 15,
+    borderRadius: 12,
+    overflow: 'hidden',
+    height: 60,
+  },
+  bannerGradient: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+  },
+  bannerTitle: {
+    color: '#000',
+    fontFamily: Typography.header,
+    fontSize: 16,
+  },
+  bannerSub: {
+    color: '#333',
+    fontFamily: Typography.body,
+    fontSize: 12,
+  },
+  bannerBtn: {
+    color: '#000',
+    fontFamily: Typography.header,
+    fontSize: 14,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
   },
   categories: {
     paddingHorizontal: 20,

@@ -3,7 +3,7 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 
 const SECRET = () => process.env.BETTER_AUTH_SECRET || 'fallback-secret-change-me';
 
-function verifyToken(token: string): { email: string; role: string } | null {
+function verifyToken(token: string): { email: string; role: string; id?: string } | null {
     try {
         const [payload, sig] = token.split('.');
         if (!payload || !sig) return null;
@@ -20,19 +20,30 @@ function verifyToken(token: string): { email: string; role: string } | null {
 }
 
 export const authMiddleware = createMiddleware(async (c, next) => {
-    const cookieHeader = c.req.header('cookie') ?? '';
     let token: string | null = null;
-    for (const part of cookieHeader.split(';')) {
-        const [k, v] = part.trim().split('=');
-        if (k === 'better-auth.session_token' && v) { token = decodeURIComponent(v); break; }
+
+    // Bearer token (clientes mobile/API)
+    const authHeader = c.req.header('authorization');
+    if (authHeader?.startsWith('Bearer ')) {
+        token = authHeader.slice(7);
+    }
+
+    // Cookie fallback (clientes web)
+    if (!token) {
+        const cookieHeader = c.req.header('cookie') ?? '';
+        for (const part of cookieHeader.split(';')) {
+            const [k, v] = part.trim().split('=');
+            if (k === 'better-auth.session_token' && v) { token = decodeURIComponent(v); break; }
+        }
     }
 
     if (token) {
         const data = verifyToken(token);
         if (data) {
-            c.set('user', { id: 'admin', email: data.email, name: 'Administrador',
+            const userId = data.id ?? 'admin';
+            c.set('user', { id: userId, email: data.email, name: 'Usuário',
                             role: data.role, emailVerified: true });
-            c.set('session', { id: 'admin-session', token, userId: 'admin' });
+            c.set('session', { id: userId, token, userId });
         } else {
             c.set('user', null);
             c.set('session', null);

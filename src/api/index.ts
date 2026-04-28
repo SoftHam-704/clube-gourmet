@@ -24,7 +24,7 @@ app.use(cors({
     origin: (origin) => origin || 'https://www.clubempar.com.br',
     credentials: true,
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+    allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', 'x-email', 'x-password', 'x-name'],
     exposeHeaders: ['Set-Cookie'],
 }));
 
