@@ -205,7 +205,7 @@ export default function HomeScreen() {
         {!user && (
           <View style={styles.statsRow}>
             {[['2.847', 'Membros'], ['6', 'Restaurantes'], ['SP', 'Cidade']].map(([val, label]) => (
-              <View key={label} style={styles.statItem}>
+              <View key={label} style={[styles.statItem, { backgroundColor: 'transparent' }]}>
                 <Text style={styles.statValue}>{val}</Text>
                 <Text style={styles.statLabel}>{label}</Text>
               </View>

@@ -1,8 +1,4 @@
-import { Platform } from 'react-native';
-
-export const API_URL = Platform.OS === 'web'
-  ? 'http://localhost:8787'
-  : 'https://clube-gourmet.vercel.app';
+export const API_URL = 'https://clube-gourmet.vercel.app';
 
 export async function apiGet(path: string, token?: string | null): Promise<any> {
   const headers: Record<string, string> = {};
