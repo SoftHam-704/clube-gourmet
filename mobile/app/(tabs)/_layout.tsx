@@ -1,14 +1,25 @@
 import React from 'react';
-import { Tabs } from 'expo-router';
-import { BlurView } from 'expo-blur';
-import { 
-  Home, 
-  Search, 
-  Heart, 
-  User 
-} from 'lucide-react-native';
-
+import { View, Pressable, StyleSheet } from 'react-native';
+import { Tabs, router } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Home, Search, Heart, User, QrCode } from 'lucide-react-native';
 import { Colors } from '@/constants/Colors';
+
+function QrTabButton({ children, onPress }: any) {
+  return (
+    <Pressable
+      onPress={() => router.push('/qrcode')}
+      style={styles.qrOuter}
+    >
+      <LinearGradient
+        colors={[Colors.dark.tint, '#00b360']}
+        style={styles.qrGrad}
+      >
+        <QrCode color="#000" size={26} />
+      </LinearGradient>
+    </Pressable>
+  );
+}
 
 export default function TabLayout() {
   return (
@@ -34,7 +45,8 @@ export default function TabLayout() {
           fontSize: 11,
           fontWeight: '600',
         },
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
@@ -42,11 +54,19 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Home color={color} size={24} />,
         }}
       />
-       <Tabs.Screen
+      <Tabs.Screen
         name="explore"
         options={{
           title: 'Explorar',
           tabBarIcon: ({ color }) => <Search color={color} size={24} />,
+        }}
+      />
+      <Tabs.Screen
+        name="qr"
+        options={{
+          title: '',
+          tabBarLabel: () => null,
+          tabBarButton: (props) => <QrTabButton {...props} />,
         }}
       />
       <Tabs.Screen
@@ -66,3 +86,25 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  qrOuter: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: -18,
+    width: 64,
+    height: 64,
+  },
+  qrGrad: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 8,
+    shadowColor: Colors.dark.tint,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+  },
+});

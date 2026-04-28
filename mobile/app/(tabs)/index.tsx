@@ -200,13 +200,13 @@ export default function HomeScreen() {
               style={styles.bannerGradient}
               start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
             >
-              <View>
+              <View style={styles.bannerLeft}>
                 <Text style={styles.bannerTitle}>Seja Membro VIP</Text>
-                <Text style={styles.bannerSub}>A partir de R$ 33/mês • Cancele quando quiser</Text>
+                <Text style={styles.bannerSub}>A partir de R$ 33/mês</Text>
               </View>
               <View style={styles.bannerBtn}>
                 <Text style={styles.bannerBtnText}>Ver Planos</Text>
-                <ChevronRight size={14} color="#000" />
+                <ChevronRight size={13} color="#000" />
               </View>
             </LinearGradient>
           </Pressable>
@@ -364,15 +364,6 @@ export default function HomeScreen() {
 
       </ScrollView>
 
-      {/* FAB QR */}
-      <View style={styles.fabContainer}>
-        <LinearGradient colors={[Colors.dark.tint, '#00b360']} style={styles.fab}>
-          <Pressable style={styles.fabBtn} onPress={handleQrPress}>
-            <QrCode color="#000" size={26} />
-          </Pressable>
-        </LinearGradient>
-      </View>
-
     </SafeAreaView>
   );
 }
@@ -490,14 +481,17 @@ const styles = StyleSheet.create({
   subscribeBanner: { marginHorizontal: 20, marginBottom: 16, borderRadius: 16, overflow: 'hidden' },
   bannerGradient: {
     flexDirection: 'row', alignItems: 'center',
-    justifyContent: 'space-between', paddingHorizontal: 18, paddingVertical: 14,
+    justifyContent: 'space-between',
+    paddingLeft: 18, paddingRight: 12, paddingVertical: 16,
   },
+  bannerLeft: { flex: 1, marginRight: 10 },
   bannerTitle: { color: '#000', fontFamily: Typography.header, fontSize: 16 },
-  bannerSub: { color: 'rgba(0,0,0,0.6)', fontFamily: Typography.body, fontSize: 12, marginTop: 2 },
+  bannerSub: { color: 'rgba(0,0,0,0.65)', fontFamily: Typography.body, fontSize: 12, marginTop: 2 },
   bannerBtn: {
     flexDirection: 'row', alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.18)',
-    paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10, gap: 2,
+    paddingHorizontal: 12, paddingVertical: 10,
+    borderRadius: 10, gap: 3, flexShrink: 0,
   },
   bannerBtnText: { color: '#000', fontFamily: Typography.header, fontSize: 13 },
 
@@ -594,21 +588,6 @@ const styles = StyleSheet.create({
     borderWidth: 1, borderColor: 'rgba(200,169,81,0.25)', gap: 6,
   },
   showMoreText: { fontFamily: Typography.label, fontSize: 14, color: GOLD },
-
-  /* FAB */
-  fabContainer: { position: 'absolute', bottom: 28, alignSelf: 'center' },
-  fab: {
-    width: 60, height: 60, borderRadius: 30, padding: 3,
-    elevation: 8,
-    shadowColor: Colors.dark.tint,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4, shadowRadius: 12,
-  },
-  fabBtn: {
-    flex: 1, borderRadius: 28,
-    backgroundColor: Colors.dark.tint,
-    alignItems: 'center', justifyContent: 'center',
-  },
 
   /* ── FOOTER ── */
   footer: {
