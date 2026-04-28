@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   Alert,
   RefreshControl,
-  Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
@@ -19,6 +18,8 @@ import { Text, View } from '@/components/Themed';
 import { Colors, Typography } from '@/constants/Colors';
 import { useAuth } from '@/contexts/AuthContext';
 import { API_URL, apiPost, apiDelete } from '@/utils/api';
+
+const GOLD = '#c8a951';
 
 const CATEGORIES = ['Tudo', 'Japonesa', 'Italiana', 'Churrasco', 'Francesa', 'Vegano', 'Brasileira'];
 
@@ -68,13 +69,8 @@ export default function HomeScreen() {
     } catch (e) {}
   }, [token]);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  useEffect(() => {
-    fetchFavorites();
-  }, [fetchFavorites]);
+  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => { fetchFavorites(); }, [fetchFavorites]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -113,83 +109,98 @@ export default function HomeScreen() {
 
   const featured = useMemo(() => restaurants.filter(r => r.highlighted), [restaurants]);
   const listItems = useMemo(() => filtered.slice(0, 6), [filtered]);
-
   const handleQrPress = () => user ? router.push('/qrcode') : router.push('/login');
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerTop}>
-          {/* Logo + saudação */}
-          <View style={styles.headerLeft}>
-            <Image
-              source={require('@/assets/images/logo.png')}
-              style={styles.logo}
-              resizeMode="contain"
-            />
-            <View style={{ backgroundColor: 'transparent' }}>
-              <Text style={styles.greeting}>
-                {user ? `${greeting()}, ${user.name.split(' ')[0]}!` : `${greeting()}!`}
-              </Text>
-              <View style={styles.locationRow}>
-                <MapPin size={12} color={Colors.dark.tint} />
-                <Text style={styles.locationText}>São Paulo, SP</Text>
-              </View>
-            </View>
-          </View>
-          <Pressable
-            style={styles.profileBtn}
-            onPress={() => router.push(user ? '/(tabs)/two' : '/login')}
-          >
-            {user ? (
-              <LinearGradient colors={[Colors.dark.tint, '#00b360']} style={styles.profileGrad}>
-                <Text style={styles.profileInitial}>{user.name[0].toUpperCase()}</Text>
-              </LinearGradient>
-            ) : (
-              <Text style={styles.profileLoginText}>Entrar</Text>
-            )}
-          </Pressable>
-        </View>
 
-        {/* Search */}
-        <BlurView intensity={30} style={styles.searchContainer}>
-          <Search color={Colors.dark.icon} size={17} style={{ marginRight: 10 }} />
-          <TextInput
-            placeholder="Buscar restaurante ou cozinha..."
-            placeholderTextColor={Colors.dark.icon}
-            style={styles.searchInput}
-            onFocus={() => router.push('/(tabs)/explore')}
-          />
-        </BlurView>
+      {/* Top bar fixa — greeting + perfil */}
+      <View style={styles.topBar}>
+        <View style={styles.topBarLeft}>
+          <Text style={styles.topGreeting}>
+            {user ? `${greeting()}, ${user.name.split(' ')[0]}!` : `${greeting()}!`}
+          </Text>
+          <View style={styles.topLocation}>
+            <MapPin size={11} color={GOLD} />
+            <Text style={styles.topLocationText}>Sinop, MT</Text>
+          </View>
+        </View>
+        <Pressable
+          style={styles.profileBtn}
+          onPress={() => router.push(user ? '/(tabs)/two' : '/login')}
+        >
+          {user ? (
+            <LinearGradient colors={[Colors.dark.tint, '#00b360']} style={styles.profileGrad}>
+              <Text style={styles.profileInitial}>{user.name[0].toUpperCase()}</Text>
+            </LinearGradient>
+          ) : (
+            <Text style={styles.profileLoginText}>Entrar</Text>
+          )}
+        </Pressable>
       </View>
 
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.dark.tint} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={GOLD} />}
       >
+
+        {/* ── HERO ── */}
+        <View style={styles.hero}>
+          <LinearGradient
+            colors={['rgba(200,169,81,0.10)', 'transparent']}
+            style={styles.heroGlow}
+          />
+          <Image
+            source={require('@/assets/images/logo.png')}
+            style={styles.heroLogo}
+            resizeMode="contain"
+          />
+          <Text style={styles.heroClub}>CLUB EMPAR</Text>
+          <Text style={styles.heroGourmet}>GOURMET</Text>
+          <View style={styles.heroDivider} />
+          <Text style={styles.heroTagline}>Alta Gastronomia,</Text>
+          <Text style={styles.heroTaglineGold}>Metade do Preço.</Text>
+          <View style={styles.heroLocationRow}>
+            <MapPin size={13} color={GOLD} />
+            <Text style={styles.heroLocationText}>Lançamento Oficial · Sinop, MT</Text>
+          </View>
+        </View>
+
+        {/* Search */}
+        <View style={styles.searchWrap}>
+          <BlurView intensity={30} style={styles.searchContainer}>
+            <Search color={Colors.dark.icon} size={17} style={{ marginRight: 10 }} />
+            <TextInput
+              placeholder="Buscar restaurante ou cozinha..."
+              placeholderTextColor={Colors.dark.icon}
+              style={styles.searchInput}
+              onFocus={() => router.push('/(tabs)/explore')}
+            />
+          </BlurView>
+        </View>
+
         {/* Banner contextual */}
         {user ? (
           <Pressable style={styles.memberBanner} onPress={handleQrPress}>
             <LinearGradient colors={['#1a1a1a', '#222']} style={styles.memberBannerInner}>
-              <View style={{ backgroundColor: 'transparent', flex: 1 }}>
+              <View style={{ flex: 1 }}>
                 <Text style={styles.memberBannerTitle}>
-                  <Crown size={14} color={Colors.dark.tint} /> Membro Ativo
+                  <Crown size={13} color={Colors.dark.tint} /> Membro Ativo
                 </Text>
                 <Text style={styles.memberBannerSub}>Toque para ver seu QR Code de membro</Text>
               </View>
-              <QrCode size={28} color={Colors.dark.tint} />
+              <QrCode size={26} color={Colors.dark.tint} />
             </LinearGradient>
           </Pressable>
         ) : (
           <Pressable style={styles.subscribeBanner} onPress={() => router.push('/plans')}>
             <LinearGradient
-              colors={[Colors.dark.tint, '#00b360']}
+              colors={[GOLD, '#a8832e']}
               style={styles.bannerGradient}
               start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
             >
-              <View style={{ backgroundColor: 'transparent' }}>
+              <View>
                 <Text style={styles.bannerTitle}>Seja Membro VIP</Text>
                 <Text style={styles.bannerSub}>A partir de R$ 33/mês • Cancele quando quiser</Text>
               </View>
@@ -201,11 +212,15 @@ export default function HomeScreen() {
           </Pressable>
         )}
 
-        {/* Stats (só para não-membros) */}
+        {/* Stats row */}
         {!user && (
           <View style={styles.statsRow}>
-            {[['2.847', 'Membros'], ['6', 'Restaurantes'], ['SP', 'Cidade']].map(([val, label]) => (
-              <View key={label} style={[styles.statItem, { backgroundColor: 'transparent' }]}>
+            {[
+              ['15k+', 'Membros'],
+              ['6', 'Restaurantes'],
+              ['4.9★', 'Avaliação'],
+            ].map(([val, label]) => (
+              <View key={label} style={styles.statItem}>
                 <Text style={styles.statValue}>{val}</Text>
                 <Text style={styles.statLabel}>{label}</Text>
               </View>
@@ -237,13 +252,13 @@ export default function HomeScreen() {
         {featured.length > 0 && (
           <>
             <View style={styles.sectionHeader}>
-              <Sparkles size={16} color={Colors.dark.tint} />
+              <Sparkles size={15} color={GOLD} />
               <Text style={styles.sectionTitle}>Em Destaque</Text>
             </View>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ paddingLeft: 20, gap: 14 }}
+              contentContainerStyle={{ paddingLeft: 20, gap: 14, paddingBottom: 4 }}
             >
               {featured.map((item, idx) => (
                 <Pressable key={item.id} style={styles.featuredCard}>
@@ -252,18 +267,15 @@ export default function HomeScreen() {
                     style={styles.featuredImage}
                   />
                   <LinearGradient
-                    colors={['transparent', 'rgba(0,0,0,0.85)']}
+                    colors={['transparent', 'rgba(0,0,0,0.88)']}
                     style={styles.featuredOverlay}
                   />
                   <View style={styles.featuredBadge}>
                     <Text style={styles.featuredBadgeText}>2x1</Text>
                   </View>
-                  <Pressable
-                    style={styles.featuredHeart}
-                    onPress={() => toggleFavorite(item.id)}
-                  >
+                  <Pressable style={styles.featuredHeart} onPress={() => toggleFavorite(item.id)}>
                     <Heart
-                      size={18}
+                      size={17}
                       color={favorites.has(item.id) ? Colors.dark.secondary : '#fff'}
                       fill={favorites.has(item.id) ? Colors.dark.secondary : 'transparent'}
                     />
@@ -273,7 +285,7 @@ export default function HomeScreen() {
                     <View style={styles.featuredMeta}>
                       <Text style={styles.featuredCuisine}>{item.cuisine}</Text>
                       <View style={styles.ratingPill}>
-                        <Star size={11} color="#FFD700" fill="#FFD700" />
+                        <Star size={10} color="#FFD700" fill="#FFD700" />
                         <Text style={styles.ratingText}>4.9</Text>
                       </View>
                     </View>
@@ -284,7 +296,7 @@ export default function HomeScreen() {
           </>
         )}
 
-        {/* Todos os Restaurantes */}
+        {/* Lista */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>
             {category === 'Tudo' ? 'Todos os Restaurantes' : category}
@@ -293,7 +305,7 @@ export default function HomeScreen() {
         </View>
 
         {loading ? (
-          <ActivityIndicator size="large" color={Colors.dark.tint} style={{ marginVertical: 30 }} />
+          <ActivityIndicator size="large" color={GOLD} style={{ marginVertical: 30 }} />
         ) : listItems.length === 0 ? (
           <View style={styles.emptyState}>
             <Text style={styles.emptyText}>Nenhum restaurante nessa categoria ainda.</Text>
@@ -308,17 +320,11 @@ export default function HomeScreen() {
               <View style={styles.listInfo}>
                 <Text style={styles.listName} numberOfLines={1}>{item.name}</Text>
                 <Text style={styles.listCuisine}>{item.cuisine}</Text>
-                <View style={styles.listBenefitRow}>
-                  <View style={styles.benefitBadge}>
-                    <Text style={styles.benefitText}>2x1 disponível</Text>
-                  </View>
+                <View style={styles.benefitBadge}>
+                  <Text style={styles.benefitText}>2x1 disponível</Text>
                 </View>
               </View>
-              <Pressable
-                style={styles.heartBtn}
-                onPress={() => toggleFavorite(item.id)}
-                hitSlop={8}
-              >
+              <Pressable style={styles.heartBtn} onPress={() => toggleFavorite(item.id)} hitSlop={8}>
                 <Heart
                   size={20}
                   color={favorites.has(item.id) ? Colors.dark.secondary : Colors.dark.icon}
@@ -332,9 +338,30 @@ export default function HomeScreen() {
         {filtered.length > 6 && (
           <Pressable style={styles.showMoreBtn} onPress={() => router.push('/(tabs)/explore')}>
             <Text style={styles.showMoreText}>Ver todos os {filtered.length} restaurantes</Text>
-            <ChevronRight size={16} color={Colors.dark.tint} />
+            <ChevronRight size={16} color={GOLD} />
           </Pressable>
         )}
+
+        {/* ── FOOTER ── */}
+        <View style={styles.footer}>
+          <View style={styles.footerDivider} />
+          <Image
+            source={require('@/assets/images/logo.png')}
+            style={styles.footerLogo}
+            resizeMode="contain"
+          />
+          <Text style={styles.footerBrandClub}>CLUB EMPAR</Text>
+          <Text style={styles.footerBrandSub}>GOURMET</Text>
+          <Text style={styles.footerTagline}>Alta Gastronomia, Metade do Preço.</Text>
+          <View style={styles.footerLocationRow}>
+            <MapPin size={11} color={GOLD} />
+            <Text style={styles.footerLocation}>Sinop, MT · Lançamento Oficial</Text>
+          </View>
+          <View style={styles.footerSeparator} />
+          <Text style={styles.footerCopy}>© 2025 Club Empar Gourmet</Text>
+          <Text style={styles.footerCopy}>Todos os direitos reservados</Text>
+        </View>
+
       </ScrollView>
 
       {/* FAB QR */}
@@ -345,84 +372,297 @@ export default function HomeScreen() {
           </Pressable>
         </LinearGradient>
       </View>
+
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.dark.background },
-  header: { paddingTop: 8, paddingHorizontal: 20, paddingBottom: 16, backgroundColor: Colors.dark.background },
-  headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, backgroundColor: 'transparent' },
-  headerLeft: { flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: 'transparent' },
-  logo: { width: 36, height: 44 },
-  greeting: { fontFamily: Typography.header, fontSize: 18, color: '#fff' },
-  locationRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 3 },
-  locationText: { fontFamily: Typography.body, fontSize: 12, color: Colors.dark.icon },
-  profileBtn: { width: 42, height: 42, borderRadius: 21, backgroundColor: Colors.dark.surface, borderWidth: 1, borderColor: '#333', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
+
+  /* top bar */
+  topBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: Colors.dark.background,
+  },
+  topBarLeft: { gap: 2 },
+  topGreeting: { fontFamily: Typography.header, fontSize: 16, color: '#fff' },
+  topLocation: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  topLocationText: { fontFamily: Typography.body, fontSize: 11, color: Colors.dark.icon },
+
+  profileBtn: {
+    width: 42, height: 42, borderRadius: 21,
+    backgroundColor: Colors.dark.surface,
+    borderWidth: 1, borderColor: '#333',
+    alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
+  },
   profileGrad: { width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' },
   profileInitial: { fontFamily: Typography.header, fontSize: 18, color: '#000' },
   profileLoginText: { fontFamily: Typography.label, fontSize: 11, color: Colors.dark.tint },
-  searchContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 14, paddingHorizontal: 15, height: 46, overflow: 'hidden' },
-  searchInput: { flex: 1, color: '#fff', fontFamily: Typography.body, fontSize: 14 },
-  scrollContent: { paddingBottom: 120 },
 
+  scrollContent: { paddingBottom: 40 },
+
+  /* ── HERO ── */
+  hero: {
+    alignItems: 'center',
+    paddingTop: 28,
+    paddingBottom: 32,
+    paddingHorizontal: 20,
+    position: 'relative',
+  },
+  heroGlow: {
+    position: 'absolute',
+    top: 0, left: 0, right: 0,
+    height: 260,
+  },
+  heroLogo: {
+    width: 64,
+    height: 78,
+    marginBottom: 14,
+  },
+  heroClub: {
+    fontFamily: Typography.header,
+    fontSize: 28,
+    color: GOLD,
+    letterSpacing: 4,
+  },
+  heroGourmet: {
+    fontFamily: Typography.label,
+    fontSize: 13,
+    color: 'rgba(200,169,81,0.6)',
+    letterSpacing: 6,
+    marginTop: 2,
+    marginBottom: 18,
+  },
+  heroDivider: {
+    width: 48,
+    height: 1,
+    backgroundColor: 'rgba(200,169,81,0.3)',
+    marginBottom: 18,
+  },
+  heroTagline: {
+    fontFamily: Typography.header,
+    fontSize: 22,
+    color: '#fff',
+    textAlign: 'center',
+  },
+  heroTaglineGold: {
+    fontFamily: Typography.header,
+    fontSize: 22,
+    color: GOLD,
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  heroLocationRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: 'rgba(200,169,81,0.08)',
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(200,169,81,0.2)',
+  },
+  heroLocationText: {
+    fontFamily: Typography.label,
+    fontSize: 12,
+    color: GOLD,
+    letterSpacing: 0.5,
+  },
+
+  /* search */
+  searchWrap: { paddingHorizontal: 20, marginBottom: 16 },
+  searchContainer: {
+    flexDirection: 'row', alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 14, paddingHorizontal: 15, height: 46, overflow: 'hidden',
+    borderWidth: 1, borderColor: '#2a2a2a',
+  },
+  searchInput: { flex: 1, color: '#fff', fontFamily: Typography.body, fontSize: 14 },
+
+  /* banners */
   subscribeBanner: { marginHorizontal: 20, marginBottom: 16, borderRadius: 16, overflow: 'hidden' },
-  bannerGradient: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 18, paddingVertical: 14 },
+  bannerGradient: {
+    flexDirection: 'row', alignItems: 'center',
+    justifyContent: 'space-between', paddingHorizontal: 18, paddingVertical: 14,
+  },
   bannerTitle: { color: '#000', fontFamily: Typography.header, fontSize: 16 },
   bannerSub: { color: 'rgba(0,0,0,0.6)', fontFamily: Typography.body, fontSize: 12, marginTop: 2 },
-  bannerBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.15)', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10, gap: 2 },
+  bannerBtn: {
+    flexDirection: 'row', alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.18)',
+    paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10, gap: 2,
+  },
   bannerBtnText: { color: '#000', fontFamily: Typography.header, fontSize: 13 },
 
-  memberBanner: { marginHorizontal: 20, marginBottom: 16, borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(0,255,136,0.2)' },
+  memberBanner: {
+    marginHorizontal: 20, marginBottom: 16, borderRadius: 16, overflow: 'hidden',
+    borderWidth: 1, borderColor: 'rgba(0,255,136,0.2)',
+  },
   memberBannerInner: { flexDirection: 'row', alignItems: 'center', padding: 16 },
   memberBannerTitle: { fontFamily: Typography.header, fontSize: 14, color: Colors.dark.tint, marginBottom: 4 },
   memberBannerSub: { fontFamily: Typography.body, fontSize: 12, color: Colors.dark.icon },
 
-  statsRow: { flexDirection: 'row', marginHorizontal: 20, marginBottom: 16, backgroundColor: Colors.dark.surface, borderRadius: 16, padding: 16, borderWidth: 1, borderColor: '#222' },
-  statItem: { flex: 1, alignItems: 'center' },
-  statValue: { fontFamily: Typography.header, fontSize: 20, color: Colors.dark.tint },
-  statLabel: { fontFamily: Typography.body, fontSize: 11, color: Colors.dark.icon, marginTop: 2 },
+  /* stats */
+  statsRow: {
+    flexDirection: 'row',
+    marginHorizontal: 20, marginBottom: 16,
+    backgroundColor: Colors.dark.surface,
+    borderRadius: 16, padding: 16,
+    borderWidth: 1, borderColor: '#222',
+  },
+  statItem: { flex: 1, alignItems: 'center', gap: 3 },
+  statValue: { fontFamily: Typography.header, fontSize: 18, color: GOLD },
+  statLabel: { fontFamily: Typography.body, fontSize: 11, color: Colors.dark.icon },
 
+  /* categories */
   categories: { marginBottom: 20 },
-  categoryChip: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, backgroundColor: Colors.dark.surface, borderWidth: 1, borderColor: '#333' },
+  categoryChip: {
+    paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,
+    backgroundColor: Colors.dark.surface, borderWidth: 1, borderColor: '#333',
+  },
   categoryChipActive: { backgroundColor: Colors.dark.tint, borderColor: Colors.dark.tint },
   categoryText: { color: Colors.dark.icon, fontFamily: Typography.label, fontSize: 13 },
   categoryTextActive: { color: '#000', fontWeight: 'bold' },
 
-  sectionHeader: { flexDirection: 'row', alignItems: 'center', marginHorizontal: 20, marginBottom: 14, gap: 8 },
-  sectionTitle: { fontFamily: Typography.header, fontSize: 18, color: '#fff', flex: 1 },
+  /* sections */
+  sectionHeader: {
+    flexDirection: 'row', alignItems: 'center',
+    marginHorizontal: 20, marginBottom: 14, gap: 8,
+  },
+  sectionTitle: { fontFamily: Typography.header, fontSize: 17, color: '#fff', flex: 1 },
   sectionCount: { fontFamily: Typography.body, fontSize: 13, color: Colors.dark.icon },
 
-  featuredCard: { width: 260, borderRadius: 20, overflow: 'hidden', marginBottom: 4 },
+  /* featured cards */
+  featuredCard: { width: 260, borderRadius: 20, overflow: 'hidden' },
   featuredImage: { width: '100%', height: 170 },
   featuredOverlay: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 110 },
-  featuredBadge: { position: 'absolute', top: 12, left: 12, backgroundColor: Colors.dark.tint, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
+  featuredBadge: {
+    position: 'absolute', top: 12, left: 12,
+    backgroundColor: GOLD, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8,
+  },
   featuredBadgeText: { color: '#000', fontFamily: Typography.header, fontSize: 11 },
-  featuredHeart: { position: 'absolute', top: 12, right: 12, backgroundColor: 'rgba(0,0,0,0.4)', padding: 7, borderRadius: 20 },
+  featuredHeart: {
+    position: 'absolute', top: 12, right: 12,
+    backgroundColor: 'rgba(0,0,0,0.4)', padding: 7, borderRadius: 20,
+  },
   featuredInfo: { position: 'absolute', bottom: 14, left: 14, right: 14 },
   featuredName: { fontFamily: Typography.header, fontSize: 16, color: '#fff', marginBottom: 4 },
   featuredMeta: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   featuredCuisine: { fontFamily: Typography.body, fontSize: 12, color: 'rgba(255,255,255,0.7)' },
-  ratingPill: { flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: 7, paddingVertical: 3, borderRadius: 8, gap: 4 },
-  ratingText: { color: '#FFD700', fontFamily: Typography.header, fontSize: 12 },
+  ratingPill: {
+    flexDirection: 'row', alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    paddingHorizontal: 7, paddingVertical: 3, borderRadius: 8, gap: 4,
+  },
+  ratingText: { color: '#FFD700', fontFamily: Typography.header, fontSize: 11 },
 
-  listRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.dark.surface, marginHorizontal: 20, marginBottom: 10, padding: 12, borderRadius: 16, borderWidth: 1, borderColor: '#222', gap: 12 },
+  /* list rows */
+  listRow: {
+    flexDirection: 'row', alignItems: 'center',
+    backgroundColor: Colors.dark.surface,
+    marginHorizontal: 20, marginBottom: 10,
+    padding: 12, borderRadius: 16,
+    borderWidth: 1, borderColor: '#222', gap: 12,
+  },
   listThumb: { width: 68, height: 68, borderRadius: 12 },
   listInfo: { flex: 1 },
   listName: { fontFamily: Typography.header, color: '#fff', fontSize: 15, marginBottom: 3 },
   listCuisine: { fontFamily: Typography.body, color: Colors.dark.icon, fontSize: 12, marginBottom: 6 },
-  listBenefitRow: { flexDirection: 'row' },
-  benefitBadge: { backgroundColor: 'rgba(0,255,136,0.08)', borderWidth: 1, borderColor: 'rgba(0,255,136,0.2)', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-  benefitText: { fontFamily: Typography.mono, fontSize: 10, color: Colors.dark.tint },
+  benefitBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: 'rgba(200,169,81,0.08)',
+    borderWidth: 1, borderColor: 'rgba(200,169,81,0.25)',
+    paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6,
+  },
+  benefitText: { fontFamily: Typography.mono, fontSize: 10, color: GOLD },
   heartBtn: { padding: 6 },
 
   emptyState: { alignItems: 'center', paddingVertical: 40 },
   emptyText: { fontFamily: Typography.body, color: Colors.dark.icon, fontSize: 14 },
 
-  showMoreBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginHorizontal: 20, marginTop: 6, marginBottom: 10, paddingVertical: 14, borderRadius: 14, borderWidth: 1, borderColor: '#333', gap: 6 },
-  showMoreText: { fontFamily: Typography.label, fontSize: 14, color: Colors.dark.tint },
+  showMoreBtn: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    marginHorizontal: 20, marginTop: 6, marginBottom: 10,
+    paddingVertical: 14, borderRadius: 14,
+    borderWidth: 1, borderColor: 'rgba(200,169,81,0.25)', gap: 6,
+  },
+  showMoreText: { fontFamily: Typography.label, fontSize: 14, color: GOLD },
 
+  /* FAB */
   fabContainer: { position: 'absolute', bottom: 28, alignSelf: 'center' },
-  fab: { width: 60, height: 60, borderRadius: 30, padding: 3, elevation: 8, shadowColor: Colors.dark.tint, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 12 },
-  fabBtn: { flex: 1, borderRadius: 28, backgroundColor: Colors.dark.tint, alignItems: 'center', justifyContent: 'center' },
+  fab: {
+    width: 60, height: 60, borderRadius: 30, padding: 3,
+    elevation: 8,
+    shadowColor: Colors.dark.tint,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4, shadowRadius: 12,
+  },
+  fabBtn: {
+    flex: 1, borderRadius: 28,
+    backgroundColor: Colors.dark.tint,
+    alignItems: 'center', justifyContent: 'center',
+  },
+
+  /* ── FOOTER ── */
+  footer: {
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingTop: 32,
+    paddingBottom: 100,
+  },
+  footerDivider: {
+    width: 60, height: 1,
+    backgroundColor: 'rgba(200,169,81,0.25)',
+    marginBottom: 28,
+  },
+  footerLogo: { width: 40, height: 48, marginBottom: 12 },
+  footerBrandClub: {
+    fontFamily: Typography.header,
+    fontSize: 18,
+    color: GOLD,
+    letterSpacing: 3,
+  },
+  footerBrandSub: {
+    fontFamily: Typography.label,
+    fontSize: 11,
+    color: 'rgba(200,169,81,0.5)',
+    letterSpacing: 5,
+    marginTop: 2,
+    marginBottom: 12,
+  },
+  footerTagline: {
+    fontFamily: Typography.body,
+    fontSize: 13,
+    color: Colors.dark.icon,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  footerLocationRow: {
+    flexDirection: 'row', alignItems: 'center', gap: 5,
+    marginBottom: 20,
+  },
+  footerLocation: {
+    fontFamily: Typography.label,
+    fontSize: 12,
+    color: 'rgba(200,169,81,0.7)',
+  },
+  footerSeparator: {
+    width: '80%', height: 1,
+    backgroundColor: '#1e1e1e',
+    marginBottom: 14,
+  },
+  footerCopy: {
+    fontFamily: Typography.body,
+    fontSize: 11,
+    color: '#444',
+    textAlign: 'center',
+    lineHeight: 18,
+  },
 });
