@@ -3,6 +3,7 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 import 'react-native-reanimated';
 
 import {
@@ -16,7 +17,7 @@ import {
 } from '@expo-google-fonts/manrope';
 import { JetBrainsMono_400Regular } from '@expo-google-fonts/jetbrains-mono';
 
-import { AuthProvider } from '@/contexts/AuthContext';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -49,24 +50,40 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
+function AppStack() {
+  const { isRestoring } = useAuth();
+
+  if (isRestoring) {
+    return (
+      <View style={{ flex: 1, backgroundColor: '#0a0a0a', alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator color="#c8a951" size="large" />
+      </View>
+    );
+  }
+
+  return (
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen name="signup" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="plans"
+        options={{ presentation: 'modal', title: 'Assinatura', headerShown: true }}
+      />
+      <Stack.Screen
+        name="qrcode"
+        options={{ presentation: 'modal', headerShown: false }}
+      />
+      <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+    </Stack>
+  );
+}
+
 function RootLayoutNav() {
   return (
     <ThemeProvider value={DarkTheme}>
       <AuthProvider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="login" options={{ headerShown: false }} />
-          <Stack.Screen name="signup" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="plans"
-            options={{ presentation: 'modal', title: 'Assinatura', headerShown: true }}
-          />
-          <Stack.Screen
-            name="qrcode"
-            options={{ presentation: 'modal', headerShown: false }}
-          />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-        </Stack>
+        <AppStack />
       </AuthProvider>
     </ThemeProvider>
   );
