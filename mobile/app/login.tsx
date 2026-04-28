@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
@@ -41,9 +42,14 @@ export default function LoginScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView contentContainerStyle={styles.inner} keyboardShouldPersistTaps="handled">
-        <Text style={styles.logo}>
-          CLUB <Text style={{ color: Colors.dark.tint }}>EMPAR</Text>
-        </Text>
+        <View style={styles.logoWrap}>
+          <Image
+            source={require('@/assets/images/logo.png')}
+            style={styles.logoImg}
+            resizeMode="contain"
+          />
+          <Text style={styles.logoText}>Clube Gourmet</Text>
+        </View>
         <Text style={styles.title}>Entrar na conta</Text>
         <Text style={styles.subtitle}>Bem-vindo de volta!</Text>
 
@@ -118,13 +124,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 28,
   },
-  logo: {
+  logoWrap: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  logoImg: {
+    width: 56,
+    height: 68,
+    marginBottom: 8,
+  },
+  logoText: {
     fontFamily: Typography.header,
-    fontSize: 28,
+    fontSize: 22,
     color: '#fff',
-    letterSpacing: 1,
-    textAlign: 'center',
-    marginBottom: 6,
+    letterSpacing: 0.5,
   },
   title: {
     fontFamily: Typography.header,

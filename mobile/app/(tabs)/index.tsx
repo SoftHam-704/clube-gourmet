@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Alert,
   RefreshControl,
+  Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
@@ -120,13 +121,21 @@ export default function HomeScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerTop}>
-          <View style={{ backgroundColor: 'transparent' }}>
-            <Text style={styles.greeting}>
-              {user ? `${greeting()}, ${user.name.split(' ')[0]}! 👋` : `${greeting()}!`}
-            </Text>
-            <View style={styles.locationRow}>
-              <MapPin size={12} color={Colors.dark.tint} />
-              <Text style={styles.locationText}>São Paulo, SP</Text>
+          {/* Logo + saudação */}
+          <View style={styles.headerLeft}>
+            <Image
+              source={require('@/assets/images/logo.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+            <View style={{ backgroundColor: 'transparent' }}>
+              <Text style={styles.greeting}>
+                {user ? `${greeting()}, ${user.name.split(' ')[0]}!` : `${greeting()}!`}
+              </Text>
+              <View style={styles.locationRow}>
+                <MapPin size={12} color={Colors.dark.tint} />
+                <Text style={styles.locationText}>São Paulo, SP</Text>
+              </View>
             </View>
           </View>
           <Pressable
@@ -344,7 +353,9 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.dark.background },
   header: { paddingTop: 8, paddingHorizontal: 20, paddingBottom: 16, backgroundColor: Colors.dark.background },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, backgroundColor: 'transparent' },
-  greeting: { fontFamily: Typography.header, fontSize: 20, color: '#fff' },
+  headerLeft: { flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: 'transparent' },
+  logo: { width: 36, height: 44 },
+  greeting: { fontFamily: Typography.header, fontSize: 18, color: '#fff' },
   locationRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 3 },
   locationText: { fontFamily: Typography.body, fontSize: 12, color: Colors.dark.icon },
   profileBtn: { width: 42, height: 42, borderRadius: 21, backgroundColor: Colors.dark.surface, borderWidth: 1, borderColor: '#333', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },

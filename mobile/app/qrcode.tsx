@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Pressable } from 'react-native';
+import { StyleSheet, Pressable, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { QrCode, ShieldCheck, X } from 'lucide-react-native';
@@ -29,6 +29,16 @@ export default function QrCodeScreen() {
         colors={['rgba(0,255,136,0.08)', 'rgba(0,255,136,0.02)']}
         style={styles.card}
       >
+        {/* Logo no topo do cartão */}
+        <View style={styles.cardHeader}>
+          <Image
+            source={require('@/assets/images/logo.png')}
+            style={styles.cardLogo}
+            resizeMode="contain"
+          />
+          <Text style={styles.cardBrand}>Clube Gourmet</Text>
+        </View>
+
         <View style={styles.qrPlaceholder}>
           <QrCode color={Colors.dark.tint} size={120} strokeWidth={1.2} />
         </View>
@@ -100,6 +110,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'rgba(0,255,136,0.25)',
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 20,
+  },
+  cardLogo: {
+    width: 28,
+    height: 34,
+  },
+  cardBrand: {
+    fontFamily: Typography.header,
+    fontSize: 16,
+    color: '#c8a951',
+    letterSpacing: 0.3,
   },
   qrPlaceholder: {
     width: 180,
