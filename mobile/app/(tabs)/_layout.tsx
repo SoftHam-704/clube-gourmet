@@ -18,11 +18,21 @@ export default function TabLayout() {
         tabBarInactiveTintColor: Colors.dark.tabIconDefault,
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: Colors.dark.background,
-          borderTopColor: '#222',
-          height: 60,
-          paddingBottom: 8,
+          backgroundColor: '#0d0d0d',
+          borderTopColor: '#1a1a1a',
+          borderTopWidth: 1,
+          height: 68,
+          paddingBottom: 10,
           paddingTop: 8,
+          elevation: 20,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -4 },
+          shadowOpacity: 0.4,
+          shadowRadius: 12,
+        },
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: '600',
         },
       }}>
       <Tabs.Screen
