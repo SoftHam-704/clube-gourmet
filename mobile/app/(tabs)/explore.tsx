@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -12,6 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Search, Star, MapPin, Sparkles, SlidersHorizontal } from 'lucide-react-native';
+import { useFocusEffect } from 'expo-router';
 import { Text, View } from '@/components/Themed';
 import { Colors, Typography } from '@/constants/Colors';
 import { API_URL } from '@/utils/api';
@@ -36,7 +37,7 @@ export default function ExploreScreen() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('Tudo');
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/restaurants`);
       const data = await res.json();
@@ -46,9 +47,9 @@ export default function ExploreScreen() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  useEffect(() => { load(); }, []);
+  useFocusEffect(useCallback(() => { load(); }, [load]));
 
   const handleRefresh = async () => {
     setRefreshing(true);

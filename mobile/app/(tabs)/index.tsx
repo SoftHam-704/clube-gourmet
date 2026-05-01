@@ -12,7 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { Search, Star, Heart, QrCode, MapPin, Sparkles, Crown, ChevronRight } from 'lucide-react-native';
 import { Text, View } from '@/components/Themed';
 import { Colors, Typography } from '@/constants/Colors';
@@ -69,7 +69,7 @@ export default function HomeScreen() {
     } catch (e) {}
   }, [token]);
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useFocusEffect(useCallback(() => { fetchData(); }, [fetchData]));
   useEffect(() => { fetchFavorites(); }, [fetchFavorites]);
 
   const onRefresh = async () => {

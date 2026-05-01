@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { Heart, Trash2, LogIn, Utensils } from 'lucide-react-native';
 import { Text, View } from '@/components/Themed';
 import { Colors, Typography } from '@/constants/Colors';
@@ -38,9 +38,7 @@ export default function FavoritesScreen() {
     }
   }, [token]);
 
-  useEffect(() => {
-    fetchFavorites();
-  }, [fetchFavorites]);
+  useFocusEffect(useCallback(() => { fetchFavorites(); }, [fetchFavorites]));
 
   const handleRefresh = async () => {
     setRefreshing(true);
