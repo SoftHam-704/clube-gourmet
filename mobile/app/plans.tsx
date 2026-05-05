@@ -51,6 +51,10 @@ function monthlyPrice(total: number, months: number): string {
   return (total / months).toFixed(2).replace('.', ',');
 }
 
+function stripEmoji(str: string): string {
+  return str.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '').trim();
+}
+
 export default function PlansScreen() {
   const { user, token } = useAuth();
   const [plans, setPlans] = useState<Plan[]>([]);
@@ -161,22 +165,11 @@ export default function PlansScreen() {
               key={plan.id}
               style={[styles.card, popular && styles.cardPopular]}
             >
-              {popular && (
-                <View style={styles.popularBanner}>
-                  <Text style={styles.popularBannerText}>MAIS VANTAJOSO</Text>
-                </View>
-              )}
-
               <View style={styles.cardHeader}>
                 <Text style={styles.planName}>{plan.name}</Text>
-                {popular && (
-                  <View style={styles.popularBadge}>
-                    <Text style={styles.popularBadgeText}>⭐ POPULAR</Text>
-                  </View>
-                )}
               </View>
 
-              <Text style={styles.planDesc}>{plan.description}</Text>
+              <Text style={styles.planDesc}>{stripEmoji(plan.description)}</Text>
 
               <View style={styles.priceRow}>
                 <Text style={styles.currency}>R$</Text>
@@ -321,7 +314,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 18,
+    marginTop: 0,
     marginBottom: 8,
   },
   planName: {
