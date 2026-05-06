@@ -7,7 +7,7 @@ import { eq, and } from 'drizzle-orm';
 export const authRoutes = new Hono();
 
 const SECRET = () => process.env.BETTER_AUTH_SECRET || 'fallback-secret-change-me';
-const ADMIN_EMAIL = () => process.env.ADMIN_EMAIL || 'admin@emparclub.com.br';
+const ADMIN_EMAIL = () => process.env.ADMIN_EMAIL || 'admin@clubempar.com.br';
 const ADMIN_PASSWORD = () => process.env.ADMIN_PASSWORD || 'admin123';
 const SESSION_MAX_AGE = 7 * 24 * 3600; // 7 dias em segundos
 
@@ -43,13 +43,25 @@ function cookie(token: string, secure: boolean, maxAge: number): string {
 async function verifyPassword(password: string, storedHash: string): Promise<boolean> {
     const [saltHex, keyHex] = storedHash.split(':');
     if (!saltHex || !keyHex) return false;
-    const derived = await new Promise<Buffer>((resolve, reject) => {
+
+    // Tenta com salt como Buffer (formato do create-admin.js — N=16384, r=8, p=1)
+    const tryBuffer = await new Promise<Buffer>((resolve, reject) => {
+        scrypt(password, Buffer.from(saltHex, 'hex'), 64, (err, key) => err ? reject(err) : resolve(key));
+    }).catch(() => null as any);
+
+    const stored = Buffer.from(keyHex, 'hex');
+    if (tryBuffer && tryBuffer.length === stored.length && timingSafeEqual(tryBuffer, stored)) return true;
+
+    // Tenta com salt como string (formato do hashPassword em auth.ts — N=16384, r=16, p=1)
+    const tryString = await new Promise<Buffer>((resolve, reject) => {
         scrypt(password.normalize('NFKC'), saltHex, 64,
             { N: 16384, r: 16, p: 1, maxmem: 128 * 16384 * 16 * 2 },
             (err, key) => err ? reject(err) : resolve(key));
-    });
-    const stored = Buffer.from(keyHex, 'hex');
-    return derived.length === stored.length && timingSafeEqual(derived, stored);
+    }).catch(() => null as any);
+
+    if (tryString && tryString.length === stored.length && timingSafeEqual(tryString, stored)) return true;
+
+    return false;
 }
 
 // Cria hash de senha no formato do Better Auth
