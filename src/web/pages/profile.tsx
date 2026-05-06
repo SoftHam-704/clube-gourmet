@@ -1,3 +1,4 @@
+﻿import { API_BASE } from "@/lib/config";
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { authClient } from "../lib/auth";
@@ -39,7 +40,7 @@ export default function Profile() {
         setMessage(null);
 
         try {
-            const res = await fetch("/api/profile", {
+            const res = await fetch(`${API_BASE}/api/profile`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

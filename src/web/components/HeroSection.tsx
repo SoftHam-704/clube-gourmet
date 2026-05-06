@@ -1,3 +1,4 @@
+﻿import { API_BASE } from "@/lib/config";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
@@ -56,7 +57,7 @@ const HeroSection = () => {
 
   // Fetch planos individuais da API
   useEffect(() => {
-    fetch("/api/membership-plans")
+    fetch(`${API_BASE}/api/membership-plans`)
       .then((r) => r.json())
       .then((data: Plan[]) => {
         const individual = data.filter((p) => p.type === "individual" && p.active !== false);

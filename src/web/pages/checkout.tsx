@@ -1,3 +1,4 @@
+﻿import { API_BASE } from "@/lib/config";
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { Navbar } from "../components/layout/Navbar";
@@ -28,7 +29,7 @@ export default function Checkout() {
             return;
         }
 
-        fetch(`/api/membership-plans`)
+        fetch(`${API_BASE}/api/membership-plans`)
             .then(res => res.json())
             .then(data => {
                 const foundPlan = data.find((p: any) => p.id === planId);
@@ -48,7 +49,7 @@ export default function Checkout() {
 
         try {
             console.log("📡 [Checkout] Chamando create-preference...");
-            const response = await fetch('/api/checkout/create-preference', {
+            const response = await fetch(`${API_BASE}/api/checkout/create-preference`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',

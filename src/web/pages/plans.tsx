@@ -1,3 +1,4 @@
+import { API_BASE } from "@/lib/config";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -199,7 +200,7 @@ export default function Plans() {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-    fetch(`/api/membership-plans?v=${Date.now()}`, { signal: controller.signal })
+    fetch(`${API_BASE}/api/membership-plans?v=${Date.now()}`, { signal: controller.signal })
       .then(res => res.json())
       .then(data => {
         clearTimeout(timeoutId);

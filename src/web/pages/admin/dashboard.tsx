@@ -1,3 +1,4 @@
+﻿import { API_BASE } from "@/lib/config";
 import { useState, useEffect } from "react";
 import { AdminLayout } from "../../components/admin/AdminLayout";
 
@@ -50,7 +51,7 @@ export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("/api/admin/stats")
+        fetch(`${API_BASE}/api/admin/stats`)
             .then(res => res.json())
             .then(json => {
                 const mappedData: DashboardData = {

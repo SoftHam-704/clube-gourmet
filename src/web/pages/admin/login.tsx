@@ -1,3 +1,4 @@
+﻿import { API_BASE } from "@/lib/config";
 import { useState } from "react";
 import { useLocation, Link } from "wouter";
 import { authClient } from "../../lib/auth";
@@ -20,7 +21,7 @@ export default function AdminLogin() {
             const controller = new AbortController();
             const clientTimeout = setTimeout(() => controller.abort(), 15000);
 
-            const res = await fetch('/api/auth/sign-in/email', {
+            const res = await fetch(`${API_BASE}/api/auth/sign-in/email`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

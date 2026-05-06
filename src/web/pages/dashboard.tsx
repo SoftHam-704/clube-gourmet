@@ -1,3 +1,4 @@
+﻿import { API_BASE } from "@/lib/config";
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { authClient } from "../lib/auth";
@@ -60,8 +61,8 @@ export default function Dashboard() {
             try {
                 // Fetch dashboard data and favorites
                 const [dashRes, favRes] = await Promise.all([
-                    fetch("/api/user-dashboard"),
-                    fetch("/api/favorites")
+                    fetch(`${API_BASE}/api/user-dashboard`),
+                    fetch(`${API_BASE}/api/favorites`)
                 ]);
 
                 const dashJson = await dashRes.json();

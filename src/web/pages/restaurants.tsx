@@ -1,3 +1,4 @@
+﻿import { API_BASE } from "@/lib/config";
 import { useState, useEffect } from "react";
 import { Navbar } from "../components/layout/Navbar";
 import { Footer } from "../components/layout/Footer";
@@ -82,8 +83,8 @@ export default function Restaurants() {
     const fetchData = async () => {
       try {
         const [resRes, cityRes] = await Promise.all([
-          fetch("/api/restaurants"),
-          fetch("/api/cities")
+          fetch(`${API_BASE}/api/restaurants`),
+          fetch(`${API_BASE}/api/cities`)
         ]);
         const resData = await resRes.json();
         const cityData = await cityRes.json();

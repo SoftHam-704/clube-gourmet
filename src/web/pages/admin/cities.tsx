@@ -1,3 +1,4 @@
+﻿import { API_BASE } from "@/lib/config";
 import { useState, useEffect } from "react";
 import { AdminLayout } from "../../components/admin/AdminLayout";
 
@@ -18,7 +19,7 @@ export default function AdminCities() {
     const fetchCities = async () => {
         setLoading(true);
         try {
-            const res = await fetch("/api/cities");
+            const res = await fetch(`${API_BASE}/api/cities`);
             const data = await res.json();
             setCities(data);
         } catch (error) {
@@ -58,7 +59,7 @@ export default function AdminCities() {
     const handleDelete = async (id: string) => {
         if (!confirm("Tem certeza que deseja excluir esta cidade?")) return;
         try {
-            const res = await fetch(`/api/cities/${id}`, { method: "DELETE" });
+            const res = await fetch(`${API_BASE}/api/cities/${id}`, { method: "DELETE" });
             if (res.ok) fetchCities();
         } catch (error) {
             console.error("Erro ao excluir cidade:", error);

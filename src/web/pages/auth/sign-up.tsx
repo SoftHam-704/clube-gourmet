@@ -1,3 +1,4 @@
+﻿import { API_BASE } from "@/lib/config";
 import { useState } from "react";
 import { useForm } from 'react-hook-form';
 import { useLocation, Link } from 'wouter';
@@ -23,7 +24,7 @@ export default function SignUp() {
         setError(null);
 
         try {
-            const res = await fetch('/api/auth/sign-up/email', {
+            const res = await fetch(`${API_BASE}/api/auth/sign-up/email`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json',
                            'x-name': data.name, 'x-email': data.email, 'x-password': data.password },
