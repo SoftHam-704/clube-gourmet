@@ -110,7 +110,7 @@ export default function ExploreScreen() {
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.chipsScroll}
-        contentContainerStyle={{ paddingHorizontal: 20, gap: 10 }}
+        contentContainerStyle={{ paddingHorizontal: 20, gap: 8 }}
       >
         {CATEGORIES.map(cat => (
           <Pressable
@@ -279,8 +279,8 @@ const styles = StyleSheet.create({
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 14,
-    paddingVertical: 9,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     borderRadius: 20,
     backgroundColor: Colors.dark.surface,
     borderWidth: 1,
