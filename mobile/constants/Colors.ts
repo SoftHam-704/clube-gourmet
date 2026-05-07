@@ -1,34 +1,34 @@
 /**
- * Design System: The Neon Sommelier / Neon Nocturne
- * Adaptado para React Native
+ * Design System: Club Empar — Dark Gold
+ * Alinhado com o site web
  */
 
-const primaryNeon = '#00ff88';
-const secondaryCoral = '#d4004b';
+const primaryGold = '#c9a961';
+const secondaryGold = '#d4c5a0';
 const backgroundObsidian = '#0a0a0a';
 const surfaceDark = '#131313';
 const textMain = '#e5e2e1';
-const textMuted = '#b9cbb9';
+const textMuted = '#d4c5a0';
 
 export const Colors = {
   light: {
     text: '#11181C',
     background: '#fff',
-    tint: primaryNeon,
+    tint: primaryGold,
     icon: '#687076',
     tabIconDefault: '#687076',
-    tabIconSelected: primaryNeon,
+    tabIconSelected: primaryGold,
   },
   dark: {
     text: textMain,
     background: backgroundObsidian,
     surface: surfaceDark,
-    tint: primaryNeon,
-    secondary: secondaryCoral,
+    tint: primaryGold,
+    secondary: secondaryGold,
     icon: textMuted,
     tabIconDefault: '#444',
-    tabIconSelected: primaryNeon,
-    border: '#333',
+    tabIconSelected: primaryGold,
+    border: '#2a2a2a',
     card: surfaceDark,
   },
 };
