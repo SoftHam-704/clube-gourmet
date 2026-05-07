@@ -163,7 +163,7 @@ export const AdminLayout = ({ children, title }: AdminLayoutProps) => {
                         </div>
                     </div>
                     <button
-                        onClick={() => authClient.signOut().then(() => setLocation("/admin/login"))}
+                        onClick={() => authClient.signOut().then(() => setLocation("/"))}
                         className="p-2 text-gold/30 hover:text-red-400 transition-colors bg-card/60 rounded-lg border border-gold/5"
                     >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
