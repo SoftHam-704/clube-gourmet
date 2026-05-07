@@ -75,6 +75,10 @@ const DEFAULT_BENEFITS = [
 
 import { authClient } from "../lib/auth";
 
+function stripEmoji(str: string): string {
+  return str.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '').trim();
+}
+
 function PlanCard({ plan }: { plan: any }) {
   const { data: session } = authClient.useSession();
   const isFamily = plan.type === 'family' || plan.id?.includes('family') || plan.id?.includes('fam-');
@@ -106,7 +110,7 @@ function PlanCard({ plan }: { plan: any }) {
           {plan.name}
         </h3>
         {plan.description && (
-          <p className="text-[#d4c5a0]/40 text-sm mt-2 font-body italic">{plan.description}</p>
+          <p className="text-[#d4c5a0]/40 text-sm mt-2 font-body">{stripEmoji(plan.description)}</p>
         )}
       </div>
 
