@@ -93,27 +93,16 @@ function PlanCard({ plan }: { plan: any }) {
   // Total price is the secondary display (small)
   const totalFormatted = totalPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' });
   
-  const isPopular = plan.id?.includes('semiannual') || plan.duration_months === 6 || plan.id?.includes('trimestral');
-
   return (
-    <div className={`group relative transition-all duration-700 ${isPopular
-      ? "bg-[#0a0a0a]/80 backdrop-blur-2xl border-2 border-[#c9a961] scale-105 z-10 shadow-[0_40px_80px_rgba(0,0,0,0.4)]"
-      : "bg-[#0a0a0a]/60 backdrop-blur-xl border border-[#c9a961]/10 hover:border-[#c9a961]/40"
-      } p-10 flex flex-col h-full overflow-hidden`}>
+    <div className="group relative transition-all duration-700 bg-[#0a0a0a]/60 backdrop-blur-xl border border-[#c9a961]/10 hover:border-[#c9a961]/40 p-10 flex flex-col h-full overflow-hidden">
 
       <div className="absolute top-0 left-0 w-10 h-10 border-t-2 border-l-2 border-[#c9a961]/30 group-hover:border-[#c9a961]" />
       <div className="absolute top-0 right-0 w-10 h-10 border-t-2 border-r-2 border-[#c9a961]/30 group-hover:border-[#c9a961]" />
       <div className="absolute bottom-0 left-0 w-10 h-10 border-b-2 border-l-2 border-[#c9a961]/30 group-hover:border-[#c9a961]" />
       <div className="absolute bottom-0 right-0 w-10 h-10 border-b-2 border-r-2 border-[#c9a961]/30 group-hover:border-[#c9a961]" />
 
-      {isPopular && (
-        <div className="absolute -top-1 left-1/2 -translate-x-1/2 px-6 py-1.5 bg-[#c9a961] text-[#0a0a0a] text-[10px] font-black tracking-[0.4em] uppercase shadow-2xl skew-x-[-12deg]">
-          Recomendado
-        </div>
-      )}
-
       <div className="mb-10 lg:text-left">
-        <h3 className={`font-display text-3xl font-light tracking-tight ${isPopular ? "text-[#c9a961]" : "text-white"}`}>
+        <h3 className="font-display text-3xl font-light tracking-tight text-white">
           {plan.name}
         </h3>
         {plan.description && (
@@ -124,7 +113,7 @@ function PlanCard({ plan }: { plan: any }) {
       <div className="mb-10 lg:text-left">
         <div className="flex items-baseline gap-2 mb-1">
           <span className="text-[#c9a961] font-mono text-xl font-bold">R$</span>
-          <span className={`font-mono text-6xl font-black tracking-tighter ${isPopular ? "text-gradient-gold animate-gradient" : "text-white"}`}>
+          <span className="font-mono text-6xl font-black tracking-tighter text-white">
             {monthlyDisplay}
           </span>
           <span className="text-[#d4c5a0]/30 font-mono text-[10px] tracking-[0.2em] uppercase whitespace-nowrap ml-1 self-end mb-2">
@@ -144,7 +133,7 @@ function PlanCard({ plan }: { plan: any }) {
       <ul className="space-y-5 mb-12 flex-grow">
         {(isFamily ? ["2 por 1 para todos", "Economia compartilhada"] : []).concat(DEFAULT_BENEFITS).slice(0, 5).map((benefit, index) => (
           <li key={index} className="flex items-start gap-4 group/item">
-            <div className={`mt-1 flex-shrink-0 w-5 h-5 rounded-full border border-[#c9a961]/30 flex items-center justify-center transition-all ${isPopular ? "bg-[#c9a961]/10 border-[#c9a961]" : "group-hover/item:border-[#c9a961]"}`}>
+            <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full border border-[#c9a961]/30 flex items-center justify-center transition-all group-hover/item:border-[#c9a961]">
               <span className="text-[#c9a961] scale-75">{Icons.check}</span>
             </div>
             <span className="text-[#d4c5a0]/60 text-sm font-light leading-snug group-hover/item:text-white transition-colors">
@@ -155,10 +144,7 @@ function PlanCard({ plan }: { plan: any }) {
       </ul>
 
       <Link href={session ? `/checkout?plan=${plan.id}` : `/sign-up?plan=${plan.id}`}>
-        <button className={`w-full flex items-center justify-center gap-5 py-6 font-black text-xs tracking-[0.4em] uppercase transition-all duration-700 ${isPopular
-          ? "bg-[#c9a961] text-[#0a0a0a] hover:glow-gold hover:-translate-y-2"
-          : "border-2 border-[#c9a961]/20 text-[#c9a961] hover:bg-[#c9a961] hover:text-[#0a0a0a]"
-          }`}>
+        <button className="w-full flex items-center justify-center gap-5 py-6 font-black text-xs tracking-[0.4em] uppercase transition-all duration-700 border-2 border-[#c9a961]/20 text-[#c9a961] hover:bg-[#c9a961] hover:text-[#0a0a0a]">
           Assinar Agora
         </button>
       </Link>
