@@ -37,8 +37,8 @@ export default function AdminRestaurants() {
         setLoading(true);
         try {
             const [resRes, cityRes] = await Promise.all([
-                fetch(`${API_BASE}/api/restaurants`),
-                fetch(`${API_BASE}/api/cities`)
+                fetch(`${API_BASE}/api/restaurants`, { credentials: 'include' }),
+                fetch(`${API_BASE}/api/cities`, { credentials: 'include' })
             ]);
             const resData = await resRes.json();
             const cityData = await cityRes.json();
@@ -82,7 +82,7 @@ export default function AdminRestaurants() {
     const handleDelete = async (id: number) => {
         if (!confirm("Confirmar a exclusão permanente deste restaurante da curadoria?")) return;
         try {
-            const res = await fetch(`${API_BASE}/api/restaurants/${id}`, { method: "DELETE" });
+            const res = await fetch(`${API_BASE}/api/restaurants/${id}`, { method: "DELETE", credentials: 'include' });
             if (res.ok) fetchData();
         } catch (error) {
             console.error("Erro ao excluir restaurante:", error);

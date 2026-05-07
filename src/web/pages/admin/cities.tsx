@@ -19,7 +19,7 @@ export default function AdminCities() {
     const fetchCities = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`${API_BASE}/api/cities`);
+            const res = await fetch(`${API_BASE}/api/cities`, { credentials: 'include' });
             const data = await res.json();
             setCities(data);
         } catch (error) {
@@ -59,7 +59,7 @@ export default function AdminCities() {
     const handleDelete = async (id: string) => {
         if (!confirm("Tem certeza que deseja excluir esta cidade?")) return;
         try {
-            const res = await fetch(`${API_BASE}/api/cities/${id}`, { method: "DELETE" });
+            const res = await fetch(`${API_BASE}/api/cities/${id}`, { method: "DELETE", credentials: 'include' });
             if (res.ok) fetchCities();
         } catch (error) {
             console.error("Erro ao excluir cidade:", error);

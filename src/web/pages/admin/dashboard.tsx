@@ -51,7 +51,7 @@ export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`${API_BASE}/api/admin/stats`)
+        fetch(`${API_BASE}/api/admin/stats`, { credentials: 'include' })
             .then(res => res.json())
             .then(json => {
                 const mappedData: DashboardData = {

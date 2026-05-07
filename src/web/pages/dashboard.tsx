@@ -61,8 +61,8 @@ export default function Dashboard() {
             try {
                 // Fetch dashboard data and favorites
                 const [dashRes, favRes] = await Promise.all([
-                    fetch(`${API_BASE}/api/user-dashboard`),
-                    fetch(`${API_BASE}/api/favorites`)
+                    fetch(`${API_BASE}/api/user-dashboard`, { credentials: 'include' }),
+                    fetch(`${API_BASE}/api/favorites`, { credentials: 'include' })
                 ]);
 
                 const dashJson = await dashRes.json();

@@ -22,7 +22,7 @@ export default function AdminPlans() {
     const fetchPlans = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`${API_BASE}/api/membership-plans?t=${Date.now()}`);
+            const res = await fetch(`${API_BASE}/api/membership-plans?t=${Date.now()}`, { credentials: 'include' });
             const data = await res.json();
             // Ordenação frontend para garantir visualização correta (Menor preço -> Maior preço)
             const sortedData = data.sort((a: Plan, b: Plan) => Number(a.price) - Number(b.price));
@@ -63,7 +63,7 @@ export default function AdminPlans() {
     const handleDelete = async (id: string) => {
         if (!confirm("Tem certeza que deseja excluir este plano?")) return;
         try {
-            const res = await fetch(`${API_BASE}/api/membership-plans/${id}`, { method: "DELETE" });
+            const res = await fetch(`${API_BASE}/api/membership-plans/${id}`, { method: "DELETE", credentials: 'include' });
             if (res.ok) fetchPlans();
         } catch (error) {
             console.error("Erro ao excluir plano:", error);
