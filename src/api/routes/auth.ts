@@ -35,8 +35,8 @@ function verifyToken(token: string): { email: string; role: string } | null {
     }
 }
 
-function cookie(token: string, secure: boolean, maxAge: number): string {
-    return `better-auth.session_token=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${secure ? '; Secure' : ''}`;
+function cookie(token: string, _secure: boolean, maxAge: number): string {
+    return `better-auth.session_token=${token}; Path=/; HttpOnly; SameSite=None; Secure; Max-Age=${maxAge}`;
 }
 
 // Verifica senha com node:crypto nativo (mesmo formato do Better Auth)
