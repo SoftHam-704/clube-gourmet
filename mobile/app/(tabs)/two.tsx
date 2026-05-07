@@ -216,13 +216,13 @@ export default function ProfileScreen() {
         {/* Stats */}
         <View style={styles.statsRow}>
           <View style={styles.statItem}>
-            <Heart color={Colors.dark.secondary} size={20} />
+            <Heart color="#FFD700" size={20} />
             <Text style={styles.statValue}>{favCount}</Text>
             <Text style={styles.statLabel}>Favoritos</Text>
           </View>
           <View style={styles.statDivider} />
           <View style={styles.statItem}>
-            <Gift color={Colors.dark.tint} size={20} />
+            <Gift color="#FFD700" size={20} />
             <Text style={styles.statValue}>{benefitsUsed}</Text>
             <Text style={styles.statLabel}>Benefícios usados</Text>
           </View>
